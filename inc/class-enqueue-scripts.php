@@ -31,8 +31,14 @@ class DCP_Enqueue_Scripts extends DCP_Init {
 	 * front_scripts
 	 */
 	public function front_scripts () {
+		// Styles
+		//wp_enqueue_style( $this->prefix . '-bootstrap4',  'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', [], time() );
 		wp_enqueue_style( $this->prefix . '-front',  $this->plugin_url . '/front/sass/front.css', [], time() );
+
+		// Scripts
+		//wp_enqueue_script( $this->prefix . '-bootstrap4', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', array('jquery'), time(), true );
 		wp_enqueue_script( $this->prefix . '-front', $this->plugin_url . '/front/js/front.min.js', [], time(), true );
+		wp_enqueue_script( $this->prefix . '-shortcodes', $this->plugin_url . '/front/js/shortcodes.min.js', array( 'jquery', 'jquery-ui-slider' ), time(), true );
 	}
 }
 

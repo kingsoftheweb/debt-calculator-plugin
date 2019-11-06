@@ -9,7 +9,7 @@ var gulp         = require("gulp"),
 	notify       = require('gulp-notify'),
 	plumber      = require( "gulp-plumber" ),
 	babel        = require('gulp-babel'),
-	uglify       = require( "gulp-uglify" );
+	uglify       = require('gulp-uglify-es').default;
 
 
 var paths = {
@@ -25,36 +25,37 @@ var paths = {
 
 function sass_to_css() {
 	return gulp
-	.src(paths.sass.src)
-	 // Initialize sourcemaps before compilation starts
-	 .pipe(sourcemaps.init())
-	 .pipe(sass())
-	 .on("error", sass.logError)
-	 // Use postcss with autoprefixer and compress the compiled file using cssnano
-	 .pipe(postcss([autoprefixer(), cssnano()]))
-	 // Now add/write the sourcemaps
-	 .pipe(sourcemaps.write())
-	 .pipe(gulp.dest(paths.sass.dest))
+		.src(paths.sass.src)
+		// Initialize sourcemaps before compilation starts
+		.pipe(sourcemaps.init())
+		.pipe(sass())
+		.on("error", sass.logError)
+		// Use postcss with autoprefixer and compress the compiled file using cssnano
+		.pipe(postcss([autoprefixer(), cssnano()]))
+		// Now add/write the sourcemaps
+		.pipe(sourcemaps.write())
+		.pipe(gulp.dest(paths.sass.dest))
 
 }
 
 
 function js_minify() {
 	return gulp
-	.src(paths.js.src)
-	 .pipe(plumber({
-		errorHandler: notify.onError('Error: <%= error.message %>')
-	}))
-	 .pipe(babel({
-		presets: [
-			['@babel/env', {
-				modules: false
-			}]
-		]
-	}))
-	 .pipe(uglify())
-	 .pipe(rename({ suffix: '.min' }))
-	 .pipe(gulp.dest(paths.js.dest))
+		.src(paths.js.src)
+		.pipe(plumber({
+			errorHandler: notify.onError('Error: <%= error.message %>')
+		}))
+		.pipe(babel({
+			presets: [
+				['@babel/env', {
+					modules: false
+				}]
+			]
+		}))
+		.pipe(uglify())
+		.on('error', console.error)
+		.pipe(rename({ suffix: '.min' }))
+		.pipe(gulp.dest(paths.js.dest))
 
 }
 
