@@ -12,13 +12,15 @@ class DCP_Admin_Init extends DCP_Init {
 	public function __construct() {
 		parent::__construct();
 
-
-		// Admin Menus
 		add_action( 'admin_menu', array( $this, 'admin_pages' ) );
+		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widgets' ) );
 	}
 
+	/**
+	 * admin_pages
+	 * Registers all admin pages and subpages needed for the dcm plugin.
+	 */
 	public function admin_pages () {
-
 
 		add_menu_page(
 			'Debt Calculator',
@@ -42,6 +44,20 @@ class DCP_Admin_Init extends DCP_Init {
 	}
 
 
+	/**
+	 *  add_dashboard_widgets
+	 *  Registers all dashboard widgets needed for the dcm plugin.
+	 */
+	public function add_dashboard_widgets () {
+		wp_add_dashboard_widget(
+			'dcm_debt_calculator_results',
+			'Debt Calculator Results',
+			array( $this, 'dcm_debt_calculator_results_callback' )
+		);
+	}
+
+
+	/** Admin Menu Pages Callbacks */
 	public function debt_calculator_main_callback () {
 		include $this->plugin_path . '/admin/partials/dashboard-pages/admin-main-page.php';
 	}
@@ -58,6 +74,14 @@ class DCP_Admin_Init extends DCP_Init {
 		<?php
 		//include $this->plugin_path . '/admin/partials/dashboard-pages/documentation-page/start.html';
 	}
+	/************ End of Admin Menu Pages Callbacks ****************/
+
+
+	/** Admin Dashboard Widgets Callbacks */
+	public function dcm_debt_calculator_results_callback () {
+		include $this->plugin_path . '/admin/partials/dashboard-widgets/debt-calculator-results.php';
+	}
+	/************ End of Admin Dashboard Widgets****************/
 
 
 }
