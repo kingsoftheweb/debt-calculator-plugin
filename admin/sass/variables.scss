@@ -1,0 +1,12 @@
+@mixin align-center {
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    align-self: center;
+    text-align: center;
+}
+@mixin align-start {
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+}

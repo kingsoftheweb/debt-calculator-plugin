@@ -1,0 +1,47 @@
+@import "variables.scss";
+
+.bnews-admin-screen {
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    width: 100%;
+    padding:2rem;
+
+    h1.plugin-title {
+        text-align: center;
+    }
+    h3.plugin-sub-title {
+        text-align: center;
+    }
+
+    .bnews-admin-section {
+        background: #ffffff;
+        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5);
+        margin: 1rem 0;
+
+        .section-header {
+            background: #eeeeee;
+            padding: 2rem;
+            h2, h3 {
+                margin: 0;
+                padding: 0;
+            }
+        }
+        .section-content {
+            padding: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+
+            .single-page {
+                display: flex;
+                max-width: 25%;
+                padding: 0.5rem;
+                box-sizing: border-box;
+                border: 1px solid #eee;
+                height: 10rem;
+                overflow: scroll;
+            }
+        }
+
+    }
+}
