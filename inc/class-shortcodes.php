@@ -1,40 +1,34 @@
 <?php
 /**
- * Class KotwSetup_Shortcodes
+ * Class DCP_Shortcodes
  */
-if( !class_exists( 'KotwSetup_Shortcodes' ) ):
-class KotwSetup_Shortcodes extends KotwSetup_Init {
+if( !class_exists( 'DCP_Shortcodes' ) ):
+class DCP_Shortcodes extends DCP_Init {
 
 	/**
-	 * KotwSetup_Shortcodes constructor.
+	 * DCP_Shortcodes constructor.
 	 */
 	public function __construct() {
 		parent::__construct();
 
 		/** Adding Shortcodes */
 
-		// The kotw-footer shortcode.
-		add_shortcode( 'kotw-footer', array( $this, 'kotw_footer_callback' ) );
-		//Append the kotw-footer shortcode to the footer.
-		add_action(
-			'wp_footer',
-			function () {
-				echo do_shortcode( '[kotw-footer]' );
-			}
-		);
+		// The debt calculator shortcode.
+		add_shortcode( 'debt-calculator', array( $this, 'debt_calculator_shortcode_callback' ) );
+
 
 	}
 
 
 	/** Callbacks */
-	public function kotw_footer_callback () {
+	public function debt_calculator_shortcode_callback () {
 		ob_start();
-		include_once $this->plugin_path . '/front/partials/shortcodes/kotw-footer/kotw-footer.php';
+		include_once $this->plugin_path . '/front/partials/shortcodes/debt-calculator/debt-calculator.php';
 		$html = ob_get_contents();
 		ob_end_clean();
 		return $html;
 	}
 }
 
-new KotwSetup_Shortcodes();
+new DCP_Shortcodes();
 endif;

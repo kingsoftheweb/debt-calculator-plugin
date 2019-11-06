@@ -1,10 +1,11 @@
 <?php
 
 
+if( !class_exists( 'KOTW_Custom_Post' ) ):
 /**
  * Class KOTW_Custom_Post
  */
-class KOTW_Custom_Post extends KotwSetup_Init {
+class KOTW_Custom_Post extends DCP_Init {
 
 
 	/**
@@ -119,3 +120,4 @@ class KOTW_Custom_Post extends KotwSetup_Init {
 		);
 	}
 }
+endif;

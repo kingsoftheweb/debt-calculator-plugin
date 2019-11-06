@@ -1,12 +1,12 @@
 <?php
 /**
- * Class KotwSetup_Meta_Boxes
+ * Class DCP_Meta_Boxes
  */
-if( !class_exists( 'KotwSetup_Meta_Boxes' ) ):
-class KotwSetup_Meta_Boxes extends KotwSetup_Init {
+if( !class_exists( 'DCP_Meta_Boxes' ) ):
+class DCP_Meta_Boxes extends DCP_Init {
 
 	/**
-	 * KotwSetup_Meta_Boxes constructor.
+	 * DCP_Meta_Boxes constructor.
 	 */
 	public function __construct() {
 		parent::__construct();
@@ -49,7 +49,7 @@ class KotwSetup_Meta_Boxes extends KotwSetup_Init {
 
 		// Saving text inputs.
 		$meta_text_values = [
-			'KotwSetup_custom_title'
+			'DCP_custom_title'
 		];
 		foreach ( $meta_text_values as $meta ) {
 			if ( isset( $_POST[$meta] ) ) {
@@ -60,5 +60,5 @@ class KotwSetup_Meta_Boxes extends KotwSetup_Init {
 	}
 }
 
-new KotwSetup_Meta_Boxes();
+new DCP_Meta_Boxes();
 endif;

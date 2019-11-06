@@ -1,13 +1,13 @@
 <?php
 /**
- * Class KotwSetup_Admin_Init
+ * Class DCP_Admin_Init
  */
-if( !class_exists( 'KotwSetup_Admin_Init' ) ):
-class KotwSetup_Admin_Init extends KotwSetup_Init {
+if( !class_exists( 'DCP_Admin_Init' ) ):
+class DCP_Admin_Init extends DCP_Init {
 
 
 	/**
-	 * KotwSetup_Admin_Init constructor.
+	 * DCP_Admin_Init constructor.
 	 */
 	public function __construct() {
 		parent::__construct();
@@ -47,5 +47,5 @@ class KotwSetup_Admin_Init extends KotwSetup_Init {
 
 }
 
-new KotwSetup_Admin_Init();
+new DCP_Admin_Init();
 endif;

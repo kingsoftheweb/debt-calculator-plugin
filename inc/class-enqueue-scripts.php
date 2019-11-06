@@ -1,14 +1,14 @@
 <?php
 /**
- * Class KotwSetup_Enqueue_Scripts
+ * Class DCP_Enqueue_Scripts
  */
 
-if( !class_exists( 'KotwSetup_Enqueue_Scripts' ) ):
-class KotwSetup_Enqueue_Scripts extends KotwSetup_Init {
+if( !class_exists( 'DCP_Enqueue_Scripts' ) ):
+class DCP_Enqueue_Scripts extends DCP_Init {
 
 
 	/**
-	 * KotwSetup_Enqueue_Scripts constructor.
+	 * DCP_Enqueue_Scripts constructor.
 	 */
 	public function __construct() {
 		parent::__construct();
@@ -36,5 +36,5 @@ class KotwSetup_Enqueue_Scripts extends KotwSetup_Init {
 	}
 }
 
-new KotwSetup_Enqueue_Scripts();
+new DCP_Enqueue_Scripts();
 endif;

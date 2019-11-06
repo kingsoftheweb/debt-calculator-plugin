@@ -1,4 +1,4 @@
-let kotwSetup = {
+let DCP = {
 
 	elements  : {
 		kotwCopyright : document.querySelector( 'div#kotw-footer' )
@@ -10,7 +10,7 @@ let kotwSetup = {
 		if( document.querySelectorAll( 'footer .ast-container' ).length > 0 ) {
 			console.log( 'footer astra exists' );
 			let astraFooter = document.querySelector( 'footer .ast-container' )
-			let kotwCopyright  = kotwSetup.elements.kotwCopyright;
+			let kotwCopyright  = DCP.elements.kotwCopyright;
 			console.log( astraFooter, kotwCopyright );
 
 			astraFooter.insertAdjacentHTML( 'beforeend', "<div id = 'kotw-footer'>" + kotwCopyright.innerHTML + "</div>" );
@@ -20,11 +20,11 @@ let kotwSetup = {
 	functions : {
 	},
 	init : () => {
-		kotwSetup.events();
+		DCP.events();
 	}
 };
 
 window.addEventListener('DOMContentLoaded', (event) => {
-	kotwSetup.init();
+	DCP.init();
 
 });

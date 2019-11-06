@@ -1,10 +1,11 @@
 <?php
 
 
+if( !class_exists( 'KOTW_Custom_Tax' ) ):
 /**
  * Class KOTW_Custom_Tax
  */
-class KOTW_Custom_Tax extends KotwSetup_Init {
+class KOTW_Custom_Tax extends DCP_Init {
 
 
 	/**
@@ -105,3 +106,4 @@ class KOTW_Custom_Tax extends KotwSetup_Init {
 		);
 	}
 }
+endif;

@@ -1,9 +1,9 @@
 <?php
 /**
- * Class KotwSetup_Init
+ * Class DCP_Init
  */
-if ( !class_exists( 'KotwSetup_Init' ) ):
-class KotwSetup_Init {
+if ( !class_exists( 'DCP_Init' ) ):
+class DCP_Init {
 
 
 	/**
@@ -34,13 +34,13 @@ class KotwSetup_Init {
 	 * BNews_Init constructor.
 	 */
 	public function __construct() {
-		$this->prefix       = 'kotwSetup';
+		$this->prefix       = 'debtcalcplugin';
 		$this->plugin_url   = dirname( plugin_dir_url(__FILE__) );
 		$this->plugin_path  = dirname( plugin_dir_path( __FILE__ ) );
-		$this->text_domain  = 'kotwSetup';
+		$this->text_domain  = 'debtcalcplugin';
 	}
 
 }
-new KotwSetup_Init();
+new DCP_Init();
 
 endif;
