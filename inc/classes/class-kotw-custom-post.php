@@ -38,6 +38,12 @@
 			public $supports;
 
 			/**
+			 * @var Boolean $show_in_menu
+			 * Show or hide the custom post tab in wordpres dashboard menu.
+			 */
+			public $show_in_menu;
+
+			/**
 			 * KOTW_Custom_Post constructor.
 			 *
 			 * @param $name
@@ -45,13 +51,15 @@
 			 * @param $plural
 			 * @param $tax_array
 			 * @param $supports
+			 * @param $show_in_menu
 			 */
-			public function __construct( $name, $singular, $plural, $tax_array, $supports ) {
-				$this->name      = $name;
-				$this->singular  = $singular;
-				$this->plural    = $plural;
-				$this->tax_array = $tax_array;
-				$this->supports  = $supports;
+			public function __construct( $name, $singular, $plural, $tax_array, $supports, $show_in_menu = true ) {
+				$this->name          = $name;
+				$this->singular      = $singular;
+				$this->plural        = $plural;
+				$this->tax_array     = $tax_array;
+				$this->supports      = $supports;
+				$this->show_in_menu  = $show_in_menu;
 
 				add_action( 'init', array( $this, 'register_post_type' ), 0 );
 
@@ -100,7 +108,7 @@
 					'hierarchical'          => false,
 					'public'                => true,
 					'show_ui'               => true,
-					'show_in_menu'          => true,
+					'show_in_menu'          => $this->show_in_menu,
 					'menu_position'         => 5,
 					'show_in_admin_bar'     => true,
 					'show_in_nav_menus'     => true,
@@ -122,5 +130,6 @@
 		'Debt',
 		'Debts',
 		array( 'tag' ),
-		array( 'title', 'editor' )
+		array( 'title', 'editor' ),
+		false
 	);

@@ -34,6 +34,14 @@ class DCP_Admin_Init extends DCP_Init {
 
 		add_submenu_page(
 			'debt_calculator_main',
+			'Debts',
+			'Debts',
+			'manage_options',
+			'edit.php?post_type=kotw_debt'
+		);
+
+		add_submenu_page(
+			'debt_calculator_main',
 			'Documentation',
 			'Documentation',
 			'manage_options',
