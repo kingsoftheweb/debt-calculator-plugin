@@ -1,10 +1,10 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     'use strict';
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         banner:
-`/*!
+            `/*!
   * Stickyfill – \`position: sticky\` polyfill
   * v. <%= pkg.version %> | <%= pkg.homepage %>
   * MIT License

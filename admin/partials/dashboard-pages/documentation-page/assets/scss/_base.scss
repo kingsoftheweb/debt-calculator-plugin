@@ -1,57 +1,60 @@
 /* ======= Base ======= */
 body {
-    font-family: 'Open Sans', arial, sans-serif;
-    color: $text-color;
-    font-size: 14px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+	font-family: 'Open Sans', arial, sans-serif;
+	color: $text-color;
+	font-size: 14px;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 html, body {
-    height: 100%;
+	height: 100%;
 }
 
 .page-wrapper {
-    min-height: 100%;
-    /* equal to footer height */
-    margin-bottom: -50px; 
-    &:after {
-        content: "";
-        display: block;
-        height: 50px;
-    }
+	min-height: 100%;
+	/* equal to footer height */
+	margin-bottom: -50px;
+
+	&:after {
+		content: "";
+		display: block;
+		height: 50px;
+	}
 }
 
 .footer {
-    height: 50px;
+	height: 50px;
 }
 
 p {
-    line-height: 1.5;
+	line-height: 1.5;
 }
 
 a {
-    color: darken($color-primary, 5%);
-    @include transition (all 0.4s ease-in-out);
-    &:hover {
-        text-decoration: underline;
-        color: darken($color-primary, 10%);        
-    }
-    &:focus {
-        text-decoration: none;
-    }
+	color: darken($color-primary, 5%);
+	@include transition (all 0.4s ease-in-out);
+
+	&:hover {
+		text-decoration: underline;
+		color: darken($color-primary, 10%);
+	}
+
+	&:focus {
+		text-decoration: none;
+	}
 }
 
 
 code {
-    background: #222;
-    color: #fff;
-    font-size: 14px;
-    font-weight: bold;
-    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-    padding:2px 8px;
-    padding-top: 4px;
-    display: inline-block;
+	background: #222;
+	color: #fff;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	padding: 2px 8px;
+	padding-top: 4px;
+	display: inline-block;
 }
 
 .btn, a.btn {
@@ -59,6 +62,7 @@ code {
 	font-weight: 600;
 	font-size: 14px;
 	line-height: 1.5;
+
 	.svg-inline--fa {
 		margin-right: 5px;
 		position: relative;
@@ -70,6 +74,7 @@ code {
 	background: $color-primary;
 	border: 1px solid $color-primary;
 	color: #fff !important;
+
 	&:hover, &:focus, &:active, &.active, &.hover {
 		background: darken($color-primary, 5%);
 		color: #fff !important;
@@ -78,26 +83,30 @@ code {
 }
 
 .btn-green, a.btn-green {
-    background: $color-green;
+	background: $color-green;
 	border: 1px solid $color-green;
 	color: #fff !important;
+
 	&:hover, &:focus, &:active, &.active, &.hover {
 		background: darken($color-green, 5%);
 		color: #fff !important;
 		border: 1px solid darken($color-green, 5%);
 	}
+
 	.body-green & {
-    	color: #fff !important;
-    	&:hover, &:focus, &:active, &.active, &.hover {
-        	color: #fff !important;
-    	}
+		color: #fff !important;
+
+		&:hover, &:focus, &:active, &.active, &.hover {
+			color: #fff !important;
+		}
 	}
 }
 
 .btn-blue, a.btn-blue {
-    background: $color-blue;
+	background: $color-blue;
 	border: 1px solid $color-blue;
 	color: #fff !important;
+
 	&:hover, &:focus, &:active, &.active, &.hover {
 		background: darken($color-blue, 5%);
 		color: #fff !important;
@@ -106,9 +115,10 @@ code {
 }
 
 .btn-orange, a.btn-orange {
-    background: $color-orange;
+	background: $color-orange;
 	border: 1px solid $color-orange;
 	color: #fff !important;
+
 	&:hover, &:focus, &:active, &.active, &.hover {
 		background: darken($color-orange, 5%);
 		color: #fff !important;
@@ -117,9 +127,10 @@ code {
 }
 
 .btn-red, a.btn-red {
-    background: $color-red;
+	background: $color-red;
 	border: 1px solid $color-red;
 	color: #fff !important;
+
 	&:hover, &:focus, &:active, &.active, &.hover {
 		background: darken($color-red, 5%);
 		color: #fff !important;
@@ -128,9 +139,10 @@ code {
 }
 
 .btn-pink, a.btn-pink {
-    background: $color-pink;
+	background: $color-pink;
 	border: 1px solid $color-pink;
 	color: #fff !important;
+
 	&:hover, &:focus, &:active, &.active, &.hover {
 		background: darken($color-pink, 5%);
 		color: #fff !important;
@@ -140,9 +152,10 @@ code {
 }
 
 .btn-purple, a.btn-purple {
-    background: $color-purple;
+	background: $color-purple;
 	border: 1px solid $color-purple;
 	color: #fff !important;
+
 	&:hover, &:focus, &:active, &.active, &.hover {
 		background: darken($color-purple, 5%);
 		color: #fff !important;
@@ -151,11 +164,12 @@ code {
 }
 
 .btn-cta {
-    padding: 7px 15px;
+	padding: 7px 15px;
 }
 
 .search-btn {
 	height: 40px;
+
 	.svg-inline--fa {
 		top: 0;
 		margin-right: 0;
@@ -163,137 +177,162 @@ code {
 }
 
 .form-control {
-   @include box-shadow(none);
-    height: 40px;
-    border-color: $divider;
-    @include placeholder(lighten($grey, 5%));
-    &:focus {
-        border-color: darken($divider, 5%);
-        @include box-shadow(none);
-    }    
+	@include box-shadow(none);
+	height: 40px;
+	border-color: $divider;
+	@include placeholder(lighten($grey, 5%));
+
+	&:focus {
+		border-color: darken($divider, 5%);
+		@include box-shadow(none);
+	}
 }
 
 input[type="text"],
 input[type="email"],
 input[type="password"],
 input[type="submit"],
-input[type="button"], 
+input[type="button"],
 textarea,
 select {
-    appearance: none;  /* for mobile safari */
-    -webkit-appearance: none;
+	appearance: none; /* for mobile safari */
+	-webkit-appearance: none;
 }
 
 /* ====== Header ====== */
 .header {
-    background: $text-color;
-    color: rgba(256, 256, 256, 0.85);
-    border-top: 5px solid $color-primary;
-    padding: 30px 0;
-    a {
-        color: #fff;
-    }
-    .container {
-	    position: relative;
-    }
+	background: $text-color;
+	color: rgba(256, 256, 256, 0.85);
+	border-top: 5px solid $color-primary;
+	padding: 30px 0;
+
+	a {
+		color: #fff;
+	}
+
+	.container {
+		position: relative;
+	}
 }
+
 .branding {
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    
-    .logo {
-        font-size: 28px;
-        margin-top: 0;
-        margin-bottom: 0;
-        a {
-            text-decoration: none;
-        }
-    }
-    .text-highlight {
-        color: $color-primary;
-        .body-green & {
-            color: $color-green;
-        }
-        .body-blue & {
-            color: $color-blue;
-        }
-        .body-orange & {
-            color: $color-orange;
-        }
-        .body-red & {
-            color: $color-red;
-        }
-        .body-pink & {
-            color: $color-pink;
-        }
-        .body-purple & {
-            color: $color-purple;
-        }
-    }
-    .text-bold {
-        font-weight: 800;
-        color: #fff;
-    }
-    .icon {
-        font-size: 24px;
-        color: $color-primary;
-        .body-green & {
-            color: $color-green;
-        }
-        .body-blue & {
-            color: $color-blue;
-        }
-        .body-orange & {
-            color: $color-orange;
-        }
-        .body-red & {
-            color: $color-red;
-        }
-        .body-pink & {
-            color: $color-pink;
-        }
-        .body-purple & {
-            color: $color-purple;
-        }
-    }
+	text-transform: uppercase;
+	margin-bottom: 10px;
+
+	.logo {
+		font-size: 28px;
+		margin-top: 0;
+		margin-bottom: 0;
+
+		a {
+			text-decoration: none;
+		}
+	}
+
+	.text-highlight {
+		color: $color-primary;
+
+		.body-green & {
+			color: $color-green;
+		}
+
+		.body-blue & {
+			color: $color-blue;
+		}
+
+		.body-orange & {
+			color: $color-orange;
+		}
+
+		.body-red & {
+			color: $color-red;
+		}
+
+		.body-pink & {
+			color: $color-pink;
+		}
+
+		.body-purple & {
+			color: $color-purple;
+		}
+	}
+
+	.text-bold {
+		font-weight: 800;
+		color: #fff;
+	}
+
+	.icon {
+		font-size: 24px;
+		color: $color-primary;
+
+		.body-green & {
+			color: $color-green;
+		}
+
+		.body-blue & {
+			color: $color-blue;
+		}
+
+		.body-orange & {
+			color: $color-orange;
+		}
+
+		.body-red & {
+			color: $color-red;
+		}
+
+		.body-pink & {
+			color: $color-pink;
+		}
+
+		.body-purple & {
+			color: $color-purple;
+		}
+	}
 }
 
 .breadcrumb {
-    background: none;
-    margin-bottom: 0;
-    padding: 0;
-    li {
-        color: rgba(256, 256, 256, 0.5);
-        &.active {
-            color: rgba(256, 256, 256, 0.5);
-        }
-        a {
-            color: rgba(256, 256, 256, 0.5);
-            &:hover {
-                color: #fff;
-            }
-        }
-    } 
-    
+	background: none;
+	margin-bottom: 0;
+	padding: 0;
+
+	li {
+		color: rgba(256, 256, 256, 0.5);
+
+		&.active {
+			color: rgba(256, 256, 256, 0.5);
+		}
+
+		a {
+			color: rgba(256, 256, 256, 0.5);
+
+			&:hover {
+				color: #fff;
+			}
+		}
+	}
+
 }
 
-.breadcrumb>li+li:before {
-    color: rgba(0, 0, 0, 0.4);
+.breadcrumb > li + li:before {
+	color: rgba(0, 0, 0, 0.4);
 }
-
-
 
 
 .search-form {
-    position: relative;
+	position: relative;
+
 	.search-input {
 		font-size: 14px;
 		@include border-radius(20px);
 		padding-top: 4px;
+
 		&:focus {
 			border-color: $text-color-secondary;
 		}
 	}
+
 	.search-btn {
 		color: lighten($text-color-secondary, 10%);
 		background: none;
@@ -302,6 +341,7 @@ select {
 		right: 5px;
 		top: 0px;
 		margin-right: 0;
+
 		&:active, &:focus, &:hover {
 			outline: none !important;
 			color: darken($text-color, 10%);
@@ -319,15 +359,17 @@ select {
 
 /* ====== Footer ====== */
 .footer {
-    background: darken($text-color, 15%);
-    color: rgba(256, 256, 256, 0.6);
-    padding: 15px 0;
-    a {
-        color: $color-primary;
-    }
-    .fa-heart {
-        color: $color-pink;
-    }
+	background: darken($text-color, 15%);
+	color: rgba(256, 256, 256, 0.6);
+	padding: 15px 0;
+
+	a {
+		color: $color-primary;
+	}
+
+	.fa-heart {
+		color: $color-pink;
+	}
 }
 
 

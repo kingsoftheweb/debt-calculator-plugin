@@ -1,6 +1,5 @@
 {
   "shadow": "inner",
-
   "camelcase": true,
   "eqeqeq": true,
   "eqnull": true,
@@ -15,8 +14,9 @@
   "scripturl": true,
   "strict": true,
   "quotmark": "single",
-
-  "globals": {"define": true},
+  "globals": {
+    "define": true
+  },
   "browser": true,
   "node": true,
   "jquery": true

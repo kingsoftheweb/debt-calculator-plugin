@@ -7,7 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const devMode = process.env.NODE_ENV !== 'production'
 
 function getHotCSS(bundle, devMode) {
-    if(!devMode) {
+    if (!devMode) {
         return bundle;
     }
     return [
@@ -31,7 +31,7 @@ const prod = {
             test: /\.less$/,
             use: getHotCSS([
                 MiniCssExtractPlugin.loader,
-                { loader: 'css-loader', options: { sourceMap: true } },
+                {loader: 'css-loader', options: {sourceMap: true}},
                 {
                     loader: 'postcss-loader',
                     options: {
@@ -45,19 +45,19 @@ const prod = {
                         ]
                     }
                 },
-                { loader: 'less-loader', options: { sourceMap: true } }
+                {loader: 'less-loader', options: {sourceMap: true}}
             ], devMode)
         },
-        {
-            test: /\.js$/,
-            exclude: /(node_modules|bower_components)/,
-            use: {
-                loader: 'babel-loader',
-                options: {
-                    presets: [require('babel-preset-env')]
+            {
+                test: /\.js$/,
+                exclude: /(node_modules|bower_components)/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [require('babel-preset-env')]
+                    }
                 }
-            }
-        }]
+            }]
     },
     plugins: [
         new MiniCssExtractPlugin({

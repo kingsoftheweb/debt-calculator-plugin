@@ -9,22 +9,21 @@ Author URI: https://kingsoftheweb.ca
 License: GPL2
 */
 
-if ( !defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 
+/**
+ * Requires DCP_Init - Main init class for the plugin.
+ */
 require_once 'inc/class-init.php';
-require_once 'inc/class-enqueue-scripts.php';
-require_once 'inc/class-admin-init.php';
-require_once 'inc/classes/class-kotw-custom-post.php';
-require_once 'inc/classes/class-kotw-custom-tax.php';
-
-require_once 'inc/classes/class-dcp-export-data.php';
-require_once 'inc/classes/class-dcp-notifications.php';
-require_once 'inc/classes/class-dcp-arm-hooks.php';
 
 
-require_once 'inc/class-meta-boxes.php';
-require_once 'inc/class-shortcodes.php';
-
-
+/**
+ * Registers activation and deactivation hooks
+ */
+register_activation_hook( __FILE__, array( 'DCP_Init', 'activate_debtcalcplugin' ) );
+register_deactivation_hook( __FILE__, array( 'DCP_Init', 'deactivate_debtcalcplugin' ) );
+register_uninstall_hook( __FILE__, array( 'DCP_Init', 'uninstall_debtcalcplugin' ) );
 

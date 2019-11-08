@@ -1,10 +1,10 @@
 /**
-* jquery.matchHeight.js v0.5.2
-* http://brm.io/jquery-match-height/
-* License: MIT
-*/
+ * jquery.matchHeight.js v0.5.2
+ * http://brm.io/jquery-match-height/
+ * License: MIT
+ */
 
-;(function($) {
+;(function ($) {
     /*
     *  internal
     */
@@ -18,14 +18,14 @@
     *  (as displayed after float wrapping applied by browser)
     */
 
-    var _rows = function(elements) {
+    var _rows = function (elements) {
         var tolerance = 1,
             $elements = $(elements),
             lastTop = null,
             rows = [];
 
         // group elements by their top position
-        $elements.each(function(){
+        $elements.each(function () {
             var $that = $(this),
                 top = $that.offset().top - _parse($that.css('margin-top')),
                 lastRow = rows.length > 0 ? rows[rows.length - 1] : null;
@@ -55,7 +55,7 @@
     *  value parse utility function
     */
 
-    var _parse = function(value) {
+    var _parse = function (value) {
         // parse value and convert NaN to 0
         return parseFloat(value) || 0;
     };
@@ -65,7 +65,7 @@
     *  plugin definition
     */
 
-    var matchHeight = $.fn.matchHeight = function(byRow) {
+    var matchHeight = $.fn.matchHeight = function (byRow) {
 
         // handle matchHeight('remove')
         if (byRow === 'remove') {
@@ -75,7 +75,7 @@
             this.css('height', '');
 
             // remove selected elements from all groups
-            $.each(matchHeight._groups, function(key, group) {
+            $.each(matchHeight._groups, function (key, group) {
                 group.elements = group.elements.not(that);
             });
 
@@ -117,7 +117,7 @@
     *  apply matchHeight to given elements
     */
 
-    matchHeight._apply = function(elements, byRow) {
+    matchHeight._apply = function (elements, byRow) {
         var $elements = $(elements),
             rows = [$elements];
 
@@ -133,7 +133,7 @@
         if (byRow) {
 
             // must first force an arbitrary equal height so floating elements break evenly
-            $elements.each(function() {
+            $elements.each(function () {
                 var $that = $(this),
                     display = $that.css('display') === 'inline-block' ? 'inline-block' : 'block';
 
@@ -156,15 +156,15 @@
             rows = _rows($elements);
 
             // revert original inline styles
-            $elements.each(function() {
+            $elements.each(function () {
                 var $that = $(this);
 
                 $that.attr('style', $that.data('style-cache') || '')
-                     .css('height', '');
+                    .css('height', '');
             });
         }
 
-        $.each(rows, function(key, row) {
+        $.each(rows, function (key, row) {
             var $row = $(row),
                 maxHeight = 0;
 
@@ -173,12 +173,12 @@
                 return;
 
             // iterate the row and find the max height
-            $row.each(function(){
+            $row.each(function () {
                 var $that = $(this),
                     display = $that.css('display') === 'inline-block' ? 'inline-block' : 'block';
 
                 // ensure we get the correct actual height (and not a previously set height value)
-                $that.css({ 'display': display, 'height': '' });
+                $that.css({'display': display, 'height': ''});
 
                 // find the max height (including padding, but not margin)
                 if ($that.outerHeight(false) > maxHeight)
@@ -189,7 +189,7 @@
             });
 
             // iterate the row and apply the height to all elements
-            $row.each(function(){
+            $row.each(function () {
                 var $that = $(this),
                     verticalPadding = 0;
 
@@ -219,11 +219,11 @@
     *  applies matchHeight to all elements with a data-match-height attribute
     */
 
-    matchHeight._applyDataApi = function() {
+    matchHeight._applyDataApi = function () {
         var groups = {};
 
         // generate groups by their groupId set by elements using data-match-height
-        $('[data-match-height], [data-mh]').each(function() {
+        $('[data-match-height], [data-mh]').each(function () {
             var $this = $(this),
                 groupId = $this.attr('data-match-height') || $this.attr('data-mh');
             if (groupId in groups) {
@@ -234,7 +234,7 @@
         });
 
         // apply matchHeight to each group
-        $.each(groups, function() {
+        $.each(groups, function () {
             this.matchHeight(true);
         });
     };
@@ -244,11 +244,11 @@
     *  updates matchHeight on all current groups with their correct options
     */
 
-    var _update = function(event) {
+    var _update = function (event) {
         if (matchHeight._beforeUpdate)
             matchHeight._beforeUpdate(event, matchHeight._groups);
 
-        $.each(matchHeight._groups, function() {
+        $.each(matchHeight._groups, function () {
             matchHeight._apply(this.elements, this.byRow);
         });
 
@@ -256,7 +256,7 @@
             matchHeight._afterUpdate(event, matchHeight._groups);
     };
 
-    matchHeight._update = function(throttle, event) {
+    matchHeight._update = function (throttle, event) {
         // prevent update if fired from a resize event
         // where the viewport width hasn't actually changed
         // fixes an event looping bug in IE8
@@ -271,7 +271,7 @@
         if (!throttle) {
             _update(event);
         } else if (_updateTimeout === -1) {
-            _updateTimeout = setTimeout(function() {
+            _updateTimeout = setTimeout(function () {
                 _update(event);
                 _updateTimeout = -1;
             }, matchHeight._throttle);
@@ -286,12 +286,12 @@
     $(matchHeight._applyDataApi);
 
     // update heights on load and resize events
-    $(window).bind('load', function(event) {
+    $(window).bind('load', function (event) {
         matchHeight._update(false, event);
     });
 
     // throttled update heights on resize events
-    $(window).bind('resize orientationchange', function(event) {
+    $(window).bind('resize orientationchange', function (event) {
         matchHeight._update(true, event);
     });
 

@@ -1,28 +1,26 @@
 let dcmShortcodes = {
 
-    debtCalculator : {
-        elements  : {
-            singleTabs : document.querySelectorAll( '.single-tab' ),
+    debtCalculator: {
+        elements: {
+            singleTabs: document.querySelectorAll('.single-tab'),
         },
-        events : () => {
+        events: () => {
             let plugin = dcmShortcodes.debtCalculator;
 
             // Single Tabs on Click.
-            plugin.elements.singleTabs.forEach( (tab) => {
-                tab.addEventListener( 'click', function () {
-                    let id = tab.getAttribute( 'data-id' );
-                    jQuery( '.single-tab' ).removeClass( 'active' );
-                    tab.classList.add( 'active' );
+            plugin.elements.singleTabs.forEach((tab) => {
+                tab.addEventListener('click', function () {
+                    let id = tab.getAttribute('data-id');
+                    jQuery('.single-tab').removeClass('active');
+                    tab.classList.add('active');
 
-                    jQuery( '.arm_account_detail_tab.arm_account_detail_tab_content' ).removeClass( 'active' );
-                    jQuery( '.arm_account_detail_tab.arm_account_detail_tab_content[data-tab="' + id + '"]' ).addClass( 'active' );
-                } );
-            } );
+                    jQuery('.arm_account_detail_tab.arm_account_detail_tab_content').removeClass('active');
+                    jQuery('.arm_account_detail_tab.arm_account_detail_tab_content[data-tab="' + id + '"]').addClass('active');
+                });
+            });
         },
-        functions :{
-
-        },
-        init : () => {
+        functions: {},
+        init: () => {
             dcmShortcodes.debtCalculator.events();
         }
     }
@@ -112,4 +110,5 @@ jQuery('.value_range').each(function (){
         + 'color-stop(' + val + ', #27283A)'
         + ')'
     );
-})*/;
+})*/
+;

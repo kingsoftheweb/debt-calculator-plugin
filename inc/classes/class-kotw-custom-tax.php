@@ -1,6 +1,6 @@
 <?php
 
-if( !class_exists( 'KOTW_Custom_Tax' ) ):
+if ( ! class_exists( 'KOTW_Custom_Tax' ) ):
 	/**
 	 * Class KOTW_Custom_Tax
 	 */
@@ -49,11 +49,11 @@ if( !class_exists( 'KOTW_Custom_Tax' ) ):
 		 * @param $hierarchical
 		 */
 		public function __construct( $name, $singular, $plural, $supports, $hierarchical = false ) {
-			$this->name          = $name;
-			$this->singular      = $singular;
-			$this->plural        = $plural;
-			$this->supports      = $supports;
-			$this->hierarchical  = $hierarchical;
+			$this->name         = $name;
+			$this->singular     = $singular;
+			$this->plural       = $plural;
+			$this->supports     = $supports;
+			$this->hierarchical = $hierarchical;
 
 			add_action( 'init', array( $this, 'register_tax' ), 0 );
 
@@ -63,7 +63,7 @@ if( !class_exists( 'KOTW_Custom_Tax' ) ):
 		/**
 		 * register_post_type.
 		 */
-		public function register_tax () {
+		public function register_tax() {
 			$labels = array(
 				'name'                       => _x( $this->plural, 'Taxonomy General Name', $this->prefix ),
 				'singular_name'              => _x( $this->singular, 'Taxonomy Singular Name', $this->prefix ),
@@ -86,14 +86,14 @@ if( !class_exists( 'KOTW_Custom_Tax' ) ):
 				'items_list'                 => __( 'Items list', $this->prefix ),
 				'items_list_navigation'      => __( 'Items list navigation', $this->prefix ),
 			);
-			$args = array(
-				'labels'                     => $labels,
-				'hierarchical'               => $this->hierarchical,
-				'public'                     => true,
-				'show_ui'                    => true,
-				'show_admin_column'          => true,
-				'show_in_nav_menus'          => true,
-				'show_tagcloud'              => true,
+			$args   = array(
+				'labels'            => $labels,
+				'hierarchical'      => $this->hierarchical,
+				'public'            => true,
+				'show_ui'           => true,
+				'show_admin_column' => true,
+				'show_in_nav_menus' => true,
+				'show_tagcloud'     => true,
 			);
 			register_taxonomy( $this->name, $this->supports, $args );
 		}

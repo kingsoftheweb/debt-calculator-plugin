@@ -3,31 +3,36 @@
 .dcm-wrapper {
 	border: 1px solid #dee3e9;
 }
+
 .dcm-shortcode {
 	.arm-tabs {
 		width: 100%;
 		@include align-start;
 		flex-direction: row;
 		padding: 0;
-		border:0;
+		border: 0;
+		
 		.single-tab {
 			padding: 1rem;
-			cursor:pointer;
+			cursor: pointer;
 			border: 1px solid #dee3e9;
 			flex: 1;
 			text-align: center;
-
+			
 			&.active {
 				background: #eeeeee;
 			}
 		}
-
-
+		
+		
 	}
+	
 	.arm_account_detail_wrapper {
 		margin-top: 0;
+		
 		.arm_account_detail_tab {
 			display: none;
+			
 			&.active {
 				display: block;
 			}
@@ -38,6 +43,7 @@
 		}
 	}
 }
+
 .dcm-shortcode {
 	//background: #F73946;
 	//background: -webkit-linear-gradient(left top, #F73946, #FF3875);
@@ -58,7 +64,7 @@
 			box-shadow: 0px 2px 45px 8px #C32B4A;
 			
 			
-			.result{
+			.result {
 				display: table;
 				width: 100%;
 				
@@ -80,13 +86,15 @@
 					-webkit-transition-delay: 2s; /* Safari */
 					transition-delay: 2s;
 					box-shadow: 0px 5px 25px 2px #333;
-					h1{
+					
+					h1 {
 						color: #fff;
 						font-size: 3em;
 						margin: 8px 0;
 						padding: 0;
 					}
-					small{
+					
+					small {
 						font-size: 1em;
 						text-transform: uppercase;
 						font-weight: 400;
@@ -96,20 +104,23 @@
 			}
 			
 			
-			.calculator{
+			.calculator {
 				padding: 20px;
-				.calculator-title{
+				
+				.calculator-title {
 					font-weight: 400;
 					text-transform: uppercase;
 					font-size: 1.5em;
 					padding: 15px;
 				}
-				.calculator-hr{
+				
+				.calculator-hr {
 					margin-top: -10px;
 					width: 80%;
 					border: 1.2px solid #F73946;
 					border-radius: 15px;
 				}
+				
 				input[type=range] {
 					-webkit-appearance: none;
 					width: 75%;
@@ -161,14 +172,16 @@
 					background: #F73946;
 					cursor: pointer;
 				}
-				.field-text{
+				
+				.field-text {
 					font-size: 2em;
 					color: #F73946;
 					font-weight: 700;
 					padding: 8px;
 					display: inline-block;
 				}
-				.label-height:after{
+				
+				.label-height:after {
 					content: ' cm';
 					font-size: 0.5em;
 					color: #4E5279;
@@ -176,16 +189,19 @@
 					text-align: center;
 					margin-top: -12px;
 				}
-				.label-weight:after{
+				
+				.label-weight:after {
 					content: ' kg';
 					font-size: 0.5em;
 					color: #4E5279;
 					font-weight: 400;
 				}
-				.submit{
+				
+				.submit {
 					text-align: center;
 				}
-				#submit{
+				
+				#submit {
 					background: #F73946;
 					background: -webkit-linear-gradient(left top, #F73946, #FF3875);
 					background: -o-linear-gradient(bottom right, #F73946, #FF3875);
@@ -201,7 +217,8 @@
 					-webkit-font-smoothing: antialiased;
 					-moz-osx-font-smoothing: grayscale;
 					cursor: pointer;
-					&:hover, &:focus{
+					
+					&:hover, &:focus {
 						color: #FFF;
 						outline: none;
 					}

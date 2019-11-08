@@ -17,8 +17,8 @@ else {
         ['', '-webkit-', '-moz-', '-ms-'].some(prefix => {
             try {
                 testNode.style.position = prefix + 'sticky';
+            } catch (e) {
             }
-            catch(e) {}
 
             return testNode.style.position != '';
         })
@@ -46,7 +46,7 @@ const stickies = [];
 /*
  * 3. Utility functions
  */
-function extend (targetObj, sourceObject) {
+function extend(targetObj, sourceObject) {
     for (var key in sourceObject) {
         if (sourceObject.hasOwnProperty(key)) {
             targetObj[key] = sourceObject[key];
@@ -54,11 +54,11 @@ function extend (targetObj, sourceObject) {
     }
 }
 
-function parseNumeric (val) {
+function parseNumeric(val) {
     return parseFloat(val) || 0;
 }
 
-function getDocOffsetTop (node) {
+function getDocOffsetTop(node) {
     let docOffsetTop = 0;
 
     while (node) {
@@ -74,7 +74,7 @@ function getDocOffsetTop (node) {
  * 4. Sticky class
  */
 class Sticky {
-    constructor (node) {
+    constructor(node) {
         if (!(node instanceof HTMLElement))
             throw new Error('First argument must be HTMLElement');
         if (stickies.some(sticky => sticky._node === node))
@@ -89,7 +89,7 @@ class Sticky {
         this.refresh();
     }
 
-    refresh () {
+    refresh() {
         if (seppuku || this._removed) return;
         if (this._active) this._deactivate();
 
@@ -124,7 +124,7 @@ class Sticky {
          * 3. Get necessary node parameters
          */
         const referenceNode = node.parentNode;
-        const parentNode = shadowRootExists && referenceNode instanceof ShadowRoot? referenceNode.host: referenceNode;
+        const parentNode = shadowRootExists && referenceNode instanceof ShadowRoot ? referenceNode.host : referenceNode;
         const nodeWinOffset = node.getBoundingClientRect();
         const parentWinOffset = parentNode.getBoundingClientRect();
         const parentComputedStyle = getComputedStyle(parentNode);
@@ -209,10 +209,10 @@ class Sticky {
         clone.docOffsetTop = getDocOffsetTop(clone.node);
     }
 
-    _recalcPosition () {
+    _recalcPosition() {
         if (!this._active || this._removed) return;
 
-        const stickyMode = scroll.top <= this._limits.start? 'start': scroll.top >= this._limits.end? 'end': 'middle';
+        const stickyMode = scroll.top <= this._limits.start ? 'start' : scroll.top >= this._limits.end ? 'end' : 'middle';
 
         if (this._stickyMode == stickyMode) return;
 
@@ -262,7 +262,7 @@ class Sticky {
         this._stickyMode = stickyMode;
     }
 
-    _fastCheck () {
+    _fastCheck() {
         if (!this._active || this._removed) return;
 
         if (
@@ -271,7 +271,7 @@ class Sticky {
         ) this.refresh();
     }
 
-    _deactivate () {
+    _deactivate() {
         if (!this._active || this._removed) return;
 
         this._clone.node.parentNode.removeChild(this._clone.node);
@@ -295,7 +295,7 @@ class Sticky {
         delete this._limits;
     }
 
-    remove () {
+    remove() {
         this._deactivate();
 
         stickies.some((sticky, index) => {
@@ -317,7 +317,7 @@ const Stickyfill = {
     stickies,
     Sticky,
 
-    addOne (node) {
+    addOne(node) {
         // Check whether it’s a node
         if (!(node instanceof HTMLElement)) {
             // Maybe it’s a node list of some sort?
@@ -336,7 +336,7 @@ const Stickyfill = {
         return new Sticky(node);
     },
 
-    add (nodeList) {
+    add(nodeList) {
         // If it’s a node make an array of one node
         if (nodeList instanceof HTMLElement) nodeList = [nodeList];
         // Check if the argument is an iterable of some sort
@@ -371,11 +371,11 @@ const Stickyfill = {
         return addedStickies;
     },
 
-    refreshAll () {
+    refreshAll() {
         stickies.forEach(sticky => sticky.refresh());
     },
 
-    removeOne (node) {
+    removeOne(node) {
         // Check whether it’s a node
         if (!(node instanceof HTMLElement)) {
             // Maybe it’s a node list of some sort?
@@ -393,7 +393,7 @@ const Stickyfill = {
         });
     },
 
-    remove (nodeList) {
+    remove(nodeList) {
         // If it’s a node make an array of one node
         if (nodeList instanceof HTMLElement) nodeList = [nodeList];
         // Check if the argument is an iterable of some sort
@@ -412,7 +412,7 @@ const Stickyfill = {
         }
     },
 
-    removeAll () {
+    removeAll() {
         while (stickies.length) stickies[0].remove();
     }
 };
@@ -421,16 +421,15 @@ const Stickyfill = {
 /*
  * 6. Setup events (unless the polyfill was disabled)
  */
-function init () {
+function init() {
     // Watch for scroll position changes and trigger recalc/refresh if needed
-    function checkScroll () {
+    function checkScroll() {
         if (window.pageXOffset != scroll.left) {
             scroll.top = window.pageYOffset;
             scroll.left = window.pageXOffset;
 
             Stickyfill.refreshAll();
-        }
-        else if (window.pageYOffset != scroll.top) {
+        } else if (window.pageYOffset != scroll.top) {
             scroll.top = window.pageYOffset;
             scroll.left = window.pageXOffset;
 
@@ -449,13 +448,13 @@ function init () {
     //Fast dirty check for layout changes every 500ms
     let fastCheckTimer;
 
-    function startFastCheckTimer () {
+    function startFastCheckTimer() {
         fastCheckTimer = setInterval(function () {
             stickies.forEach(sticky => sticky._fastCheck());
         }, 500);
     }
 
-    function stopFastCheckTimer () {
+    function stopFastCheckTimer() {
         clearInterval(fastCheckTimer);
     }
 
@@ -465,8 +464,7 @@ function init () {
     if ('hidden' in document) {
         docHiddenKey = 'hidden';
         visibilityChangeEventName = 'visibilitychange';
-    }
-    else if ('webkitHidden' in document) {
+    } else if ('webkitHidden' in document) {
         docHiddenKey = 'webkitHidden';
         visibilityChangeEventName = 'webkitvisibilitychange';
     }
@@ -477,13 +475,11 @@ function init () {
         document.addEventListener(visibilityChangeEventName, () => {
             if (document[docHiddenKey]) {
                 stopFastCheckTimer();
-            }
-            else {
+            } else {
                 startFastCheckTimer();
             }
         });
-    }
-    else startFastCheckTimer();
+    } else startFastCheckTimer();
 }
 
 if (!seppuku) init();
@@ -494,7 +490,6 @@ if (!seppuku) init();
  */
 if (typeof module != 'undefined' && module.exports) {
     module.exports = Stickyfill;
-}
-else {
+} else {
     window.Stickyfill = Stickyfill;
 }
