@@ -1,71 +1,67 @@
 <?php
 
-
-if( !class_exists( 'KOTW_Custom_Post' ) ):
-/**
- * Class KOTW_Custom_Post
- */
-class KOTW_Custom_Post extends DCP_Init {
-
-
-	/**
-	 * @var String $name
-	 * Post type name
-	 */
-	public $name;
-
-	/**
-	 * @var String $singular
-	 * Singular label
-	 */
-	public $singular;
-
-	/**
-	 * @var String $plural
-	 * Plural Label
-	 */
-	public $plural;
-
-	/**
-	 * @var Array $tax_array
-	 * Taxonomy array
-	 */
-	public $tax_array;
-
-	/**
-	 * @var Array $support
-	 * Supports Array
-	 */
-	public $supports;
-
-	/**
-	 * KOTW_Custom_Post constructor.
-	 *
-	 * @param $name
-	 * @param $singular
-	 * @param $plural
-	 * @param $tax_array
-	 * @param $supports
-	 */
-	public function __construct( $name, $singular, $plural, $tax_array, $supports ) {
-		$this->name      = $name;
-		$this->singular  = $singular;
-		$this->plural    = $plural;
-		$this->tax_array = $tax_array;
-		$this->supports  = $supports;
-
-		$this->register_post_type();
-
-	}
+	if( !class_exists( 'KOTW_Custom_Post' ) ):
+		/**
+		 * Class KOTW_Custom_Post
+		 */
+		class KOTW_Custom_Post extends DCP_Init {
 
 
-	/**
-	 * register_post_type.
-	 */
-	public function register_post_type () {
-		add_action (
-			'init',
-			function () {
+			/**
+			 * @var String $name
+			 * Post type name
+			 */
+			public $name;
+
+			/**
+			 * @var String $singular
+			 * Singular label
+			 */
+			public $singular;
+
+			/**
+			 * @var String $plural
+			 * Plural Label
+			 */
+			public $plural;
+
+			/**
+			 * @var Array $tax_array
+			 * Taxonomy array
+			 */
+			public $tax_array;
+
+			/**
+			 * @var Array $support
+			 * Supports Array
+			 */
+			public $supports;
+
+			/**
+			 * KOTW_Custom_Post constructor.
+			 *
+			 * @param $name
+			 * @param $singular
+			 * @param $plural
+			 * @param $tax_array
+			 * @param $supports
+			 */
+			public function __construct( $name, $singular, $plural, $tax_array, $supports ) {
+				$this->name      = $name;
+				$this->singular  = $singular;
+				$this->plural    = $plural;
+				$this->tax_array = $tax_array;
+				$this->supports  = $supports;
+
+				add_action( 'init', array( $this, 'register_post_type' ), 0 );
+
+			}
+
+
+			/**
+			 * register_post_type.
+			 */
+			public function register_post_type () {
 				$labels = array(
 					'name'                  => _x( $this->singular, $this->singular, $this->prefix ),
 					'singular_name'         => _x( $this->singular, $this->singular, $this->prefix ),
@@ -115,9 +111,16 @@ class KOTW_Custom_Post extends DCP_Init {
 					'capability_type'       => 'page',
 				);
 				register_post_type( $this->name, $args );
-			},
-			0
-		);
-	}
-}
-endif;
+			}
+		}
+	endif;
+
+
+	/** Registering custom_post_types */
+	$debts = new KOTW_Custom_Post(
+		'kotw_debt',
+		'Debt',
+		'Debts',
+		array( 'tag' ),
+		array( 'title', 'editor' )
+	);

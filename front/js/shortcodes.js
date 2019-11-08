@@ -1,27 +1,39 @@
-/*
 let dcmShortcodes = {
 
-    elements  : {
+    debtCalculator : {
+        elements  : {
+            singleTabs : document.querySelectorAll( '.single-tab' ),
+        },
+        events : () => {
+            let plugin = dcmShortcodes.debtCalculator;
 
-    },
-    events : () => {
+            // Single Tabs on Click.
+            plugin.elements.singleTabs.forEach( (tab) => {
+                tab.addEventListener( 'click', function () {
+                    let id = tab.getAttribute( 'data-id' );
+                    jQuery( '.single-tab' ).removeClass( 'active' );
+                    tab.classList.add( 'active' );
 
-    },
-    functions :{
+                    jQuery( '.arm_account_detail_tab.arm_account_detail_tab_content' ).removeClass( 'active' );
+                    jQuery( '.arm_account_detail_tab.arm_account_detail_tab_content[data-tab="' + id + '"]' ).addClass( 'active' );
+                } );
+            } );
+        },
+        functions :{
 
-    },
-    init : () => {
-        console.log( 'shortcodes working fine' );
-        dcmShortcodes.events();
+        },
+        init : () => {
+            dcmShortcodes.debtCalculator.events();
+        }
     }
+
 };
 
 window.addEventListener('DOMContentLoaded', (event) => {
-    dcmShortcodes.init();
+    dcmShortcodes.debtCalculator.init();
 });
-*/
 
-
+/*
 var rangeSlider = function(){
     var slider = jQuery('.row'),
         range = jQuery('.value_range'),
@@ -100,4 +112,4 @@ jQuery('.value_range').each(function (){
         + 'color-stop(' + val + ', #27283A)'
         + ')'
     );
-});
+})*/;

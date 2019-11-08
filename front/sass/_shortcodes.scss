@@ -1,17 +1,51 @@
 @import "variables";
+
+.dcm-wrapper {
+	border: 1px solid #dee3e9;
+}
 .dcm-shortcode {
-	background: #F73946;
-	background: -webkit-linear-gradient(left top, #F73946, #FF3875);
-	background: -o-linear-gradient(bottom right, #F73946, #FF3875);
-	background: -moz-linear-gradient(bottom right, #F73946, #FF3875);
-	background: linear-gradient(to bottom right, #F73946, #FF3875);
-	background-attachment: fixed;
-	background-repeat: no-repeat;
-	height: 100%;
+	.arm-tabs {
+		width: 100%;
+		@include align-start;
+		flex-direction: row;
+		padding: 0;
+		border:0;
+		.single-tab {
+			padding: 1rem;
+			cursor:pointer;
+			border: 1px solid #dee3e9;
+			flex: 1;
+			text-align: center;
+
+			&.active {
+				background: #eeeeee;
+			}
+		}
+
+
+	}
+	.arm_account_detail_wrapper {
+		margin-top: 0;
+		.arm_account_detail_tab {
+			display: none;
+			&.active {
+				display: block;
+			}
+		}
+	}
+}
+.dcm-shortcode {
+	//background: #F73946;
+	//background: -webkit-linear-gradient(left top, #F73946, #FF3875);
+	//background: -o-linear-gradient(bottom right, #F73946, #FF3875);
+	//background: -moz-linear-gradient(bottom right, #F73946, #FF3875);
+	//background: linear-gradient(to bottom right, #F73946, #FF3875);
+	//background-attachment: fixed;
+	//background-repeat: no-repeat;
 	&#debt-calculator-shortcode {
 		.debt-calculator {
 			margin: 75px auto;
-			width: 100%;
+			width: 50%;
 			max-width: 500px;
 			display: table;
 			background: #2B2D41;
