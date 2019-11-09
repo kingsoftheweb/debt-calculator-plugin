@@ -5,7 +5,11 @@ $debt_id = $post->ID;
 global $wpdb;
 $table_name = $wpdb->prefix . $this->prefix . '_debt_logs';
 $sql        = $wpdb->prepare( "select * from `$table_name` where `debt_id` =  %d", $debt_id );
-$debt_logs  = $wpdb->get_results( $sql , ARRAY_A );
+$debt_logs  = $wpdb->get_results( $sql );
+
+
+
+
 
 ?>
 <div class="kotw-meta-box">

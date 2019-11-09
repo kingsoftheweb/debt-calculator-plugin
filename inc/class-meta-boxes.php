@@ -115,14 +115,26 @@ if ( ! class_exists( 'DCP_Meta_Boxes' ) ):
 			$table_name = $wpdb->prefix . $this->prefix . '_debt_logs';
 
 			// Check if any of the values has changed to last debt log for the same debt.
-			//$last_debt_log = $wpdb->get_var( $wpdb->prepare( "select " ) );
+			$last_debt_log = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT * FROM `$table_name` WHERE `debt_id` = %d and `remaining` = %s and `paid` = %s and `yearly_interest` = %s ",
+					$debt_id,
+					$remaining,
+					$paid,
+					$interest
+				)
+			);
 
-			$insert = $wpdb->insert( $table_name, array(
-				'debt_id'           => $debt_id,
-				'remaining'         => $remaining,
-				'paid'              => $paid,
-				'yearly_interest'   => $interest,
-			) );
+			$insert = false;
+			if ( empty( $last_debt_log ) ) {
+				$insert = $wpdb->insert( $table_name, array(
+					'debt_id'           => $debt_id,
+					'remaining'         => $remaining,
+					'paid'              => $paid,
+					'yearly_interest'   => $interest,
+				) );
+			}
+
 			return $insert;
 		}
 	}

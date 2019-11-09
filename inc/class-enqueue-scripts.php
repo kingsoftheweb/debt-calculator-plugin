@@ -33,6 +33,7 @@ if ( ! class_exists( 'DCP_Enqueue_Scripts' ) ):
 		public function front_scripts() {
 			// Styles
 			//wp_enqueue_style( $this->prefix . '-bootstrap4',  'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', [], time() );
+			wp_enqueue_style( $this->prefix . '-fontawesome',  'https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', [], time() );
 			wp_enqueue_style( $this->prefix . '-front', $this->plugin_url . '/front/sass/front.css', [], time() );
 
 			// Scripts

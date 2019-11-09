@@ -2,24 +2,73 @@ let dcmShortcodes = {
 
     debtCalculator: {
         elements: {
-            singleTabs: document.querySelectorAll('.single-tab'),
+            singleTabs  : document.querySelectorAll('.single-grid-tab'),
+            contentTabs : document.querySelectorAll( '.arm_account_detail_tab.arm_account_detail_tab_content' ),
+            resultsTabs : document.querySelectorAll( 'td.arm-form-table-content.tab-has-result' ),
         },
         events: () => {
             let plugin = dcmShortcodes.debtCalculator;
 
-            // Single Tabs on Click.
-            plugin.elements.singleTabs.forEach((tab) => {
-                tab.addEventListener('click', function () {
-                    let id = tab.getAttribute('data-id');
-                    jQuery('.single-tab').removeClass('active');
-                    tab.classList.add('active');
+            // On load.
+            window.onload = () => {
+                plugin.functions.parseUrl();
+            };
 
-                    jQuery('.arm_account_detail_tab.arm_account_detail_tab_content').removeClass('active');
-                    jQuery('.arm_account_detail_tab.arm_account_detail_tab_content[data-tab="' + id + '"]').addClass('active');
+            // Single Tabs on Click.
+            plugin.elements.singleTabs.forEach( ( tab ) => {
+                tab.addEventListener('click', function () {
+                    let id     = tab.getAttribute('data-id');
+                    plugin.functions.showTab( id );
+
                 });
             });
+
+            // Tab Results on Click.
+            plugin.elements.resultsTabs.forEach( ( tab ) => {
+                tab.addEventListener( 'click', () => {
+                    if( tab.classList.contains( 'open' ) ) {
+                        tab.classList.remove( 'open' );
+                    } else {
+                        plugin.elements.resultsTabs.forEach( ( tab) => { tab.classList.remove( 'open' ) } );
+                        tab.classList.add( 'open' );
+                    }
+
+                } );
+            } );
         },
-        functions: {},
+        functions: {
+            showTab : ( dataID ) => {
+                dcmShortcodes.debtCalculator.elements.singleTabs.forEach( ( tab ) => {
+                    tab.classList.remove( 'active' );
+                } );
+                document.querySelector( '.single-grid-tab[data-id="' + dataID + '"]' ).classList.add( 'active' );
+
+                dcmShortcodes.debtCalculator.elements.contentTabs.forEach( ( tab ) => {
+                    tab.classList.remove( 'active' );
+                } );
+                document.querySelector( '.arm_account_detail_tab.arm_account_detail_tab_content[data-tab="' + dataID + '"]' ).classList.add( 'active' );
+
+                let targetBottom = parseInt ( document.querySelector( '.arm-tabs.dcm-wrapper.dcm-shortcode' ).offsetHeight )
+                    + parseInt( document.querySelector( '.arm-tabs.dcm-wrapper.dcm-shortcode' ).offsetTop );
+
+                window.scrollTo({
+                    top: targetBottom,
+                    left:0,
+                    behavior: 'smooth'
+                });
+            },
+            parseUrl : () => {
+                let url     = new URL( location.href );
+                let tab     =  url.searchParams.get( 'tab' );
+                let debtID  = url.searchParams.get( 'debt_id' );
+
+                dcmShortcodes.debtCalculator.functions.showTab( tab );
+                return debtID;
+            },
+            updateUrl : () => {
+
+            }
+        },
         init: () => {
             dcmShortcodes.debtCalculator.events();
         }
