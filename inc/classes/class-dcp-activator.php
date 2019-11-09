@@ -30,7 +30,7 @@ class DCP_Activator extends DCP_Init {
 				remaining text NOT NULL,
 				paid text NOT NULL,
 				yearly_interest text NOT NULL,
-				time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+				time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				PRIMARY KEY  (id)
 		) $charset_collate;";
 

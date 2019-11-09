@@ -1,0 +1,19 @@
+.kotw-meta-box {
+	@include align-start;
+	flex-direction: column;
+	p {
+		@include align-start;
+		width: 100%;
+		
+		label {
+			@include align-start;
+			flex:1;
+			font-weight: 600;
+		}
+		
+		input {
+			@include align-start;
+			flex:2;
+		}
+	}
+}

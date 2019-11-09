@@ -1,11 +1,11 @@
 <?php
 global $post;
 
-echo $remaining = get_post_meta( $post->ID, $this->prefix . '_remaining_debt', true );
-echo $paid = get_post_meta( $post->ID, $this->prefix . '_paid_amount', true );
-echo $yearly_interest = get_post_meta( $post->ID, $this->prefix . '_yearly_interest', true );
+$remaining = get_post_meta( $post->ID, $this->prefix . '_remaining_debt', true );
+$paid = get_post_meta( $post->ID, $this->prefix . '_paid_amount', true );
+$yearly_interest = get_post_meta( $post->ID, $this->prefix . '_yearly_interest', true );
 ?>
-<div class="dcm-meta-box">
+<div class="kotw-meta-box">
 	<p>
 		<label for="_remaining_debt">Remaining</label>
 		<input type="text" name="<?php echo $this->prefix; ?>_remaining_debt" id="_remaining_debt"
@@ -20,7 +20,7 @@ echo $yearly_interest = get_post_meta( $post->ID, $this->prefix . '_yearly_inter
 
 	<p>
 		<label for="_yearly_interest">Yearly Interest</label>
-		<input type="text" name="<?php echo $this->prefix; ?>_paid_amount" id="_yearly_interest"
+		<input type="text" name="<?php echo $this->prefix; ?>_yearly_interest" id="_yearly_interest"
 		       value="<?php echo $yearly_interest; ?>"/>
 	</p>
 
