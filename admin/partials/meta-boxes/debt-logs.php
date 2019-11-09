@@ -1,6 +1,7 @@
 <?php
 global $post;
 $debt_id = $post->ID;
+
 global $wpdb;
 $table_name = $wpdb->prefix . $this->prefix . '_debt_logs';
 $debt_logs  = $wpdb->get_results( "select * from $table_name where `debt_id` =  '$debt_id'; " );
