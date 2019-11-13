@@ -23,6 +23,7 @@
                                     <input type = "number" name = "yearly_interest" step= "0.1" placeholder = "example: 2"/>
                                 </div>
 								<div class="submit">
+									<input type = "hidden" name = "author_id" value = "<?php echo get_current_user_id(); ?>" />
 									<input class="submit" type="submit" id="submit" value="Add New Debt">
 								</div>
 							</div>

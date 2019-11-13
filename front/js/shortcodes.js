@@ -21,6 +21,8 @@ let dcmShortcodes = {
                 tab.addEventListener('click', function () {
                     let id     = tab.getAttribute('data-id');
                     plugin.functions.showTab( id );
+                    plugin.functions.updateUrl( id );
+
 
                 });
             });
@@ -78,8 +80,8 @@ let dcmShortcodes = {
 
 
             },
-            updateUrl : () => {
-
+            updateUrl : ( tabID ) => {
+                
             },
             // Updating the Chart per each report for each debt.
             reportsCharts : () => {
@@ -101,7 +103,7 @@ let dcmShortcodes = {
 
             },
             addNewDebt : ( submitButton ) => {
-                console.log( submitButton );
+                let authorID             = submitButton.parentElement.parentElement.parentElement.querySelector( 'input[name="author_id"]' ).value;
                 let debtNameInput        = submitButton.parentElement.parentElement.parentElement.querySelector( 'input[name="debt_name"]' );
                 let debtAmountInput      = submitButton.parentElement.parentElement.querySelector( 'input[name="debt_amount"]' );
                 let yearlyInterestInput  = submitButton.parentElement.parentElement.querySelector( 'input[name="yearly_interest"]' );
@@ -110,18 +112,21 @@ let dcmShortcodes = {
                  || '' === debtAmountInput.value
                  || '' === yearlyInterestInput.value
                 ) {
-                    console.log( 'error' );
+                    alert( 'Fill All Fields please.' );
                 } else {
+                    console.log( dcp_object.ajaxurl );
                     jQuery.post(
                         dcp_object.ajaxurl,
                         {
                             action          : 'add_dcp_debt',
                             debt_title      : debtNameInput.value,
                             debt_amount     : debtAmountInput.value,
-                            yearly_interest : yearlyInterestInput.value
+                            yearly_interest : yearlyInterestInput.value,
+                            author_id       : authorID
                         },
                         function ( response ) {
-                            console.log( response );
+                            let url     = new URL( location.href );
+
                         }
                     );
 
