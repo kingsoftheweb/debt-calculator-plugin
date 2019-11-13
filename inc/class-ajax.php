@@ -14,8 +14,8 @@ class DCP_Ajax extends DCP_Init{
 
 	public function update_dcp_debt () {
 
-		$debt = new DCP_Meta_Boxes();
-		$debt->update_debt_logs(
+		$functions = new DCP_Functions();
+		$functions->update_debt_logs(
 			$_POST['debtID'],
 			$_POST['remaining'],
 			$_POST['paid'],

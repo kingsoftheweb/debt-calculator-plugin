@@ -90,53 +90,17 @@ if ( ! class_exists( 'DCP_Meta_Boxes' ) ):
 				}
 			}
 
-			$this->update_debt_logs(
+			$functions = new DCP_Functions();
+			$functions->update_debt_logs(
 				$post_id,
 				$_POST[$this->prefix . '_remaining_debt'],
 				$_POST[$this->prefix . '_paid_amount'],
 				$_POST[$this->prefix . '_yearly_interest']
 			);
 
+
 		}
 
-		/**
-		 * update_debt_logs.
-		 * Updates the debt logs with a new entry.
-		 *
-		 * @param $debt_id
-		 * @param $remaining
-		 * @param $paid
-		 * @param $interest
-		 *
-		 * @return false|int
-		 */
-		public function update_debt_logs ( $debt_id, $remaining, $paid, $interest ) {
-			global $wpdb;
-			$table_name = $wpdb->prefix . $this->prefix . '_debt_logs';
-
-			// Check if any of the values has changed to last debt log for the same debt.
-			$last_debt_log = $wpdb->get_var(
-				$wpdb->prepare(
-					"SELECT * FROM `$table_name` WHERE `debt_id` = %d and `remaining` = %s and `paid` = %s and `yearly_interest` = %s ",
-					$debt_id,
-					$remaining,
-					$paid,
-					$interest
-				)
-			);
-
-			$insert = false;
-			if ( empty( $last_debt_log ) ) {
-				$insert = $wpdb->insert( $table_name, array(
-					'debt_id'           => $debt_id,
-					'remaining'         => $remaining,
-					'paid'              => $paid,
-					'yearly_interest'   => $interest,
-				) );
-			}
-
-			return $insert;
-		}
 	}
 
 	new DCP_Meta_Boxes();

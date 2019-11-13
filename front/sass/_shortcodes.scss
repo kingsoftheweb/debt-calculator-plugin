@@ -1,5 +1,13 @@
 @import "variables";
 
+@mixin single_grid_active {
+	background-color: $primary_color;
+	color: $secondary_color;
+	transition: background-color $fast_time_duration ease-in-out, color $fast_time_duration ease-in-out;
+	i, h3 {
+		color: $secondary_color;
+	}
+}
 .dcm-wrapper {
 	border: 1px solid #dee3e9;
 }
@@ -32,7 +40,8 @@
 			.single-grid-tab {
 				@include align-center;
 				flex-direction: column;
-				height: 10rem;
+				min-height: 10rem;
+				height: auto;
 				border-radius: 3px;
 				background-color: #ffffff;
 				padding: 15px;
@@ -43,23 +52,19 @@
 				transition: background-color 0.7s ease-in-out;
 
 				&:hover {
-					background-color: $primary_color;
-					color: $secondary_color;
-					transition: background-color $fast_time_duration ease-in-out, color $fast_time_duration ease-in-out;
+					@include single_grid_active;
 				}
 				&.active {
-					background-color: $primary_color;
-					color: $secondary_color;
-					transition: background-color $fast_time_duration ease-in-out, color $fast_time_duration ease-in-out;
+					@include single_grid_active;
 				}
 				.icon {
 					i {
-						font-size: 3rem;
+						font-size: 45px;
 					}
 				}
 				.title {
 					h3 {
-						font-size: 1rem;
+						font-size: 15px;
 					}
 				}
 
@@ -103,8 +108,18 @@
 						}
 						&.open {
 							.results-tab {
-								height: 10rem;
+								min-height: 10rem;
+								height: 100%;
 								transition: height $slow_time_duration ease-in-out;
+								
+								.reports-graphics {
+									.single-graphics-wrapper {
+										margin-bottom: 50px;
+										canvas {
+											width: 100%;
+										}
+									}
+								}
 							}
 
 						}

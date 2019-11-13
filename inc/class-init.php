@@ -58,6 +58,7 @@ if ( ! class_exists( 'DCP_Init' ) ):
 			require_once $this->plugin_path . '/inc/classes/class-dcp-notifications.php';
 			require_once $this->plugin_path . '/inc/classes/class-dcp-arm-hooks.php';
 
+			require_once $this->plugin_path . '/inc/classes/class-functions.php';
 			require_once $this->plugin_path . '/inc/class-meta-boxes.php';
 
 			require_once $this->plugin_path . '/inc/class-ajax.php';

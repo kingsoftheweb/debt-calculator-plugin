@@ -4,7 +4,7 @@ let dcmShortcodes = {
         elements: {
             singleTabs  : document.querySelectorAll('.single-grid-tab'),
             contentTabs : document.querySelectorAll( '.arm_account_detail_tab.arm_account_detail_tab_content' ),
-            resultsTabs : document.querySelectorAll( 'td.arm-form-table-content.tab-has-result' ),
+            resultsTabs : document.querySelectorAll( 'td.arm-form-table-content.tab-has-result .title' ),
         },
         events: () => {
             let plugin = dcmShortcodes.debtCalculator;
@@ -12,6 +12,7 @@ let dcmShortcodes = {
             // On load.
             window.onload = () => {
                 plugin.functions.parseUrl();
+                plugin.functions.reportsCharts();
             };
 
             // Single Tabs on Click.
@@ -26,11 +27,11 @@ let dcmShortcodes = {
             // Tab Results on Click.
             plugin.elements.resultsTabs.forEach( ( tab ) => {
                 tab.addEventListener( 'click', () => {
-                    if( tab.classList.contains( 'open' ) ) {
-                        tab.classList.remove( 'open' );
+                    if( tab.parentElement.classList.contains( 'open' ) ) {
+                        tab.parentElement.classList.remove( 'open' );
                     } else {
-                        plugin.elements.resultsTabs.forEach( ( tab) => { tab.classList.remove( 'open' ) } );
-                        tab.classList.add( 'open' );
+                        plugin.elements.resultsTabs.forEach( ( tab ) => { tab.parentElement.classList.remove( 'open' ) } );
+                        tab.parentElement.classList.add( 'open' );
                     }
 
                 } );
@@ -61,11 +62,35 @@ let dcmShortcodes = {
                 let url     = new URL( location.href );
                 let tab     =  url.searchParams.get( 'tab' );
                 let debtID  = url.searchParams.get( 'debt_id' );
+                if( null !== tab ) {
+                    dcmShortcodes.debtCalculator.functions.showTab( tab );
+                    return debtID;
+                } else {
+                    return null;
+                }
 
-                dcmShortcodes.debtCalculator.functions.showTab( tab );
-                return debtID;
+
             },
             updateUrl : () => {
+
+            },
+            // Updating the Chart per each report for each debt.
+            reportsCharts : () => {
+                console.log('reports charts');
+                // Line Charts.
+                document.querySelectorAll( 'canvas.debts-reports.line-chart' ).forEach( ( canvas ) => {
+                    createChart.functions.drawChart( canvas, canvas.getAttribute( 'data-id' ), 'line' );
+                } );
+
+                // Pie Charts.
+                document.querySelectorAll( 'canvas.debts-reports.pie-chart' ).forEach( ( canvas ) => {
+                    createChart.functions.drawChart( canvas, canvas.getAttribute( 'data-id' ), 'pie' );
+                } );
+
+                // Doughnut Charts.
+                document.querySelectorAll( 'canvas.debts-reports.doughnut-chart' ).forEach( ( canvas ) => {
+                    createChart.functions.drawChart( canvas, canvas.getAttribute( 'data-id' ), 'doughnut' );
+                } );
 
             }
         },
