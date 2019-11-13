@@ -32,7 +32,6 @@ class DCP_Ajax extends DCP_Init{
 
 	public function add_dcp_debt () {
 
-		echo $_POST['action'];
 		$debt_id = wp_insert_post(
 			array(
 				'post_type'   => 'kotw_debt',

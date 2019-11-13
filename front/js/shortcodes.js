@@ -81,11 +81,12 @@ let dcmShortcodes = {
 
             },
             updateUrl : ( tabID ) => {
-                
+                let locationUrl = new URL ( location.href );
+                history.pushState(null, '', locationUrl.pathname + '?tab=' + tabID );
+                return locationUrl.pathname + '?tab=' + tabID;
             },
             // Updating the Chart per each report for each debt.
             reportsCharts : () => {
-                console.log('reports charts');
                 // Line Charts.
                 document.querySelectorAll( 'canvas.debts-reports.line-chart' ).forEach( ( canvas ) => {
                     createChart.functions.drawChart( canvas, canvas.getAttribute( 'data-id' ), 'line' );
@@ -114,7 +115,6 @@ let dcmShortcodes = {
                 ) {
                     alert( 'Fill All Fields please.' );
                 } else {
-                    console.log( dcp_object.ajaxurl );
                     jQuery.post(
                         dcp_object.ajaxurl,
                         {
@@ -125,7 +125,8 @@ let dcmShortcodes = {
                             author_id       : authorID
                         },
                         function ( response ) {
-                            let url     = new URL( location.href );
+                            let newUrl = dcmShortcodes.debtCalculator.functions.updateUrl( 'debts-reports&debt_id=' + response );
+                            location.href = newUrl;
 
                         }
                     );
