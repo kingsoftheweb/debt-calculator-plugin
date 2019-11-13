@@ -46,6 +46,11 @@ if ( ! class_exists( 'DCP_Enqueue_Scripts' ) ):
 				'jquery',
 				'jquery-ui-slider'
 			), time(), true );
+			wp_localize_script( $this->prefix . '-shortcodes', 'dcp_object',
+				array(
+					'ajaxurl' => admin_url( 'admin-ajax.php' )
+				)
+			);
 		}
 	}
 

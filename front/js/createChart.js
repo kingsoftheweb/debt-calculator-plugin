@@ -8,8 +8,6 @@ let createChart = {
             let debtLogValues = JSON.parse ( canvas.parentElement.parentElement.querySelector( 'input.debt-logs-json' ).value );
             let debtValues    = JSON.parse ( canvas.parentElement.parentElement.querySelector( 'input.current-debt-values' ).value );
 
-            console.log( debtLogValues, debtValues );
-
             let data    = [];
             let options = [];
             switch ( type ) {
@@ -18,7 +16,7 @@ let createChart = {
                         values = [];
                     debtLogValues.forEach( ( log ) => {
                         let time = new Date( log.time );
-                        labels.push( 'test' );
+                        labels.push( log.time );
                         values.push( parseFloat( log.remaining ) );
                     } );
                     data =  {

@@ -2,9 +2,10 @@ let dcmShortcodes = {
 
     debtCalculator: {
         elements: {
-            singleTabs  : document.querySelectorAll('.single-grid-tab'),
-            contentTabs : document.querySelectorAll( '.arm_account_detail_tab.arm_account_detail_tab_content' ),
-            resultsTabs : document.querySelectorAll( 'td.arm-form-table-content.tab-has-result .title' ),
+            singleTabs   : document.querySelectorAll('.single-grid-tab'),
+            contentTabs  : document.querySelectorAll( '.arm_account_detail_tab.arm_account_detail_tab_content' ),
+            resultsTabs  : document.querySelectorAll( 'td.arm-form-table-content.tab-has-result .title' ),
+            submitButton : document.querySelector( '.debt-calculator input.submit' )
         },
         events: () => {
             let plugin = dcmShortcodes.debtCalculator;
@@ -35,6 +36,12 @@ let dcmShortcodes = {
                     }
 
                 } );
+            } );
+
+
+            // On Submit New Debt Button Click
+            plugin.elements.submitButton.addEventListener( 'click', function () {
+                plugin.functions.addNewDebt( plugin.elements.submitButton );
             } );
         },
         functions: {
@@ -92,6 +99,33 @@ let dcmShortcodes = {
                     createChart.functions.drawChart( canvas, canvas.getAttribute( 'data-id' ), 'doughnut' );
                 } );
 
+            },
+            addNewDebt : ( submitButton ) => {
+                console.log( submitButton );
+                let debtNameInput        = submitButton.parentElement.parentElement.parentElement.querySelector( 'input[name="debt_name"]' );
+                let debtAmountInput      = submitButton.parentElement.parentElement.querySelector( 'input[name="debt_amount"]' );
+                let yearlyInterestInput  = submitButton.parentElement.parentElement.querySelector( 'input[name="yearly_interest"]' );
+                if(
+                    '' === debtNameInput.value
+                 || '' === debtAmountInput.value
+                 || '' === yearlyInterestInput.value
+                ) {
+                    console.log( 'error' );
+                } else {
+                    jQuery.post(
+                        dcp_object.ajaxurl,
+                        {
+                            action          : 'add_dcp_debt',
+                            debt_title      : debtNameInput.value,
+                            debt_amount     : debtAmountInput.value,
+                            yearly_interest : yearlyInterestInput.value
+                        },
+                        function ( response ) {
+                            console.log( response );
+                        }
+                    );
+
+                }
             }
         },
         init: () => {

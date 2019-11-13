@@ -40,7 +40,7 @@
 			.single-grid-tab {
 				@include align-center;
 				flex-direction: column;
-				min-height: 10rem;
+				min-height: 25rem;
 				height: auto;
 				border-radius: 3px;
 				background-color: #ffffff;
@@ -119,6 +119,11 @@
 											width: 100%;
 										}
 									}
+									.debts-logs {
+										table {
+											width: 100%;
+										}
+									}
 								}
 							}
 
@@ -161,6 +166,11 @@
 				border: 1px solid #3b4148 !important;
 				border-radius: 10px !important;
 				color: #eeeeee !important;
+				text-align: center;
+				&::placeholder {
+					color: rgba(255,255,255,0.5);
+					font-style: italic;
+				}
 			}
 			.result {
 				display: table;
@@ -207,7 +217,8 @@
 					font-weight: 400;
 					text-transform: uppercase;
 					font-size: 1.5em;
-					padding: 15px;
+					padding: 0px;
+					color: #eeeeee;
 				}
 				
 				.calculator-hr {
@@ -215,6 +226,9 @@
 					width: 80%;
 					border: 1.2px solid #F73946;
 					border-radius: 15px;
+				}
+				.height {
+					margin-bottom: 20px;
 				}
 				
 				input[type=range] {

@@ -16,14 +16,14 @@
 							<div class="calculator">
 								<h2 class="text-center calculator-title">Amount You Owe</h2>
 								<div class="height">
-                                    <input type = "text" name = "debt_name" placeholder = "Name of Debt"/>
+                                    <input type = "number" name = "debt_amount" placeholder = "example: 23000"/>
 								</div>
-                                <h2 class="text-center calculator-title">Yearly Interest</h2>
+                                <h2 class="text-center calculator-title">Yearly Interest (%)</h2>
                                 <div class="height">
-                                    <input type = "text" name = "debt_name" placeholder = "Name of Debt"/>
+                                    <input type = "number" name = "yearly_interest" step= "0.1" placeholder = "example: 2"/>
                                 </div>
 								<div class="submit">
-									<input class="submit" type="submit" id="submit" value="add">
+									<input class="submit" type="submit" id="submit" value="Add New Debt">
 								</div>
 							</div>
 						</div>
