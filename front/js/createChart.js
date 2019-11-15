@@ -70,9 +70,8 @@ let createChart = {
                             text: debtValues.title
                         },
                         animation: {
-                            animateScale: true,
-                            animateRotate: true
-                        }
+                            duration: 0
+                        },
                     };
                     break;
             }
