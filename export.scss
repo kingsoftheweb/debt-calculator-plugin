@@ -1,0 +1,45 @@
+.results-tab {
+	min-height: 10rem;
+	height: 100%;
+	h2 {
+		font-size: 22px;
+		&.align-center {
+			text-align: center;
+		}
+	}
+	
+	.current-debt-info {
+		display: flex;
+		margin-bottom: 10px;
+		border: 1px solid #000000;
+		>div {
+			flex: 1;
+		}
+	}
+	.reports-graphics {
+		border: 1px solid #000000;
+		.single-graphics-wrapper {
+			margin-bottom: 50px;
+			canvas {
+				width: 100%;
+			}
+			&#doughnut-chart {
+				canvas {
+					height: 200px !important;
+					width: auto !important;
+				}
+			}
+			&#line-chart {
+				canvas {
+					height: 300px !important;
+					width: auto !important;
+				}
+			}
+		}
+		.debts-logs {
+			table {
+				width: 100%;
+			}
+		}
+	}
+}

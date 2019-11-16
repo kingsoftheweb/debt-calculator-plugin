@@ -112,7 +112,16 @@
 								height: 100%;
 								//transition: height $slow_time_duration ease-in-out;
 								
+								.current-debt-info {
+									@include align-start;
+									margin-bottom: 10px;
+									border: 1px solid #000000;
+									>div {
+										flex: 1;
+									}
+								}
 								.reports-graphics {
+									border: 1px solid #000000;
 									.single-graphics-wrapper {
 										margin-bottom: 50px;
 										canvas {

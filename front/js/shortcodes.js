@@ -7,7 +7,7 @@ let dcmShortcodes = {
             resultsTabs   : document.querySelectorAll( 'td.arm-form-table-content.tab-has-result .title' ),
             addNewButton  : document.querySelector( '.dcm-shortcode input.submit.add-new-debt' ),
             updateButtons : document.querySelectorAll( '.dcm-shortcode input.submit.update-debt' ),
-
+            exportPDFs   : document.querySelectorAll( '.results-tab a.export-pdf' ),
         },
         events: () => {
             let plugin = dcmShortcodes.debtCalculator;
@@ -55,6 +55,15 @@ let dcmShortcodes = {
                 } );
             } );
 
+
+            // On Export Button Click.
+            plugin.elements.exportPDFs.forEach( ( btn ) => {
+                btn.addEventListener( 'click', function () {
+                    let url  = btn.getAttribute( 'data-href' );
+                    let html = document.querySelector( '.reports-graphics[data-id="' + btn.getAttribute( 'data-id' ) + '"]' ).innerHTML;
+                    dcpExportHTML.functions.pdfExport( html, url );
+                } );
+            } );
         },
         functions: {
             showTab : ( dataID ) => {

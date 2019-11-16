@@ -25,14 +25,24 @@
 							<td class="arm-form-table-content tab-has-result">
                                 <span class = "title"><?php echo $debt->post_title; ?></span>
                                 <div class="results-tab">
-	                                <div class="current-debt-values">
-		                                <?php
-		                                $current_debt_values = json_decode( $debt_logs['current_debt_values'] );
-		                                ?>
-		                               <p>
-			                                <b>Title: </b><span class="debt-title"><?php echo $current_debt_values->title; ?></span>
-		                                </p>
+	                                <div class="current-debt-info">
+		                                <div class="current-debt-values">
+			                                <?php
+			                                $current_debt_values = json_decode( $debt_logs['current_debt_values'] );
+			                                ?>
+			                                <p>
+				                                <b>Title: </b><span class="debt-title"><?php echo $current_debt_values->title; ?></span>
+			                                </p>
 
+			                                <p>
+				                                <b>Remaining: </b><span class="debt-remaining"><?php echo $current_debt_values->remaining; ?></span>
+			                                </p>
+			                                <p>
+				                                <b>Paid: </b><span class="debt-paid"><?php echo $current_debt_values->paid; ?></span>
+			                                </p>
+			                                <p>
+				                                <b>Yearly Interest: </b><span class="debt-paid"><?php echo $current_debt_values->yearly_interest; ?></span>
+			                                </p>
 		                               <p>
 			                                <b>Remaining: </b><span class="debt-remaining"><?php echo $current_debt_values->remaining; ?></span>
 		                                </p>
@@ -43,9 +53,14 @@
 			                                <b>Yearly Interest: </b><span class="debt-paid"><?php echo $current_debt_values->yearly_interest; ?></span>
 		                                </p>
 
+		                                </div>
+		                                <div class="export-current-debt">
+			                                <a class="button-primary export-pdf" href = "<?php echo $this->plugin_url . '/export.php?debt_id=' . $debt_id;?>" target="_blank" data-href = "<?php echo $this->plugin_url . '/export.php?html=';?>" data-id = "<?php echo $debt_id; ?>">Export Current Debt</a>
+		                                </div>
 	                                </div>
 
-	                                <div class="reports-graphics">
+
+	                                <div class="reports-graphics" data-id = "<?php echo $debt_id; ?>">
 		                                <input type = "hidden" class = "current-debt-values" data-id = "<?php echo $debt_id; ?>" value = '<?php echo $debt_logs['current_debt_values']; ?>'/>
 		                                <input type = "hidden" class = "debt-logs-json" data-id = "<?php echo $debt_id; ?>" value = '<?php echo $debt_logs['debt_logs_json']; ?>'/>
 
