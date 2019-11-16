@@ -72,6 +72,7 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 				'remaining'       => get_post_meta( $debt_id, $this->prefix . '_remaining_debt', true ),
 				'paid'            => get_post_meta( $debt_id, $this->prefix . '_paid_amount', true ),
 				'yearly_interest' => get_post_meta( $debt_id, $this->prefix . '_yearly_interest', true ),
+				'total_paid'      => get_post_meta( $debt_id, $this->prefix . '_total_paid', true ),
 			);
 
 			return array(
@@ -109,16 +110,45 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 
 			$insert = false;
 			if ( empty( $last_debt_log ) ) {
+			    // Update the new remaining.
+                $new_remaining = ( float ) $remaining - ( float ) $paid;
+
 				$insert = $wpdb->insert( $table_name, array(
 					'debt_id'           => $debt_id,
-					'remaining'         => $remaining,
+					'remaining'         => $new_remaining,
 					'paid'              => $paid,
 					'yearly_interest'   => $interest,
 				) );
+
+				update_post_meta( $debt_id, $this->prefix . '_remaining_debt', $new_remaining );
+				$this->udpate_total_paid( $debt_id );
 			}
 
 			return $insert;
 		}
+
+
+		/**
+		 * update_total_paid.
+		 * Updates the total paid for a debt.
+		 *
+		 * @param $debt_id
+		 */
+		public function udpate_total_paid ( $debt_id ) {
+			global $wpdb;
+			$table_name = $wpdb->prefix . $this->prefix . '_debt_logs';
+			$debt_logs = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT * FROM `$table_name` WHERE `debt_id` = %d",
+					$debt_id
+				)
+			);
+			$total_paid = 0;
+			foreach ( $debt_logs as $log ) {
+			    $total_paid = $total_paid + ( float ) $log->paid;
+            }
+			update_post_meta( $debt_id, $this->prefix . '_total_paid', $total_paid );
+        }
 	}
 
 	new DCP_Functions();
