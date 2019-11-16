@@ -1,8 +1,9 @@
 <?php
 global $post;
 
-$remaining = get_post_meta( $post->ID, $this->prefix . '_remaining_debt', true );
-$paid = get_post_meta( $post->ID, $this->prefix . '_paid_amount', true );
+$remaining       = get_post_meta( $post->ID, $this->prefix . '_remaining_debt', true );
+$paid            = get_post_meta( $post->ID, $this->prefix . '_paid_amount', true );
+$total_paid      = get_post_meta( $post->ID, $this->prefix . '_total_paid', true );
 $yearly_interest = get_post_meta( $post->ID, $this->prefix . '_yearly_interest', true );
 ?>
 <div class="kotw-meta-box">
@@ -11,6 +12,12 @@ $yearly_interest = get_post_meta( $post->ID, $this->prefix . '_yearly_interest',
 		<input type="text" name="<?php echo $this->prefix; ?>_remaining_debt" id="_remaining_debt"
 		       value="<?php echo $remaining; ?>"/>
 	</p>
+
+    <p>
+        <label>Total Paid</label>
+        <input type="text"
+               value="<?php echo $total_paid; ?>" disabled/>
+    </p>
 
 	<p>
 		<label for="_paid_amount">Paid</label>

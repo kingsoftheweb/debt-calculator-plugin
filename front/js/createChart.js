@@ -28,6 +28,15 @@ let createChart = {
                             data: values
                         }]
                     };
+                    options = {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    };
                     break;
 
                 case 'pie' :
@@ -56,7 +65,7 @@ let createChart = {
                             ],
                             data: [
                                 debtValues.remaining,
-                                debtValues.paid
+                                debtValues.total_paid
                             ]
                         }]
                     };

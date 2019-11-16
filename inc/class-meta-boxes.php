@@ -97,6 +97,7 @@ if ( ! class_exists( 'DCP_Meta_Boxes' ) ):
 				$_POST[$this->prefix . '_paid_amount'],
 				$_POST[$this->prefix . '_yearly_interest']
 			);
+			$functions->udpate_total_paid( $post_id );
 
 
 		}

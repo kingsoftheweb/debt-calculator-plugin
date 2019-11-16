@@ -2,10 +2,12 @@ let dcmShortcodes = {
 
     debtCalculator: {
         elements: {
-            singleTabs   : document.querySelectorAll('.single-grid-tab'),
-            contentTabs  : document.querySelectorAll( '.arm_account_detail_tab.arm_account_detail_tab_content' ),
-            resultsTabs  : document.querySelectorAll( 'td.arm-form-table-content.tab-has-result .title' ),
-            submitButton : document.querySelector( '.debt-calculator input.submit' )
+            singleTabs    : document.querySelectorAll('.single-grid-tab'),
+            contentTabs   : document.querySelectorAll( '.arm_account_detail_tab.arm_account_detail_tab_content' ),
+            resultsTabs   : document.querySelectorAll( 'td.arm-form-table-content.tab-has-result .title' ),
+            addNewButton  : document.querySelector( '.dcm-shortcode input.submit.add-new-debt' ),
+            updateButtons : document.querySelectorAll( '.dcm-shortcode input.submit.update-debt' ),
+
         },
         events: () => {
             let plugin = dcmShortcodes.debtCalculator;
@@ -42,9 +44,17 @@ let dcmShortcodes = {
 
 
             // On Submit New Debt Button Click
-            plugin.elements.submitButton.addEventListener( 'click', function () {
-                plugin.functions.addNewDebt( plugin.elements.submitButton );
+            plugin.elements.addNewButton.addEventListener( 'click', function () {
+                plugin.functions.addNewDebt( plugin.elements.addNewButton );
             } );
+
+            // On Submit Update Debt Buttons Click
+            plugin.elements.updateButtons.forEach( ( btn ) => {
+               btn.addEventListener( 'click', function () {
+                    plugin.functions.updateDebt( btn );
+                } );
+            } );
+
         },
         functions: {
             showTab : ( dataID ) => {
@@ -128,6 +138,31 @@ let dcmShortcodes = {
                             let newUrl = dcmShortcodes.debtCalculator.functions.updateUrl( 'debts-reports&debt_id=' + response );
                             location.href = newUrl;
 
+                        }
+                    );
+
+                }
+            },
+            updateDebt : ( submitButton ) => {
+                let debtID               = submitButton.parentElement.parentElement.querySelector( 'input[name="debt_id"]' ).value;
+                let debtAmountInput      = submitButton.parentElement.parentElement.querySelector( 'input[name="pay_amount"]' );
+                let remainingAmount      = submitButton.parentElement.parentElement.querySelector( 'input[name="remaining"]' ).value;
+                let yearlyInterest       = submitButton.parentElement.parentElement.querySelector( 'input[name="interest"]' ).value;
+                if( '' === debtAmountInput ) {
+                    alert( 'Fill the Amount Field please.' );
+                } else {
+                    jQuery.post(
+                        dcp_object.ajaxurl,
+                        {
+                            action      : 'update_dcp_debt',
+                            debtID      : debtID,
+                            paid        : debtAmountInput.value,
+                            remaining   : remainingAmount,
+                            interest    : yearlyInterest
+                        },
+                        function ( response ) {
+                            let newUrl = dcmShortcodes.debtCalculator.functions.updateUrl( 'debts-reports&debt_id=' + response );
+                            location.href = newUrl;
                         }
                     );
 

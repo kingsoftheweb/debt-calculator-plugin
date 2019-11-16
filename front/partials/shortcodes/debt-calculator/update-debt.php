@@ -16,14 +16,27 @@
 					)
 				);
 				foreach ( $debts as $debt ) {
-					$debt_id = isset( $debt ) ? $debt->ID : 0;
+					$debt_id   = isset( $debt ) ? $debt->ID : 0;
+					$remaining = get_post_meta( $debt_id, $this->prefix . '_remaining_debt', true );
+					$interest  = get_post_meta( $debt_id, $this->prefix . '_yearly_interest', true );
 					if ( 0 !== $debt_id ):
 						?>
                         <tr data-id="<?php echo $debt_id; ?>">
                             <td class="arm-form-table-content tab-has-result">
                                 <span class = "title"><?php echo $debt->post_title; ?></span>
                                 <div class="results-tab">
-
+                                    <div class="update-debt-form">
+                                        <input type = "hidden" value = "<?php echo $debt_id; ?>" name = "debt_id"/>
+                                        <h3>New Payment</h3>
+                                        <p class="input-field">
+                                            <input type = "hidden" name = "remaining" value = "<?php echo $remaining; ?>" />
+                                            <input type = "hidden" name = "interest" value = "<?php echo $interest; ?>" />
+                                            <input type = "number" step = "0.01" name = "pay_amount" />
+                                        </p>
+                                        <p class="input-field">
+                                            <input type = "submit" class = "submit update-debt" value = "Update" />
+                                        </p>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

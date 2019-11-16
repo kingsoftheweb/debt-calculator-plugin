@@ -37,7 +37,7 @@
 			                                <b>Remaining: </b><span class="debt-remaining"><?php echo $current_debt_values->remaining; ?></span>
 		                                </p>
 		                                <p>
-			                                <b>Paid: </b><span class="debt-paid"><?php echo $current_debt_values->paid; ?></span>
+			                                <b>Total Paid: </b><span class="debt-paid"><?php echo $current_debt_values->total_paid; ?></span>
 		                                </p>
 		                                <p>
 			                                <b>Yearly Interest: </b><span class="debt-paid"><?php echo $current_debt_values->yearly_interest; ?></span>
