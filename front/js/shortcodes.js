@@ -5,9 +5,10 @@ let dcmShortcodes = {
             singleTabs    : document.querySelectorAll('.single-grid-tab'),
             contentTabs   : document.querySelectorAll( '.arm_account_detail_tab.arm_account_detail_tab_content' ),
             resultsTabs   : document.querySelectorAll( 'td.arm-form-table-content.tab-has-result .title' ),
+            totalDebtInfo : document.querySelectorAll( 'total-debts-chart .total-debts-chart__main' ),
             addNewButton  : document.querySelector( '.dcm-shortcode input.submit.add-new-debt' ),
             updateButtons : document.querySelectorAll( '.dcm-shortcode input.submit.update-debt' ),
-            exportPDFs   : document.querySelectorAll( '.results-tab a.export-pdf' ),
+            exportPDFs    : document.querySelectorAll( '.results-tab a.export-pdf' ),
         },
         events: () => {
             let plugin = dcmShortcodes.debtCalculator;
@@ -106,17 +107,17 @@ let dcmShortcodes = {
             },
             // Updating the Chart per each report for each debt.
             reportsCharts : () => {
-                // Line Charts.
+                // Line Charts per each single debt.
                 document.querySelectorAll( 'canvas.debts-reports.line-chart' ).forEach( ( canvas ) => {
                     createChart.functions.drawChart( canvas, canvas.getAttribute( 'data-id' ), 'line' );
                 } );
 
-                // Pie Charts.
-                document.querySelectorAll( 'canvas.debts-reports.pie-chart' ).forEach( ( canvas ) => {
-                    createChart.functions.drawChart( canvas, canvas.getAttribute( 'data-id' ), 'pie' );
-                } );
+                // Doughnut Charts for total debts values.
+                let totalDebtsValues = dcmShortcodes.elements.totalDebtInfo.querySelector( 'input[name="total_debts_info"]' ).value;
+                let totalDebtCanvas  = dcmShortcodes.elements.totalDebtInfo.querySelector( 'canvas' );
+                createChart.functions.drawChart( canvas, canvas.getAttribute( 'data-id' ), 'doughnut' );
 
-                // Doughnut Charts.
+                // Doughnut Charts per each single debt.
                 document.querySelectorAll( 'canvas.debts-reports.doughnut-chart' ).forEach( ( canvas ) => {
                     createChart.functions.drawChart( canvas, canvas.getAttribute( 'data-id' ), 'doughnut' );
                 } );

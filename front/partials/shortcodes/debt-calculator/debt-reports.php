@@ -1,6 +1,9 @@
 <div class="arm_account_detail_tab arm_account_detail_tab_content arm_account_content_active"
      data-tab="debts-reports">
 	<div class="arm_account_detail_tab_heading">Debts Reports</div>
+	<div class="total-debts-chart">
+		<?php include_once $this->plugin_path . '/front/partials/shortcodes/debt-calculator/reports-charts/total-debts-chart.php'; ?>
+	</div>
 	<div class="arm_account_detail_tab_body arm_account_detail_tab_debts-list">
 		<div class="arm_view_profile_wrapper arm_account_detail_block">
 			<table class="form-table">
@@ -12,7 +15,7 @@
 				$debts = get_posts(
 					array(
 						'post_type'   => 'kotw_debt',
-						'post_status' => 'publish'
+						'post_status' => 'publish',
 					)
 				);
 				foreach ( $debts as $debt ) {
