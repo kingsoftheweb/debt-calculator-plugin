@@ -56,6 +56,9 @@ if ( ! class_exists( 'DCP_Enqueue_Scripts' ) ):
 					'ajaxurl' => admin_url( 'admin-ajax.php' )
 				)
 			);
+			//wp_enqueue_script( $this->prefix . '-shortcodes-class', $this->plugin_url . '/front/js/shortcodes-class.min.js', [], time(), true );
+			//wp_enqueue_script( $this->prefix . '-debtCalculator-class', $this->plugin_url . '/front/js/classes/DebtCalculator.min.js', [], time(), true );
+
 		}
 	}
 

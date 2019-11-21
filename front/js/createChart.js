@@ -4,9 +4,14 @@ let createChart = {
         secondaryColor  : 'rgb(253,228,40)'
     },
     functions : {
-        drawChart : ( canvas, debtID, type ) => {
-            let debtLogValues = JSON.parse ( canvas.parentElement.parentElement.querySelector( 'input.debt-logs-json' ).value );
-            let debtValues    = JSON.parse ( canvas.parentElement.parentElement.querySelector( 'input.current-debt-values' ).value );
+        drawChart : ( canvas, debtID, type, debtValues = null ) => {
+            if( null !== debtValues ) {
+                let debtLogValues = [];
+                let debtValues    = JSON.parse( debtValues );
+            } else {
+                let debtLogValues = JSON.parse ( canvas.parentElement.parentElement.querySelector( 'input.debt-logs-json' ).value );
+                let debtValues    = JSON.parse ( canvas.parentElement.parentElement.querySelector( 'input.current-debt-values' ).value );
+            }
 
             let data    = [];
             let options = [];
@@ -36,18 +41,6 @@ let createChart = {
                                 }
                             }]
                         }
-                    };
-                    break;
-
-                case 'pie' :
-                    data =  {
-                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                        datasets: [{
-                            label: debtValues.title,
-                            backgroundColor: 'rgb(255, 99, 132)',
-                            borderColor: 'rgb(255, 99, 132)',
-                            data: [0, 10, 5, 2, 20, 30, 45]
-                        }]
                     };
                     break;
 
