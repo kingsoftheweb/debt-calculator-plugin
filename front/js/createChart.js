@@ -4,14 +4,17 @@ let createChart = {
         secondaryColor  : 'rgb(253,228,40)'
     },
     functions : {
-        drawChart : ( canvas, debtID, type, debtValues = null ) => {
-            if( null !== debtValues ) {
-                let debtLogValues = [];
-                let debtValues    = JSON.parse( debtValues );
-            } else {
-                let debtLogValues = JSON.parse ( canvas.parentElement.parentElement.querySelector( 'input.debt-logs-json' ).value );
-                let debtValues    = JSON.parse ( canvas.parentElement.parentElement.querySelector( 'input.current-debt-values' ).value );
+        drawChart : ( canvas, debtID, type, debtValuesJson = null ) => {
+            let debtLogValues = [];
+            let debtValues    = [];
+            if( null !== debtValuesJson ) { // Total Debt Case.
+                debtValues    = JSON.parse( debtValuesJson );
+            } else {  // Single Debt Case.
+                debtLogValues = JSON.parse ( canvas.parentElement.parentElement.querySelector( 'input.debt-logs-json' ).value );
+                debtValues    = JSON.parse ( canvas.parentElement.parentElement.querySelector( 'input.current-debt-values' ).value );
             }
+
+            console.log( debtValues );
 
             let data    = [];
             let options = [];

@@ -149,6 +149,53 @@ if ( ! class_exists( 'DCP_Functions' ) ):
             }
 			update_post_meta( $debt_id, $this->prefix . '_total_paid', $total_paid );
         }
+
+		/**
+		 * order_logs_per_month.
+		 * Orders the debt logs in an array of each month since the first debt log till the last debt log.
+		 *
+		 * @param $debt_id
+		 *
+		 * @return array
+		 */
+        public function order_logs_per_month ( $debt_id ) {
+	        global $wpdb;
+	        $table_name = $wpdb->prefix . $this->prefix . '_debt_logs';
+	        $first_date_log = $wpdb->get_results(
+		        $wpdb->prepare(
+			        "SELECT * FROM `$table_name` WHERE `debt_id` = %d order by time asc limit 1",
+			        $debt_id
+		        )
+	        );
+	        $last_date_log = $wpdb->get_results(
+		        $wpdb->prepare(
+			        "SELECT * FROM `$table_name` WHERE `debt_id` = %d order by time desc limit 1",
+			        $debt_id
+		        )
+	        );
+
+
+	        $first_date = date_format( date_create(  $first_date_log[0]->time ), 'd-m-Y' );
+	        $last_date  = date_format( date_create(  $last_date_log[0]->time ), 'd-m-Y' );
+
+	        $first_month = date_format( date_create( $first_date_log[0]->time ), 'm' );
+	        $last_month  = date_format( date_create( $last_date_log[0]->time ), 'm' );
+
+	        // Start Looping from first month till last month.
+            $i = 0;
+
+	        return array(
+	                'first_month' => $first_month,
+                    'first_date'  => $first_date,
+                    'last_month'  => $last_month,
+                    'last_date'   => $last_date
+            );
+        }
+
+
+        public function get_number_months_between_dates ( $date1, $date2 ) {
+
+        }
 	}
 
 	new DCP_Functions();

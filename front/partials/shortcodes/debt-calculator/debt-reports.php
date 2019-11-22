@@ -70,16 +70,29 @@
 		                                <div class="single-graphics-wrapper">
 			                                <canvas class="debts-reports doughnut-chart" data-id = "<?php echo$debt_id; ?>"></canvas>
 		                                </div>
-		                                <div class="debts-logs">
-			                                <?php
-			                                echo $debt_logs['debt_logs_html'];
-			                                ?>
-		                                </div>
+
 		                                <div class="single-graphics-wrapper">
 			                                <canvas class="debts-reports line-chart" data-id = "<?php echo$debt_id; ?>"></canvas>
 		                                </div>
 
+                                        <div class="multi-graphics-wrapper">
+                                            <?php
+                                            $order_debts = $functions->order_logs_per_month( $debt_id );
+                                            echo '<pre>';
+                                            print_r( $order_debts );
+                                            echo '</pre>';
+                                            ?>
+                                        </div>
+
 	                                </div>
+
+
+
+                                    <div class="debts-logs">
+		                                <?php
+		                                echo $debt_logs['debt_logs_html'];
+		                                ?>
+                                    </div>
 
                                 </div>
                             </td>

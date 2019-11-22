@@ -17,11 +17,16 @@ foreach ($debts as $debt) {
 
 }
 $total_debt_info = array(
-	'remaining' => $total_debt_remaining,
-	'paid'      => $total_debt_paid
+        'title'      => 'Total Debts',
+        'remaining'  => $total_debt_remaining,
+        'total_paid' => $total_debt_paid
 );
 ?>
 <div class="total-debts-chart__main">
+    <div class="total-debts-header">
+        <span class="title">Total Number of Debts : </span>
+        <span class="content"><?php echo count( $debts ); ?></span>
+    </div>
 	<input type = "hidden" name = "total_debts_info" value = '<?php echo json_encode( $total_debt_info ); ?>'/>
-	<canvas class="total-debts-canvas debts-reports doughnut-chart"></canvas>
+	<canvas class="total-debts-canvas doughnut-chart"></canvas>
 </div>

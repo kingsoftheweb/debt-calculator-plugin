@@ -5,7 +5,7 @@ let dcmShortcodes = {
             singleTabs    : document.querySelectorAll('.single-grid-tab'),
             contentTabs   : document.querySelectorAll( '.arm_account_detail_tab.arm_account_detail_tab_content' ),
             resultsTabs   : document.querySelectorAll( 'td.arm-form-table-content.tab-has-result .title' ),
-            totalDebtInfo : document.querySelectorAll( 'total-debts-chart .total-debts-chart__main' ),
+            totalDebtInfo : document.querySelector( '.total-debts-chart__main' ),
             addNewButton  : document.querySelector( '.dcm-shortcode input.submit.add-new-debt' ),
             updateButtons : document.querySelectorAll( '.dcm-shortcode input.submit.update-debt' ),
             exportPDFs    : document.querySelectorAll( '.results-tab a.export-pdf' ),
@@ -113,9 +113,9 @@ let dcmShortcodes = {
                 } );
 
                 // Doughnut Charts for total debts values.
-                let totalDebtsValues = dcmShortcodes.elements.totalDebtInfo.querySelector( 'input[name="total_debts_info"]' ).value;
-                let totalDebtCanvas  = dcmShortcodes.elements.totalDebtInfo.querySelector( 'canvas' );
-                createChart.functions.drawChart( canvas, canvas.getAttribute( 'data-id' ), 'doughnut' );
+                let totalDebtsValues = dcmShortcodes.debtCalculator.elements.totalDebtInfo.querySelector( 'input[name="total_debts_info"]' ).value;
+                let totalDebtCanvas  = dcmShortcodes.debtCalculator.elements.totalDebtInfo.querySelector( 'canvas.total-debts-canvas' );
+                createChart.functions.drawChart( totalDebtCanvas, totalDebtCanvas.getAttribute( 'data-id' ), 'doughnut', totalDebtsValues );
 
                 // Doughnut Charts per each single debt.
                 document.querySelectorAll( 'canvas.debts-reports.doughnut-chart' ).forEach( ( canvas ) => {
