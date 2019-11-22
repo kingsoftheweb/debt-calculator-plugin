@@ -27,7 +27,7 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 
 			global $wpdb;
 			$table_name = $wpdb->prefix . $this->prefix . '_debt_logs';
-			$sql        = $wpdb->prepare( "select * from `$table_name` where `debt_id` =  %d", $debt_id );
+			$sql        = $wpdb->prepare( "select * from `$table_name` where `debt_id` =  %d order by time asc", $debt_id );
 			$debt_logs  = $wpdb->get_results( $sql );
 
 			$debts_logs_array = [];
@@ -157,45 +157,114 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 		 * @param $debt_id
 		 *
 		 * @return array
+		 * @throws Exception
 		 */
-        public function order_logs_per_month ( $debt_id ) {
-	        global $wpdb;
-	        $table_name = $wpdb->prefix . $this->prefix . '_debt_logs';
-	        $first_date_log = $wpdb->get_results(
-		        $wpdb->prepare(
-			        "SELECT * FROM `$table_name` WHERE `debt_id` = %d order by time asc limit 1",
-			        $debt_id
-		        )
-	        );
-	        $last_date_log = $wpdb->get_results(
-		        $wpdb->prepare(
-			        "SELECT * FROM `$table_name` WHERE `debt_id` = %d order by time desc limit 1",
-			        $debt_id
-		        )
-	        );
+		public function order_logs_per_month ( $debt_id ) {
+			global $wpdb;
+			$table_name = $wpdb->prefix . $this->prefix . '_debt_logs';
+			$first_date_log = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT * FROM `$table_name` WHERE `debt_id` = %d order by time asc limit 1",
+					$debt_id
+				)
+			);
+			$last_date_log = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT * FROM `$table_name` WHERE `debt_id` = %d order by time desc limit 1",
+					$debt_id
+				)
+			);
 
 
-	        $first_date = date_format( date_create(  $first_date_log[0]->time ), 'd-m-Y' );
-	        $last_date  = date_format( date_create(  $last_date_log[0]->time ), 'd-m-Y' );
+			$first_date = date_format( date_create(  $first_date_log[0]->time ), 'd-m-Y' );
+			$last_date  = date_format( date_create(  $last_date_log[0]->time ), 'd-m-Y' );
 
-	        $first_month = date_format( date_create( $first_date_log[0]->time ), 'm' );
-	        $last_month  = date_format( date_create( $last_date_log[0]->time ), 'm' );
+			// Start Looping from first month till last month.
+			$months_dates = $this->get_all_periods_between_dates( $first_date, $last_date );
 
-	        // Start Looping from first month till last month.
-            $i = 0;
+			// get debt logs between start and end of each month.
+			$debt_logs = [];
+			foreach( $months_dates as $period ) {
+				$start_date = $period['start'];
+				$end_date   = $period['end'];
+				$period_debt_logs = $this->get_debt_logs_between_two_dates( $debt_id, $start_date, $end_date );
+				$debt_logs[] = array(
+					'start_date' => $start_date,
+					'end_date'   => $end_date,
+					'debt_logs'  => $period_debt_logs
+				);
+			}
+			return $debt_logs;
+		}
 
-	        return array(
-	                'first_month' => $first_month,
-                    'first_date'  => $first_date,
-                    'last_month'  => $last_month,
-                    'last_date'   => $last_date
-            );
+		/**
+		 *  get_debt_logs_between_two_dates
+		 *  Returns all debt logs between two dates of a debt.
+		 *
+		 * @param $debt_id
+		 * @param $date1
+		 * @param $date2
+		 *
+		 * @return array
+		 */
+
+		public function get_debt_logs_between_two_dates ( $debt_id, $date1, $date2 ) {
+			$date1 = date_format( date_create( $date1 ), 'Y-m-d H:i:s');
+			$date2 = date_format( date_create( $date2 ), 'Y-m-d H:i:s');
+			global $wpdb;
+			$table_name = $wpdb->prefix . $this->prefix . '_debt_logs';
+			$debt_logs = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT * FROM `$table_name` WHERE `debt_id` = %d and time >= %s and time <= %s;",
+					$debt_id,
+					$date1,
+					$date2
+				)
+			);
+			$debt_logs_array = [];
+			foreach ( $debt_logs as $debt ) {
+				$debt_logs_array[] = $debt;
+			}
+			return $debt_logs_array;
+		}
+
+
+		/**
+		 * get_all_periods_between_dates.
+		 * Gets all monthly periods ( start date - end date ) between two dates.
+		 *
+		 * @param $date1
+		 * @param $date2
+		 *
+		 * @return array
+		 * @throws Exception
+		 */
+        public function get_all_periods_between_dates ( $date1, $date2 ) {
+        	$first_month_start = ( new DateTime( $date1 ) )->modify('first day of this month');
+	        $last_date         = ( new DateTime( $date2 ) );
+
+
+	        $interval = DateInterval::createFromDateString('1 month');
+	        $first_period   = new DatePeriod( $first_month_start, $interval, $last_date );
+
+	        $start_dates = [];
+	        $end_dates = [];
+	        $all_dates = [];
+	        foreach ($first_period as $dt) {
+		        $start_dates[] = $dt->format("d-m-Y");
+		        $end_dates[]   =  $dt->modify('last day of this month')->format("d-m-Y");
+	        }
+
+	        foreach ($start_dates as $key=>$date) {
+		        $all_dates[] = array(
+			        'start' => $start_dates[$key],
+			        'end' => $end_dates[$key]
+		        );
+	        }
+
+	        return $all_dates;
         }
 
-
-        public function get_number_months_between_dates ( $date1, $date2 ) {
-
-        }
 	}
 
 	new DCP_Functions();

@@ -76,12 +76,17 @@
 		                                </div>
 
                                         <div class="multi-graphics-wrapper">
-                                            <?php
-                                            $order_debts = $functions->order_logs_per_month( $debt_id );
-                                            echo '<pre>';
-                                            print_r( $order_debts );
-                                            echo '</pre>';
-                                            ?>
+                                            <input type = "hidden"
+                                                   class = "order_logs_per_month"
+                                                   data-id = "<?php echo $debt_id; ?>"
+                                                   value = '<?php echo json_encode( $functions->order_logs_per_month( $debt_id ) ); ?>' />
+	                                        <script>
+		                                        document.querySelectorAll( '.multi-graphics-wrapper input.order_logs_per_month' ).forEach( ( input ) => {
+		                                            let debtID = input.getAttribute( 'data-id' );
+		                                            let array = JSON.parse( input.value );
+		                                            console.log( debtID, array );
+		                                        } );
+	                                        </script>
                                         </div>
 
 	                                </div>
