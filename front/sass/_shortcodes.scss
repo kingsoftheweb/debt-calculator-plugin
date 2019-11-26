@@ -80,12 +80,24 @@
 	
 	.arm_account_detail_wrapper {
 		margin-top: 0;
-		
+		.arm_account_detail_tab_body {
+			padding: 0;
+		}
 		.arm_account_detail_tab {
 			display: none;
 			
 			&.active {
 				display: block;
+				overflow-x: hidden;
+			}
+			
+			.total-debts-chart {
+				.total-debts-header {
+					padding-left: 20px;
+					h4.title {
+						font-size: 15px;
+					}
+				}
 			}
 			
 			table.form-table {
@@ -114,18 +126,101 @@
 								
 								.current-debt-info {
 									@include align-start;
+									@include block_background;
 									margin-bottom: 10px;
-									border: 1px solid #000000;
-									>div {
-										flex: 1;
+									padding: 10px 10px 40px 10px;
+									flex-direction:column;
+									color: #000;
+									
+									.row {
+										display: flex;
+										width: 100%;
+										padding-top: 20px;
+										padding-bottom: 20px;
+										@media screen and (max-width:768px) {
+											flex-direction: column;
+										}
+										>div {
+											flex: 1;
+										}
+										.single-debt-info-graphics {
+											canvas {
+												width: 100% !important;
+												height: auto !important;
+											}
+										}
+										
+										&.export {
+											@include align-center;
+											padding-bottom: 0;
+											.export-current-debt {
+												@include align-center;
+											}
+										}
 									}
 								}
 								.reports-graphics {
-									border: 1px solid #000000;
+									//border: 1px solid #000000;
 									.single-graphics-wrapper {
 										margin-bottom: 50px;
+										@include block_background;
+										padding: 10px 0 30px 0;
 										canvas {
 											width: 100%;
+										}
+									}
+									.multi-graphics-wrapper {
+										.single-month-chart {
+											@include align-center;
+											display: none;
+											flex-direction: column;
+											padding: 10px 0 30px 0;
+											margin-bottom: 10px;
+											@include block_background;
+											
+											.monthly-header {
+												@include align-center;
+												width: 70%;
+												flex-direction: row;
+												background: $primary_color;
+												color: $secondary_color;
+												border-radius: 20px;
+												padding: 5px;
+												margin: 10px 0 30px 0;
+												
+												span {
+													display: flex;
+													justify-content: center;
+													i {
+														@include align-center;
+														margin: 0 10px;
+														&.arrow-direction {
+															font-size: 20px;
+														}
+													}
+													&.arrow {
+														width: 20px;
+														margin: 0 10px;
+													}
+													&.start-date {
+														flex:2;
+													}
+													&.middle-icon {
+														flex:1;
+													}
+													&.end-date {
+														flex:2;
+													}
+												}
+											}
+											canvas {
+												width: 95% !important;
+												height: auto !important;
+											}
+											
+											&.show {
+												display: flex;
+											}
 										}
 									}
 									.debts-logs {
@@ -133,7 +228,10 @@
 											width: 100%;
 										}
 									}
+									
+									
 								}
+								
 								.update-debt-form {
 									width: 100%;
 									display: flex;
@@ -162,6 +260,22 @@
 
 
 
+	// General Elements
+	.button-primary {
+		background: $primary_color;
+		color: $secondary_color;
+		padding: 0.5rem 1rem;
+		cursor:pointer;
+		text-decoration: none !important;
+		border-radius: 20px;
+		box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5);
+		transition: all $fast_time_duration;
+		&:hover{
+			background: $secondary_color;
+			color: $primary_color;
+			transition: all $fast_time_duration;
+		}
+	}
 }
 
 

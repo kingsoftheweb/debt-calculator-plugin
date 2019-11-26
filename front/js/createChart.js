@@ -4,17 +4,24 @@ let createChart = {
         secondaryColor  : 'rgb(253,228,40)'
     },
     functions : {
-        drawChart : ( canvas, debtID, type, debtValuesJson = null ) => {
+        drawChart : ( canvas, debtID, type, debtValuesJson = null, debtLogValuesArray = null, labels = null) => {
             let debtLogValues = [];
             let debtValues    = [];
+            let chartLabels   = ( null !== labels ) ? labels : ['Remaining', 'Paid'];
             if( null !== debtValuesJson ) { // Total Debt Case.
                 debtValues    = JSON.parse( debtValuesJson );
             } else {  // Single Debt Case.
-                debtLogValues = JSON.parse ( canvas.parentElement.parentElement.querySelector( 'input.debt-logs-json' ).value );
-                debtValues    = JSON.parse ( canvas.parentElement.parentElement.querySelector( 'input.current-debt-values' ).value );
-            }
+                if( null !== debtLogValuesArray ) {
+                    // Line Chart of debt logs per month.
+                    debtLogValues = debtLogValuesArray.debt_logs;
+                    debtValues    = debtLogValuesArray;
+                } else {
+                    // Line Chart for TOTAL Debt Logs
+                    debtLogValues = JSON.parse ( canvas.parentElement.parentElement.querySelector( 'input.debt-logs-json' ).value );
+                    debtValues    = JSON.parse ( canvas.parentElement.parentElement.querySelector( 'input.current-debt-values' ).value );
+                }
 
-            console.log( debtValues );
+            }
 
             let data    = [];
             let options = [];
@@ -23,7 +30,6 @@ let createChart = {
                     let labels = [],
                         values = [];
                     debtLogValues.forEach( ( log ) => {
-                        let time = new Date( log.time );
                         labels.push( log.time );
                         values.push( parseFloat( log.remaining ) );
                     } );
@@ -49,7 +55,7 @@ let createChart = {
 
                 case 'doughnut' :
                     data =  {
-                        labels: ['Remaining', 'Paid'],
+                        labels: chartLabels,
                         datasets: [{
                             label: debtValues.title,
                             backgroundColor: [
@@ -88,5 +94,51 @@ let createChart = {
                 options: options
             });
         },
+
+        drawDoughnutCombined : ( canvas, chartData = null, labels = null ) => {
+            console.log(chartData, labels);
+            let dataLength = labels.length;
+            let i=0;
+            let r,g,b;
+            let colors = [];
+            for(i; i<dataLength; i++) {
+                r = Math.floor(Math.random() * 255) + 0;
+                g = Math.floor(Math.random() * 255) + 0;
+                b = Math.floor(Math.random() * 255) + 0;
+                colors.push( 'rgb(' + r + ',' + g + ',' + b + ')' );
+            }
+            console.log( colors );
+            let data =  {
+                labels: labels,
+                datasets: [{
+                    label: '',
+                    backgroundColor: colors,
+                    borderColor: [
+                        'rgb(255,255,255)'
+                    ],
+                    data: chartData
+                }]
+            };
+            let options = {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: ''
+                },
+                animation: {
+                    duration: 0
+                },
+            };
+
+            let ctx = canvas.getContext( '2d' );
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: data,
+                options: options
+            });
+        }
     },
 };

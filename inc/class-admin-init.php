@@ -25,7 +25,7 @@ if ( ! class_exists( 'DCP_Admin_Init' ) ):
 			add_menu_page(
 				'Debt Calculator',
 				'Debt Calculator',
-				'manage_options',
+				'edit_posts',
 				'debt_calculator_main',
 				array( $this, 'debt_calculator_main_callback' ),
 				'dashicons-controls-volumeon',
@@ -36,7 +36,7 @@ if ( ! class_exists( 'DCP_Admin_Init' ) ):
 				'debt_calculator_main',
 				'Debts',
 				'Debts',
-				'manage_options',
+				'edit_posts',
 				'edit.php?post_type=kotw_debt'
 			);
 
@@ -44,7 +44,7 @@ if ( ! class_exists( 'DCP_Admin_Init' ) ):
 				'debt_calculator_main',
 				'Documentation',
 				'Documentation',
-				'manage_options',
+				'edit_posts',
 				'debt_calculator_documentation',
 				array( $this, 'debt_calculator_doc_callback' )
 			);
@@ -67,7 +67,16 @@ if ( ! class_exists( 'DCP_Admin_Init' ) ):
 
 		/** Admin Menu Pages Callbacks */
 		public function debt_calculator_main_callback() {
-			include $this->plugin_path . '/admin/partials/dashboard-pages/admin-main-page.php';
+			//include $this->plugin_path . '/admin/partials/dashboard-pages/admin-main-page.php';
+			$doc_url = $this->plugin_url . '/admin/partials/dashboard-pages/documentation-page/start.html';
+			?>
+            <iframe
+                    src="<?php echo $doc_url; ?>"
+                    width="100%"
+                    height="1000px"
+                    border=0
+            ></iframe>
+            <?php
 		}
 
 		public function debt_calculator_doc_callback() {

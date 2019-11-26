@@ -6,6 +6,8 @@ let dcmShortcodes = {
             contentTabs   : document.querySelectorAll( '.arm_account_detail_tab.arm_account_detail_tab_content' ),
             resultsTabs   : document.querySelectorAll( 'td.arm-form-table-content.tab-has-result .title' ),
             totalDebtInfo : document.querySelector( '.total-debts-chart__main' ),
+            allDebtsInfo  : document.querySelector( '.total-debts-chart__main.all_debts' ),
+            monthlyLogs   : document.querySelectorAll( '.multi-graphics-wrapper input.order_logs_per_month' ),
             addNewButton  : document.querySelector( '.dcm-shortcode input.submit.add-new-debt' ),
             updateButtons : document.querySelectorAll( '.dcm-shortcode input.submit.update-debt' ),
             exportPDFs    : document.querySelectorAll( '.results-tab a.export-pdf' ),
@@ -55,7 +57,6 @@ let dcmShortcodes = {
                     plugin.functions.updateDebt( btn );
                 } );
             } );
-
 
             // On Export Button Click.
             plugin.elements.exportPDFs.forEach( ( btn ) => {
@@ -109,13 +110,89 @@ let dcmShortcodes = {
             reportsCharts : () => {
                 // Line Charts per each single debt.
                 document.querySelectorAll( 'canvas.debts-reports.line-chart' ).forEach( ( canvas ) => {
-                    createChart.functions.drawChart( canvas, canvas.getAttribute( 'data-id' ), 'line' );
+                    //createChart.functions.drawChart( canvas, canvas.getAttribute( 'data-id' ), 'line' );
                 } );
 
                 // Doughnut Charts for total debts values.
                 let totalDebtsValues = dcmShortcodes.debtCalculator.elements.totalDebtInfo.querySelector( 'input[name="total_debts_info"]' ).value;
                 let totalDebtCanvas  = dcmShortcodes.debtCalculator.elements.totalDebtInfo.querySelector( 'canvas.total-debts-canvas' );
                 createChart.functions.drawChart( totalDebtCanvas, totalDebtCanvas.getAttribute( 'data-id' ), 'doughnut', totalDebtsValues );
+
+                let allDebtsInfoValues  = dcmShortcodes.debtCalculator.elements.allDebtsInfo.querySelector( 'input[name="total_debts_info"]' ).value;
+                let allDebtsInfoLabels  = dcmShortcodes.debtCalculator.elements.allDebtsInfo.querySelector( 'input[name="total_debts_info_labels"]' ).value;
+                let allDebtsInfoCanvas  = dcmShortcodes.debtCalculator.elements.allDebtsInfo.querySelector( 'canvas.total-debts-canvas' );
+                createChart.functions.drawDoughnutCombined( allDebtsInfoCanvas,  JSON.parse( allDebtsInfoValues ), JSON.parse( allDebtsInfoLabels ) );
+
+
+
+                // Doughnut and Line Charts for monthly logs per each debt
+                dcmShortcodes.debtCalculator.elements.monthlyLogs.forEach( ( totalLogsInput ) => {
+                    let totalLogsOrderedByMonth = JSON.parse( totalLogsInput.value );
+                    let debtID = totalLogsInput.getAttribute( 'data-id' );
+
+                    totalLogsOrderedByMonth.forEach( ( month, index ) => {
+                        let startDate =  month.start_date;
+                        let endDate   =  month.end_date;
+
+                        let beforeArrow = index === 0 ? '' : '<i class="fa fa-arrow-left arrow-direction"></i>';
+                        let nextArrow   = index === totalLogsOrderedByMonth.length-1 ? '' : '<i class="fa fa-arrow-right arrow-direction"></i>';
+                        let showClass   = index === totalLogsOrderedByMonth.length-1 ? 'show' : 'hide';
+
+
+                        let singleMonth = document.createElement( 'div' );
+                        singleMonth.classList.add( 'single-month-chart', showClass );
+                        singleMonth.setAttribute( 'data-index', index );
+                        singleMonth.insertAdjacentHTML( 'afterbegin',
+                            '<div class="monthly-header" data-index = "' + index + '">' +
+                                    '<span class="arrow" data-direction ="back" data-index = "' + index + '">' + beforeArrow +  '</span>'+
+                                    '<span class="start-date">' + startDate +  '</span>'+
+                                    '<span class="middle-icon">-</span>'+
+                                    '<span class="end-date">' + endDate + '</span>'+
+                                    '<span class="arrow" data-direction ="forward" data-index = "' + index + '">' + nextArrow +  '</span>'+
+                                  '</div>' );
+                        totalLogsInput.insertAdjacentElement( 'afterend', singleMonth );
+
+                        // On Each Arrow Click
+                        singleMonth.querySelectorAll( '.monthly-header .arrow i' ).forEach( ( arrow ) => {
+                            arrow.addEventListener( 'click', () => {
+                                console.log( arrow );
+                                let currentIndex = arrow.parentElement.getAttribute( 'data-index' );
+                                let nextIndex    = 0;
+                                switch( arrow.parentElement.getAttribute( 'data-direction' ) ) {
+                                    case 'forward' : nextIndex = parseInt( currentIndex ) + 1;
+                                        break;
+                                    case 'back' : nextIndex = parseInt( currentIndex ) - 1;
+                                        break;
+                                }
+                                console.log( currentIndex, nextIndex );
+                                document.querySelectorAll( '.single-month-chart' ).forEach( ( div ) => {
+                                    div.classList.remove( 'show' );
+                                } );
+                                document.querySelector( '.single-month-chart[data-index="' + nextIndex + '"]' ).classList.add('show');
+                            } );
+
+                        } );
+
+                        let lineCanvas = document.createElement( 'canvas' );
+                        lineCanvas.classList.add( 'total-logs-per-month', 'line-chart' );
+                        lineCanvas.setAttribute( 'debt-id', debtID );
+                        lineCanvas.setAttribute( 'data-start_date', startDate );
+                        lineCanvas.setAttribute( 'data-end_date', endDate );
+                        singleMonth.insertAdjacentElement( 'beforeend', lineCanvas );
+                        createChart.functions.drawChart( lineCanvas, debtID, 'line', debtValuesJson = null, month );
+
+                        let doughnutChart = document.createElement( 'canvas' );
+                        doughnutChart.classList.add( 'total-logs-per-month', 'line-chart' );
+                        doughnutChart.setAttribute( 'debt-id', debtID );
+                        doughnutChart.setAttribute( 'data-start_date', startDate );
+                        doughnutChart.setAttribute( 'data-end_date', endDate );
+                        singleMonth.insertAdjacentElement( 'beforeend', doughnutChart );
+                        createChart.functions.drawChart( doughnutChart, debtID, 'doughnut', debtValuesJson = null, month );
+
+
+                    } );
+
+                } );
 
                 // Doughnut Charts per each single debt.
                 document.querySelectorAll( 'canvas.debts-reports.doughnut-chart' ).forEach( ( canvas ) => {

@@ -83,6 +83,39 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 		}
 
 		/**
+		 *  get_total_debt_values_at_date
+		 *  Returns the total debt values at a specific date.
+		 *
+		 * @param $debt_id
+		 * @param $date
+		 *
+		 * @return array
+		 */
+		public function get_total_debt_values_at_date ( $debt_id, $date ) {
+			global $wpdb;
+			$table_name = $wpdb->prefix . $this->prefix . '_debt_logs';
+			$sql        = $wpdb->prepare( "select * from `$table_name` where `debt_id` =  %d and time <= %s order by time asc", $debt_id, $date );
+			$debt_logs  = $wpdb->get_results( $sql, OBJECT );
+
+			$total_paid         = 0;
+			$number_of_payments = 0;
+			foreach ( $debt_logs as $log ) {
+				$total_paid      = $total_paid + ( float ) $log->paid;
+				$number_of_payments++;
+			}
+
+			// Get the remaining at that exact date
+            $last_row  = $debt_logs[0];
+			$remaining = $last_row->remaining;
+			return array(
+			        'number_of_payments' => $number_of_payments,
+                    'total_paid'         => $total_paid,
+                    'remaining'          => $remaining
+            );
+
+		}
+
+		/**
 		 * update_debt_logs.
 		 * Updates the debt logs with a new entry.
 		 *
@@ -121,7 +154,7 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 				) );
 
 				update_post_meta( $debt_id, $this->prefix . '_remaining_debt', $new_remaining );
-				$this->udpate_total_paid( $debt_id );
+				$this->update_total_paid( $debt_id );
 			}
 
 			return $insert;
@@ -134,7 +167,7 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 		 *
 		 * @param $debt_id
 		 */
-		public function udpate_total_paid ( $debt_id ) {
+		public function update_total_paid ( $debt_id ) {
 			global $wpdb;
 			$table_name = $wpdb->prefix . $this->prefix . '_debt_logs';
 			$debt_logs = $wpdb->get_results(
@@ -149,6 +182,9 @@ if ( ! class_exists( 'DCP_Functions' ) ):
             }
 			update_post_meta( $debt_id, $this->prefix . '_total_paid', $total_paid );
         }
+
+
+
 
 		/**
 		 * order_logs_per_month.
@@ -183,15 +219,21 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 			$months_dates = $this->get_all_periods_between_dates( $first_date, $last_date );
 
 			// get debt logs between start and end of each month.
-			$debt_logs = [];
+            $debt_title = get_the_title( $debt_id );
+			$debt_logs  = [];
 			foreach( $months_dates as $period ) {
 				$start_date = $period['start'];
 				$end_date   = $period['end'];
 				$period_debt_logs = $this->get_debt_logs_between_two_dates( $debt_id, $start_date, $end_date );
+
+				$debt_info = $this->get_total_debt_values_at_date( $debt_id, date_format( date_create( $end_date ), 'Y-m-d H:i:s') );
 				$debt_logs[] = array(
-					'start_date' => $start_date,
-					'end_date'   => $end_date,
-					'debt_logs'  => $period_debt_logs
+				        'title'      => $debt_title,
+					    'total_paid' => $debt_info['total_paid'],
+					    'remaining'  => $debt_info['remaining'],
+					    'start_date' => $start_date,
+					    'end_date'   => $end_date,
+					    'debt_logs'  => $period_debt_logs
 				);
 			}
 			return $debt_logs;
@@ -207,7 +249,6 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 		 *
 		 * @return array
 		 */
-
 		public function get_debt_logs_between_two_dates ( $debt_id, $date1, $date2 ) {
 			$date1 = date_format( date_create( $date1 ), 'Y-m-d H:i:s');
 			$date2 = date_format( date_create( $date2 ), 'Y-m-d H:i:s');
