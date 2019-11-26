@@ -1,0 +1,11 @@
+
+1. Monthly Debts. Need to show a pie graph showing the total monthly debt amounts and then a spreadsheet below it with the number of debts listed and % of debt paid off.
+
+2. Yearly Payments. Bar graph showing yearly total payment amounts (measured in ten thousands?). Below it will be a spreadsheet showing total payment amounts per year and total # of debts paid.
+3. Monthly Payments. Bar graph showing monthly payments with an x-axis labeled months at the bottom of the graph and monthly payments on the y-axis measured in thousands.
+4. Report Export Options:
+1. Excel/Google docs for admins (i.e. financial coaches). As well as .PDF’s for bi-weekly and monthly reporting.
+2. ONLY .PDF bi-weekly or monthly reports available for clients.
+5. Need to finish documentation.
+
+*Make sure Interest labels on pie graphs or charts have a % beside them when it’s showing the annual interest rate.

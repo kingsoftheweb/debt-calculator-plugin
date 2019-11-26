@@ -31,8 +31,8 @@
 						?>
 						<tr data-id="<?php echo $debt_id; ?>">
 							<td class="arm-form-table-content"><a href = "<?php echo get_edit_post_link( $debt_id );?>" target = "_blank"><?php echo $debt->post_title; ?></a></td>
-							<td class="arm-form-table-content"><?php echo $remaining; ?></td>
-							<td class="arm-form-table-content"><?php echo $total_paid; ?></td>
+							<td class="arm-form-table-content">$<?php echo number_format( (float) $remaining ); ?></td>
+							<td class="arm-form-table-content">$<?php echo number_format( (float) $total_paid ); ?></td>
 							<td class="arm-form-table-content"><?php echo $yearly_interest; ?>%</td>
 
 						</tr>

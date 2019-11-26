@@ -105,13 +105,22 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 			}
 
 			// Get the remaining at that exact date
-            $last_row  = $debt_logs[0];
-			$remaining = $last_row->remaining;
-			return array(
-			        'number_of_payments' => $number_of_payments,
-                    'total_paid'         => $total_paid,
-                    'remaining'          => $remaining
-            );
+			if( $debt_logs ) {
+				$last_row  = $debt_logs[0];
+				$remaining = $last_row->remaining;
+				return array(
+					'number_of_payments' => $number_of_payments,
+					'total_paid'         => $total_paid,
+					'remaining'          => $remaining
+				);
+			} else {
+				return array(
+					'number_of_payments' => 0,
+					'total_paid'         => 0,
+					'remaining'          => 0
+				);
+			}
+
 
 		}
 
@@ -212,8 +221,8 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 			);
 
 
-			$first_date = date_format( date_create(  $first_date_log[0]->time ), 'd-m-Y' );
-			$last_date  = date_format( date_create(  $last_date_log[0]->time ), 'd-m-Y' );
+			$first_date = $first_date_log ? date_format( date_create( $first_date_log[0]->time ), 'd-m-Y' ) : '';
+			$last_date  = $last_date_log ? date_format( date_create( $last_date_log[0]->time ), 'd-m-Y' ) : '';
 
 			// Start Looping from first month till last month.
 			$months_dates = $this->get_all_periods_between_dates( $first_date, $last_date );

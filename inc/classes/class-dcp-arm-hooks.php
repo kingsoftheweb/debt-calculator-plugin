@@ -16,6 +16,7 @@ class DCP_ARM_Hooks extends DCP_Init {
 			'content_after_arm_profile_field'
 		), 10, 2 );
 
+
 	}
 
 	public function content_after_arm_profile_field( $content, $atts ) {

@@ -31,13 +31,13 @@
 		                                        $current_debt_values = json_decode( $debt_logs['current_debt_values'] );
 		                                        ?>
                                                 <p>
-                                                    <b>Remaining: </b><span class="debt-remaining"><?php echo $current_debt_values->remaining; ?></span>
+                                                    <b>Remaining: </b><span class="debt-remaining">$<?php echo number_format( (float)$current_debt_values->remaining ); ?></span>
                                                 </p>
                                                 <p>
-                                                    <b>Total Paid: </b><span class="debt-paid"><?php echo $current_debt_values->total_paid; ?></span>
+                                                    <b>Total Paid: </b><span class="debt-paid">$<?php echo number_format( (float) $current_debt_values->total_paid ); ?></span>
                                                 </p>
                                                 <p>
-                                                    <b>Yearly Interest: </b><span class="debt-paid"><?php echo $current_debt_values->yearly_interest; ?></span>
+                                                    <b>Yearly Interest: </b><span class="debt-paid"><?php echo $current_debt_values->yearly_interest; ?>%</span>
                                                 </p>
 
                                             </div>

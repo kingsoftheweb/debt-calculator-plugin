@@ -21,6 +21,7 @@ $total_debt_info = array(
         'remaining'  => $total_debt_remaining,
         'total_paid' => $total_debt_paid
 );
+$progress = 100 * (float)$total_debt_paid / ( (float) $total_debt_paid + (float) $total_debt_remaining );
 ?>
 <div class="total-debts-chart__main">
     <div class="total-debts-header">
@@ -29,13 +30,21 @@ $total_debt_info = array(
 
         </div>
         <div class="row">
-            <h4 class="title">Total Paid : <span class="content">$<?php echo number_format($total_debt_paid); ?></span></h4>
+            <h4 class="title">Total Paid :
+	            <span class="content">$<?php echo number_format( $total_debt_paid ) . ' (<em>' . round( $progress, 2 );  ?>%</em>)</span>
+            </h4>
 
         </div>
         <div class="row">
-            <h4 class="title">Total Remaining : <span class="content">$<?php echo number_format($total_debt_remaining); ?></span></h4>
+            <h4 class="title">Total Remaining : <span class="content">$<?php echo number_format( $total_debt_remaining ); ?></span></h4>
 
         </div>
+
+	    <!--
+	    <div class="row">
+		    <h4 class="title">Progress Finished : <span class="content">%<?php echo round( $progress, 2 ); ?></span></h4>
+	    </div>
+	    -->
 
 
     </div>
