@@ -95,6 +95,39 @@ let createChart = {
             });
         },
 
+        drawLineCombined : ( canvas, chartData = null, chartLabels = null ) => {
+            let labels = [],
+                values = [];
+            chartData.forEach( ( log ) => {
+                labels.push( log.year );
+                values.push( parseFloat( log.total_paid ) );
+            } );
+            let data =  {
+                labels: labels,
+                datasets: [{
+                    label: chartLabels.title,
+                    backgroundColor: 'rgb(255,255,255)',
+                    borderColor: createChart.variables.primaryColor,
+                    data: values
+                }]
+            };
+            let options = {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            };
+
+            let ctx = canvas.getContext( '2d' );
+            new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: options
+            });
+        },
         drawDoughnutCombined : ( canvas, chartData = null, labels = null ) => {
             console.log(chartData, labels);
             let dataLength = labels.length;
@@ -126,7 +159,7 @@ let createChart = {
                 },
                 title: {
                     display: true,
-                    text: ''
+                    text: 'All Payments'
                 },
                 animation: {
                     duration: 0

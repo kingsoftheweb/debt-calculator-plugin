@@ -12,7 +12,9 @@
 				$debts = get_posts(
 					array(
 						'post_type'   => 'kotw_debt',
-						'post_status' => 'publish'
+						'post_status' => 'publish',
+						'numberposts' => -1,
+						'post_author' => get_current_user_id()
 					)
 				);
 				foreach ( $debts as $debt ) {

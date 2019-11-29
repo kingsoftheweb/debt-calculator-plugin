@@ -89,12 +89,18 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 		 * @param $debt_id
 		 * @param $date
 		 *
+		 * @param null $start_date
+		 *
 		 * @return array
 		 */
-		public function get_total_debt_values_at_date ( $debt_id, $date ) {
+		public function get_total_debt_values_at_date ( $debt_id, $date, $start_date = null ) {
 			global $wpdb;
 			$table_name = $wpdb->prefix . $this->prefix . '_debt_logs';
-			$sql        = $wpdb->prepare( "select * from `$table_name` where `debt_id` =  %d and time <= %s order by time asc", $debt_id, $date );
+			if( null !== $start_date ) {
+				$sql        = $wpdb->prepare( "select * from `$table_name` where `debt_id` =  %d and time >= %s and time <= %s order by time asc", $debt_id, $start_date, $date );
+			} else {
+				$sql        = $wpdb->prepare( "select * from `$table_name` where `debt_id` =  %d and time <= %s order by time asc", $debt_id, $date );
+			}
 			$debt_logs  = $wpdb->get_results( $sql, OBJECT );
 
 			$total_paid         = 0;
@@ -122,6 +128,100 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 			}
 
 
+		}
+
+
+		/**
+		 *  is_still_debt_at_date
+		 *  Returns Boolean true or false, if the debt is still a debt at a date ( Remaining > 0 ).
+		 *
+		 * @param $debt_id
+		 * @param $date
+		 *
+		 * @param null $start_date
+		 *
+		 * @return array
+		 */
+		public function is_still_debt_at_date ( $debt_id, $date ) {
+			$debt_values = $this->get_total_debt_values_at_date( $debt_id, $date );
+			if( (float)$debt_values['remaining'] > 0 ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 *  get_total_payments_per_year
+		 *  Returns the total payments per year.
+		 *
+		 * @param $debt_id
+		 * @param $date
+		 *
+		 * @return array
+		 */
+		public function get_total_payments_per_year ( $author_id ) {
+			$first_debt = get_posts(
+				array(
+					'post_type'   => 'kotw_debt',
+					'post_status' => 'publish',
+					'numberposts' => 1,
+					'orderby'     => 'date',
+					'order'       => 'asc',
+					'post_author' => $author_id,
+				)
+			);
+			$last_debt = get_posts(
+				array(
+					'post_type'   => 'kotw_debt',
+					'post_status' => 'publish',
+					'numberposts' => 1,
+					'orderby'     => 'date',
+					'order'       => 'desc',
+					'post_author' => $author_id,
+				)
+			);
+			$first_year = get_the_date( 'Y', $first_debt[0] );
+			$last_year  = get_the_date( 'Y', $last_debt[0] );
+			$years = [];
+			$i = $first_year;
+			for( $i; $i<=$last_year; $i++ ) {
+				$years[] = $i;
+			}
+			$debts_per_year_array = [];
+			foreach ( $years as $year ) {
+				$all_debts_till_year = get_posts(
+					array(
+						'post_type'   => 'kotw_debt',
+						'post_status' => 'publish',
+						'numberposts' => -1,
+						'orderby'     => 'date',
+						'order'       => 'asc',
+						'post_author' => $author_id,
+						'date_query'  => array(
+							'before'     => '31-12-'.$year,
+							'inclusive' => true
+						)
+					)
+				);
+				$debts = [];
+				foreach ( $all_debts_till_year as $single_debt ) {
+					if( $this->is_still_debt_at_date( $single_debt->ID, '31-12-'.$year ) ) {
+						$debts[] = array(
+							'title'        => $single_debt->post_title,
+							'is_stil_debt' => $this->is_still_debt_at_date( $single_debt->ID, '31-12-'.$year ) ? 'yes' : 'no',
+							'debt_values'  => $this->get_total_debt_values_at_date( $single_debt->ID, '31-12-'.$year, '1-1-'.$year )
+						);
+					}
+				}
+
+				$debts_per_year_array[] = array(
+					'year'  => $year,
+					'debts' => $debts
+				);
+			}
+
+			return $debts_per_year_array;
 		}
 
 		/**

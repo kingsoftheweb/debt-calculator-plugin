@@ -2,15 +2,16 @@ let dcmShortcodes = {
 
     debtCalculator: {
         elements: {
-            singleTabs    : document.querySelectorAll('.single-grid-tab'),
-            contentTabs   : document.querySelectorAll( '.arm_account_detail_tab.arm_account_detail_tab_content' ),
-            resultsTabs   : document.querySelectorAll( 'td.arm-form-table-content.tab-has-result .title' ),
-            totalDebtInfo : document.querySelector( '.total-debts-chart__main' ),
-            allDebtsInfo  : document.querySelector( '.total-debts-chart__main.all_debts' ),
-            monthlyLogs   : document.querySelectorAll( '.multi-graphics-wrapper input.order_logs_per_month' ),
-            addNewButton  : document.querySelector( '.dcm-shortcode input.submit.add-new-debt' ),
-            updateButtons : document.querySelectorAll( '.dcm-shortcode input.submit.update-debt' ),
-            exportPDFs    : document.querySelectorAll( '.results-tab a.export-pdf' ),
+            singleTabs        : document.querySelectorAll('.single-grid-tab'),
+            contentTabs       : document.querySelectorAll( '.arm_account_detail_tab.arm_account_detail_tab_content' ),
+            resultsTabs       : document.querySelectorAll( 'td.arm-form-table-content.tab-has-result .title' ),
+            totalDebtInfo     : document.querySelector( '.total-debts-chart__main' ),
+            allDebtsInfo      : document.querySelector( '.total-debts-chart__main.all_debts' ),
+            yearlyPaymentsDiv : document.querySelector( '.yearly-payments-chart__main' ),
+            monthlyLogs       : document.querySelectorAll( '.multi-graphics-wrapper input.order_logs_per_month' ),
+            addNewButton      : document.querySelector( '.dcm-shortcode input.submit.add-new-debt' ),
+            updateButtons     : document.querySelectorAll( '.dcm-shortcode input.submit.update-debt' ),
+            exportPDFs        : document.querySelectorAll( '.results-tab a.export-pdf' ),
         },
         events: () => {
             let plugin = dcmShortcodes.debtCalculator;
@@ -112,6 +113,26 @@ let dcmShortcodes = {
                 document.querySelectorAll( 'canvas.debts-reports.line-chart' ).forEach( ( canvas ) => {
                     //createChart.functions.drawChart( canvas, canvas.getAttribute( 'data-id' ), 'line' );
                 } );
+
+                // Line Charts for yearly payments.
+                let yearlyPaymentValues = JSON.parse( dcmShortcodes.debtCalculator.elements.yearlyPaymentsDiv.querySelector( 'input[name=yearly_payments_values]' ).value );
+                let yearlyPaymentsArray = [];
+                yearlyPaymentValues.forEach( ( year ) => {
+                    let totalPaidPerYear = 0;
+                    year.debts.forEach( (debt) => {
+                        totalPaidPerYear += parseFloat( debt.debt_values.total_paid );
+                    } );
+                    yearlyPaymentsArray.push( {
+                        year : year.year,
+                        total_paid : totalPaidPerYear
+                    } );
+                } );
+                let yearlyPaymentCanvas = dcmShortcodes.debtCalculator.elements.yearlyPaymentsDiv.querySelector( 'canvas.yearly-payments-canvas' );
+                let yearlyPaymentLabels = {
+                    title: 'Yearly Payments'
+                };
+                createChart.functions.drawLineCombined( yearlyPaymentCanvas, yearlyPaymentsArray, yearlyPaymentLabels );
+
 
                 // Doughnut Charts for total debts values.
                 let totalDebtsValues = dcmShortcodes.debtCalculator.elements.totalDebtInfo.querySelector( 'input[name="total_debts_info"]' ).value;
