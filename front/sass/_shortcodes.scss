@@ -264,6 +264,13 @@
 
 
 	// General Elements
+	.row {
+		&.export {
+			display: flex;
+			justify-content: center;
+			margin: 20px;
+		}
+	}
 	.button-primary {
 		background: $primary_color;
 		color: $secondary_color;

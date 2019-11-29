@@ -13,7 +13,7 @@
 						'post_type'   => 'kotw_debt',
 						'post_status' => 'publish',
 						'numberposts' => -1,
-						'post_author' => get_current_user_id()
+						'author' => get_current_user_id()
 					)
 				);
 				foreach ( $debts as $debt ) {
@@ -55,11 +55,12 @@
                                         </div>
 
 
+		                                <!--
                                         <div class="row export">
                                             <div class="export-current-debt">
                                                 <a class="button-primary export-pdf" href = "<?php echo $this->plugin_url . '/export.php?debt_id=' . $debt_id;?>" target="_blank" data-href = "<?php echo $this->plugin_url . '/export.php?html=';?>" data-id = "<?php echo $debt_id; ?>">Export Current Debt</a>
                                             </div>
-                                        </div>
+                                        </div>-->
 
 
 

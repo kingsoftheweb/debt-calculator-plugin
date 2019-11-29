@@ -1,10 +1,13 @@
 <?php
+
+$user_id = get_current_user_id();
+
 $debts = get_posts(
 	array(
 		'post_type'   => 'kotw_debt',
 		'post_status' => 'publish',
 		'numberposts' => -1,
-		'post_author' => get_current_user_id()
+		'author' => get_current_user_id()
 	)
 );
 $total_debt_remaining = 0;
@@ -23,6 +26,8 @@ $total_debt_info = array(
         'total_paid' => $total_debt_paid
 );
 $progress = 100 * (float)$total_debt_paid / ( (float) $total_debt_paid + (float) $total_debt_remaining );
+
+
 ?>
 <div class="total-debts-chart__main">
     <div class="total-debts-header">
@@ -41,12 +46,16 @@ $progress = 100 * (float)$total_debt_paid / ( (float) $total_debt_paid + (float)
 
         </div>
 
-	    <!--
-	    <div class="row">
-		    <h4 class="title">Progress Finished : <span class="content">%<?php echo round( $progress, 2 ); ?></span></h4>
+	    <div class="row export">
+		    <div class="export-current-debt">
+			    <a class="button-primary export-pdf" href = "<?php echo $this->plugin_url . '/export.php?debt_id=' . $debt_id;?>" target="_blank" data-href = "<?php echo $this->plugin_url . '/export.php?html=';?>" data-id = "<?php echo $debt_id; ?>">Export All Debts to PDF</a>
+		    </div>
 	    </div>
-	    -->
-
+	    <div class="row export">
+		    <div class="export-current-debt">
+			    <a class="button-primary export-excel" href = "<?php echo $this->plugin_url . '/export-excel.php?type=all&user_id=' . $user_id . '" target="_blank" data-href = "' . $this->plugin_url . '/export-excel.php?type=all';?>" data-id = "<?php echo $debt_id; ?>">Export All Debts to Excel</a>
+		    </div>
+	    </div>
 
     </div>
 	<input type = "hidden" name = "total_debts_info" value = '<?php echo json_encode( $total_debt_info ); ?>'/>
@@ -62,7 +71,7 @@ $progress = 100 * (float)$total_debt_paid / ( (float) $total_debt_paid + (float)
 	            'post_type'   => 'kotw_debt',
 	            'post_status' => 'publish',
 	            'numberposts' => -1,
-	            'post_author' => get_current_user_id()
+	            'author' => get_current_user_id()
             )
     );
     $debts_array  = [];
@@ -87,7 +96,7 @@ $progress = 100 * (float)$total_debt_paid / ( (float) $total_debt_paid + (float)
 		array(
 			'post_type'   => 'kotw_debt',
 			'post_status' => 'publish',
-			'post_author' => get_current_user_id()
+			'author' => get_current_user_id()
 		)
 	);
 	$debts_array  = [];

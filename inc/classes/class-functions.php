@@ -168,7 +168,7 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 					'numberposts' => 1,
 					'orderby'     => 'date',
 					'order'       => 'asc',
-					'post_author' => $author_id,
+					'author' => $author_id,
 				)
 			);
 			$last_debt = get_posts(
@@ -178,7 +178,7 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 					'numberposts' => 1,
 					'orderby'     => 'date',
 					'order'       => 'desc',
-					'post_author' => $author_id,
+					'author' => $author_id,
 				)
 			);
 			$first_year = get_the_date( 'Y', $first_debt[0] );
@@ -197,7 +197,7 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 						'numberposts' => -1,
 						'orderby'     => 'date',
 						'order'       => 'asc',
-						'post_author' => $author_id,
+						'author' => $author_id,
 						'date_query'  => array(
 							'before'     => '31-12-'.$year,
 							'inclusive' => true

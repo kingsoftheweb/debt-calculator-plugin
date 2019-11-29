@@ -37,7 +37,7 @@ class DCP_Ajax extends DCP_Init{
 				'post_type'   => 'kotw_debt',
 				'post_status' => 'publish',
 				'post_title'  => sanitize_text_field( $_POST['debt_title'] ),
-				'post_author' => sanitize_text_field( $_POST['author_id'] )
+				'author' => sanitize_text_field( $_POST['author_id'] )
 			)
 		);
 		if( $debt_id ) {
