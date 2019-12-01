@@ -15,6 +15,11 @@ class DCP_Ajax extends DCP_Init{
 		add_action( 'wp_ajax_update_dcp_debt', array( $this, 'update_dcp_debt' ) );
 		add_action( 'wp_ajax_nopriv_update_dcp_debt', array( $this, 'update_dcp_debt' ) );
 
+		add_action( 'wp_ajax_export_dcp_debt_pdf', array( $this, 'export_dcp_debt_pdf' ) );
+		add_action( 'wp_ajax_nopriv_export_dcp_debt_pdf', array( $this, 'export_dcp_debt_pdf' ) );
+
+
+
 	}
 
 	public function update_dcp_debt () {
@@ -48,6 +53,16 @@ class DCP_Ajax extends DCP_Init{
 			echo $debt_id;
 		}
 
+
+		wp_die();
+	}
+
+
+	function export_dcp_debt_pdf () {
+
+		update_user_meta( $_POST['user_id'], $this->prefix . '_canvas_data_1', $_POST['data1'] );
+		update_user_meta( $_POST['user_id'], $this->prefix . '_canvas_data_2', $_POST['data2'] );
+		update_user_meta( $_POST['user_id'], $this->prefix . '_canvas_data_3', $_POST['data3'] );
 
 		wp_die();
 	}

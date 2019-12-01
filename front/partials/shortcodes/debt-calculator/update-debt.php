@@ -36,7 +36,7 @@
                                             <input type = "number" step = "0.01" name = "pay_amount" />
                                         </p>
                                         <p class="input-field">
-                                            <input type = "submit" class = "submit update-debt" value = "Update" />
+                                            <input type = "submit" class = "submit update-debt button-primary" value = "Update" />
                                         </p>
                                     </div>
                                 </div>

@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Debt Calculator Plugin
+Plugin Name: Debt Free Calculator
 Plugin URI: https://kingsoftheweb.ca
-Description: Must Use Plugin for KingsOfTheWeb Network.
+Description: Calculates Debt and helps you be debt free.
 Version: 1.0
 Author: Kings Of The Web
 Author URI: https://kingsoftheweb.ca

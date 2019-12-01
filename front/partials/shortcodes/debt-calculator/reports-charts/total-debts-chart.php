@@ -20,12 +20,14 @@ foreach ($debts as $debt) {
 	}
 
 }
+
+$paid_progress      = 100 * (float)$total_debt_paid / ( (float) $total_debt_paid + (float) $total_debt_remaining );
+$remaining_progress = 100 * (float)$total_debt_remaining / ( (float) $total_debt_paid + (float) $total_debt_remaining );
 $total_debt_info = array(
         'title'      => 'Total Debts',
         'remaining'  => $total_debt_remaining,
         'total_paid' => $total_debt_paid
 );
-$progress = 100 * (float)$total_debt_paid / ( (float) $total_debt_paid + (float) $total_debt_remaining );
 
 
 ?>
@@ -37,23 +39,27 @@ $progress = 100 * (float)$total_debt_paid / ( (float) $total_debt_paid + (float)
         </div>
         <div class="row">
             <h4 class="title">Total Paid :
-	            <span class="content">$<?php echo number_format( $total_debt_paid ) . ' (<em>' . round( $progress, 2 );  ?>%</em>)</span>
+	            <span class="content">$<?php echo number_format( $total_debt_paid ) . ' (<em>' . round( $paid_progress, 2 );  ?>%</em>)</span>
             </h4>
 
         </div>
         <div class="row">
-            <h4 class="title">Total Remaining : <span class="content">$<?php echo number_format( $total_debt_remaining ); ?></span></h4>
+            <h4 class="title">Total Remaining : <span class="content">$<?php echo number_format( $total_debt_remaining ) . ' (<em>' . round( $remaining_progress, 2 );  ?>%</em>)</span></h4>
 
         </div>
 
 	    <div class="row export">
 		    <div class="export-current-debt">
-			    <a class="button-primary export-pdf" href = "<?php echo $this->plugin_url . '/export.php?debt_id=' . $debt_id;?>" target="_blank" data-href = "<?php echo $this->plugin_url . '/export.php?html=';?>" data-id = "<?php echo $debt_id; ?>">Export All Debts to PDF</a>
+                <a class="button-primary export-pdf"
+                   hrefff = "<?php echo $this->plugin_url . '/export-pdf.php?type=all&user_id=' . $user_id . '" target="_blank" data-userID = "' . $user_id . '" 
+                   data-href = "' . $this->plugin_url . '/export-pdf.php?type=all&user_id=' . $user_id;?>"
+                   data-meta = "<?php echo $this->prefix . '_canvas_data_'; ?>"
+                   data-id = "<?php echo $debt_id; ?>">Export All Debts to PDF</a>
 		    </div>
 	    </div>
 	    <div class="row export">
 		    <div class="export-current-debt">
-			    <a class="button-primary export-excel" href = "<?php echo $this->plugin_url . '/export-excel.php?type=all&user_id=' . $user_id . '" target="_blank" data-href = "' . $this->plugin_url . '/export-excel.php?type=all';?>" data-id = "<?php echo $debt_id; ?>">Export All Debts to Excel</a>
+			    <a class="button-primary export-excel" href = "<?php echo $this->plugin_url . '/export-excel.php?type=all&user_id=' . $user_id . '" target="_blank" data-href = "' . $this->plugin_url . '/export-excel.php?type=all&user_id=' . $user_id;?>" data-id = "<?php echo $debt_id; ?>">Export All Debts to Excel</a>
 		    </div>
 	    </div>
 

@@ -14,6 +14,17 @@ if ( ! class_exists( 'DCP_Admin_Init' ) ):
 
 			add_action( 'admin_menu', array( $this, 'admin_pages' ) );
 			add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widgets' ) );
+
+
+			add_action( 'admin_head', function() {
+			    ?>
+                <style>
+                    .toplevel_page_debt_calculator_main img {
+                        width: 23px !important;
+                    }
+                </style>
+                <?php
+            } );
 		}
 
 		/**
@@ -23,12 +34,12 @@ if ( ! class_exists( 'DCP_Admin_Init' ) ):
 		public function admin_pages() {
 
 			add_menu_page(
-				'Debt Calculator',
-				'Debt Calculator',
+				'Debt Free Calculator',
+				'Debt Free Calculator',
 				'edit_posts',
 				'debt_calculator_main',
 				array( $this, 'debt_calculator_main_callback' ),
-				'dashicons-controls-volumeon',
+				$this->plugin_url . '/admin/assets/debt-free-calculator-plugin.png',
 				5
 			);
 
@@ -40,14 +51,14 @@ if ( ! class_exists( 'DCP_Admin_Init' ) ):
 				'edit.php?post_type=kotw_debt'
 			);
 
-			add_submenu_page(
+			/*add_submenu_page(
 				'debt_calculator_main',
 				'Documentation',
 				'Documentation',
 				'edit_posts',
 				'debt_calculator_documentation',
 				array( $this, 'debt_calculator_doc_callback' )
-			);
+			);*/
 
 		}
 

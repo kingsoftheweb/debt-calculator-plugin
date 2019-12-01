@@ -34,7 +34,7 @@ class DCP_Export_Data extends DCP_Init {
 					'Paid'       => $total_paid,
 					'Remaining'  => '$' . number_format( ( float ) $remaining ),
 					'Interest'   => $yearly_interest . '%',
-					'Started At' => $start_date
+					'Payment Date' => $start_date
 
 				);
 				$current_debt_all_logs_array    = json_decode( $dcp_functions->get_debt_logs( $debt_id )['debt_logs_json'] );
@@ -59,8 +59,8 @@ class DCP_Export_Data extends DCP_Init {
 
 	}
 
-	public function export_all_debts_to_pdf() {
-
+	public function export_all_debts_to_pdf ( $author_id ) {
+		//echo 'welcome';
 	}
 
 	public function export_all_debts_to_excel( $author_id ) {
