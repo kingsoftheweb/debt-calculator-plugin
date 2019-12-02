@@ -1,3 +1,6 @@
+<?php
+if( is_user_logged_in() ) :
+?>
 <div class="dcm-shortcode">
 	<h3>Debt Control</h3>
 
@@ -51,7 +54,9 @@
 	</div>
 
 </div>
-
+<?php
+endif;
+?>
 
 <!--<div id = "debt-calculator-shortcode" class="dcm-wrapper dcm-shortcode">
 	<div class="row">

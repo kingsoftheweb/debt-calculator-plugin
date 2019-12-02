@@ -21,6 +21,7 @@ let dcpExportHTML = {
                 function ( response ) {
                     url = url + '&meta=' + meta;
                     console.log( url );
+                    window.open(url,'pdfDownload','width=1200,height=1697');
                     location.href = url;
                 }
             );

@@ -60,7 +60,9 @@ class DCP_Export_Data extends DCP_Init {
 	}
 
 	public function export_all_debts_to_pdf ( $author_id ) {
-		//echo 'welcome';
+		$data = $this->init_data( $author_id );
+
+		return $data;
 	}
 
 	public function export_all_debts_to_excel( $author_id ) {

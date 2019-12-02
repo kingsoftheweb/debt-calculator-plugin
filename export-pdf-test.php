@@ -6,11 +6,6 @@ $export = new DCP_Export_Data();
 $type    = $_GET['type'];
 $user_id = $_GET['user_id'];
 
-$user_data = get_userdata( $user_id );
-$user_display_name = $user_data->display_name;
-$username          = $user_data->user_login;
-
-
 if( 'all' === $type ) :
 
 	if ( ! $export->is_user_allowed( $user_id ) ) :
@@ -45,11 +40,6 @@ if( 'all' === $type ) :
 	$meta3 =  $_GET['meta'].'3';
 	$data3 = get_user_meta( $user_id, $meta3, true );
 
-
-	$data = $export->export_all_debts_to_pdf( $user_id );
-	$all_debts_array = $data['all_debts_array'];
-	$all_debts_logs  = $data['all_debts_logs'];
-
 	?>
 	<style>
 		.wrapper {
@@ -65,24 +55,7 @@ if( 'all' === $type ) :
 			display: flex;
 			padding: 1rem;
 			justify-content: center;
-			flex-direction: row;
 		}
-		.wrapper .header .logo {
-			width: 33%;
-		}
-		.wrapper .header .info {
-			width: 66%;
-			display: flex;
-			align-items: center;
-		}
-		.wrapper .header .info table {
-			width: 100%;
-			text-align: left;
-		}
-		.wrapper .header .info table th, .wrapper .header .info table td {
-			padding: 10px;
-		}
-
 		.wrapper .header img {
 			max-height: 200px;
 			width: auto;
@@ -103,72 +76,21 @@ if( 'all' === $type ) :
 
 		.wrapper .charts .row .canvas-3 {
 			display: flex;
-			width: 40%;
+			width: 100%;
 			justify-content: center;
 		}
-		.wrapper .charts table#all_debts_array {
-			width: 55%;
-			margin-left: 5%;
-		}
-
-		.wrapper .charts table#all_debts_array tr, .wrapper .charts table#all_debts_array th, .wrapper .charts table#all_debts_array td {
-			text-align: left;
-		}
-
 		.wrapper .charts .row .canvas-3 img {
-			//max-width: 50%;
+			max-width: 50%;
 		}
 
 		canvas.pdf-canvas {
-			display: none;
-		}
-
-		table.results-table {
-			text-align: left;
-		}
-
-		table.results-table tr:nth-child(even){
-			background-color: #f2f2f2;
-		}
-		table.results-table th {
-			border: 1px solid #ddd;
-			padding: 10px;
-			text-align: left;
-			background-color: #002d5b;
-			color: #fde427;
-		}
-		table.results-table td {
-			border: 1px solid #ddd;
-			padding: 8px;
-		}
-		ul#all_debts_array {
-			display: flex;
-			flex-direction: column;
-			max-height: 400px;
-			flex-wrap: wrap;
-			list-style: none;
+		//display: none;
 		}
 	</style>
 	<div class="wrapper" id = "page1">
 
 		<div class="header">
-			<div class="logo">
-				<img src="<?php echo 'admin/assets/jay-folds-logo.png'; ?>" />
-			</div>
-			<div class="info">
-				<table>
-					<tr>
-						<th>User:</th>
-						<td><?php echo $user_display_name . '(' . $username . ')'; ?></td>
-					</tr>
-					<tr>
-						<th>Report Date:</th>
-						<td><?php echo date('d-m-Y'); ?></td>
-					</tr>
-
-				</table>
-			</div>
-
+			<img src="<?php echo 'admin/assets/jay-folds-logo.png'; ?>" />
 		</div>
 		<div class="charts">
 			<div class="row">
@@ -185,76 +107,25 @@ if( 'all' === $type ) :
 				<div class = "canvas-wrapper canvas-3">
 					<img src = "<?php echo $data3;?>" />
 				</div>
-				<table class="results-table" id = "all_debts_array">
-					<tr>
-						<th>Debt</th>
-						<th>Paid</th>
-						<th>Remaining</th>
-						<th>Interest</th>
-<!--						<th>Payment Date</th>-->
-					</tr>
-					<?php
-					foreach ( $all_debts_array as $debt ) {
-						?>
-						<tr>
-							<td><?php echo $debt['Debt'];?></td>
-							<td><?php echo $debt['Paid'];?></td>
-							<td><?php echo $debt['Remaining'];?></td>
-							<td><?php echo $debt['Interest'];?></td>
-<!--							<td>--><?php //echo $debt['Payment Date'];?><!--</td>-->
-						</tr>
-
-						<?php
-					}
-					?>
-				</table>
 			</div>
 
-		</div>
-
-		<div class="tables">
-			<h3>Payments in last Two Weeks</h3>
-			<table class="results-table" id = "all_debts_array">
-
-				<?php
-				$all_debts_logs = json_decode( json_encode( $all_debts_logs ), true );
-				foreach ( $all_debts_logs as $log ) {
-					$dateLastTwoWeeks = strtotime('-2 weeks');
-
-					if( strtotime( $log['time'] ) >= $dateLastTwoWeeks ) {
-						?>
-
-						<tr>
-							<td><?php echo $log['title'];?></td>
-							<td><?php echo $log['paid'];?></td>
-							<td><?php echo $log['remaining'];?></td>
-							<td><?php echo $log['yearly_interest'];?></td>
-							<td><?php echo $log['time'];?></td>
-						</tr>
-
-
-						<?php
-					}
-				}
-				?>
-			</table>
 		</div>
 
 
 	</div>
 
-<!--	<div class="wrapper" id = "page-2">
+	<div class="wrapper" id = "page-2">
 		<div class="tables">
 			<?php
-/*
+
 			$data = $export->export_all_debts_to_pdf( $user_id );
 			echo '<pre>';
-			//print_r($data);
+			print_r($data);
 			echo '</pre>';
 
-			*/?>
+			?>
 		</div>
-	</div>-->
+	</div>
 
 
 
@@ -298,7 +169,7 @@ if( 'all' === $type ) :
 				 pdf.addImage( canvasesArray[i], 'JPEG', 0, 0, width, height );
 			 }
 			 console.log(pdfCanvases);*/
-            //pdf.save('debts_payments_reports.pdf');
+            pdf.save('myPage.pdf');
 
 
             console.log(pdfCanvases);
@@ -337,3 +208,4 @@ if( 'all' === $type ) :
 
 endif;
 
+<?php
