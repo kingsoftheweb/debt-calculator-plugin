@@ -8,8 +8,6 @@ if( isset( $_GET['user_id'] ) ) {
 }
 ?>
 <div class="dcm-shortcode">
-	<h3>Debt Control</h3>
-
     <div class="arm-tabs dcm-wrapper dcm-shortcode">
         <div class="tabs-grid">
             <div class="single-grid-tab" data-id = "debts-list">

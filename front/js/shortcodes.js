@@ -110,11 +110,10 @@ let dcmShortcodes = {
             },
             updateUrl : ( tabID ) => {
                 let locationUrl = new URL ( location.href );
-
-                console.log( tabID );
+                let userID = locationUrl.searchParams.get( 'user_id' );
+                console.log( userID );
                 // Check if user_id parameter exists.
-                if( 'user_id' === location.search.split("?")[1].split("=")[0] ) {
-                    let userID = location.search.split("?")[1].split("=")[1].split('&')[0];
+                if( null !== userID ) {
                     let locationNew = '?user_id=' + userID + '&tab=' + tabID;
                     history.pushState(null, '', locationNew );
                     return locationNew;
