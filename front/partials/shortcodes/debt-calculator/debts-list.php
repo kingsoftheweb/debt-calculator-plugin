@@ -22,7 +22,7 @@
 						'post_type'   => 'kotw_debt',
 						'post_status' => 'publish',
 						'numberposts' => -1,
-						'author' => get_current_user_id()
+						'author'      => $author
 					)
 				);
 				foreach ( $debts as $debt ) {
@@ -52,7 +52,7 @@
 			<h4>Yearly Payments</h4>
 			<?php
 			$functions = new DCP_Functions();
-			$payments_per_years = $functions->get_total_payments_per_year( get_current_user_id() );
+			$payments_per_years = $functions->get_total_payments_per_year( $author );
 			$payments_per_years = array_reverse( $payments_per_years ); // Re-arrange years array to be DESC.
 			?>
 

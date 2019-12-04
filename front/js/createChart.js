@@ -129,7 +129,7 @@ let createChart = {
             });
         },
         drawDoughnutCombined : ( canvas, chartData = null, labels = null ) => {
-            console.log(chartData, labels);
+           // console.log(chartData, labels);
             let dataLength = labels.length;
             let i=0;
             let r,g,b;
@@ -140,7 +140,7 @@ let createChart = {
                 b = Math.floor(Math.random() * 255) + 0;
                 colors.push( 'rgb(' + r + ',' + g + ',' + b + ')' );
             }
-            console.log( colors );
+            //console.log( colors );
             let data =  {
                 labels: labels,
                 datasets: [{
@@ -172,6 +172,44 @@ let createChart = {
                 data: data,
                 options: options
             });
+        },
+        drawLineChartPerYear : (  canvas, yearData, chartLabels  ) => {
+            let chartData = yearData.data;
+            let labels = [],
+                values = [];
+            chartData.forEach( ( month ) => {
+                let monthPayments = parseFloat( month.payments );
+                let monthPaymentsThousand = monthPayments/1000;
+                labels.push( month.month );
+                values.push( monthPaymentsThousand );
+            } );
+            let data =  {
+                labels: labels,
+                datasets: [{
+                    label: chartLabels.title + ' Payments',
+                    backgroundColor: 'rgb(255,255,255)',
+                    borderColor: createChart.variables.primaryColor,
+                    data: values
+                }]
+            };
+            let options = {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            };
+
+            let ctx = canvas.getContext( '2d' );
+            new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: options
+            });
         }
     },
+
+
 };

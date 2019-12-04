@@ -110,8 +110,19 @@ let dcmShortcodes = {
             },
             updateUrl : ( tabID ) => {
                 let locationUrl = new URL ( location.href );
-                history.pushState(null, '', locationUrl.pathname + '?tab=' + tabID );
-                return locationUrl.pathname + '?tab=' + tabID;
+
+                console.log( tabID );
+                // Check if user_id parameter exists.
+                if( 'user_id' === location.search.split("?")[1].split("=")[0] ) {
+                    let userID = location.search.split("?")[1].split("=")[1].split('&')[0];
+                    let locationNew = '?user_id=' + userID + '&tab=' + tabID;
+                    history.pushState(null, '', locationNew );
+                    return locationNew;
+                } else {
+                    history.pushState(null, '', locationUrl.pathname + '?tab=' + tabID );
+                    return locationUrl.pathname + '?tab=' + tabID;
+                }
+
             },
             // Updating the Chart per each report for each debt.
             reportsCharts : () => {
@@ -155,6 +166,25 @@ let dcmShortcodes = {
                 // Doughnut and Line Charts for monthly logs per each debt
                 dcmShortcodes.debtCalculator.elements.monthlyLogs.forEach( ( totalLogsInput ) => {
                     let totalLogsOrderedByMonth = JSON.parse( totalLogsInput.value );
+                    console.log(totalLogsOrderedByMonth  );
+                    let totalLogsOrderedByYear   = dcmShortcodes.debtCalculator.generalFunctions.converMonthLogsToYearLogs( totalLogsOrderedByMonth );
+
+                    // Get first and last year
+                    let firstYear = totalLogsOrderedByYear[0].year;
+                    let lastYear  = totalLogsOrderedByYear[totalLogsOrderedByYear.length-1].year;
+
+                    //console.log(firstYear, lastYear);
+                    let allYearsData = [];
+                    for( let i = firstYear; i <= lastYear; i++ ) {
+                        // Get year logs of that year.
+                        let logsPerYear = dcmShortcodes.debtCalculator.generalFunctions.getYearLogs( i, totalLogsOrderedByYear );
+                        allYearsData.push( {
+                            year: i,
+                            data: logsPerYear
+                        } );
+                    }
+                    console.log( allYearsData );
+
                     let debtID = totalLogsInput.getAttribute( 'data-id' );
 
                     totalLogsOrderedByMonth.forEach( ( month, index ) => {
@@ -191,7 +221,7 @@ let dcmShortcodes = {
                                     case 'back' : nextIndex = parseInt( currentIndex ) - 1;
                                         break;
                                 }
-                                console.log( currentIndex, nextIndex );
+                              //  console.log( currentIndex, nextIndex );
                                 document.querySelectorAll( '.single-month-chart' ).forEach( ( div ) => {
                                     div.classList.remove( 'show' );
                                 } );
@@ -199,14 +229,6 @@ let dcmShortcodes = {
                             } );
 
                         } );
-
-                        let lineCanvas = document.createElement( 'canvas' );
-                        lineCanvas.classList.add( 'total-logs-per-month', 'line-chart' );
-                        lineCanvas.setAttribute( 'debt-id', debtID );
-                        lineCanvas.setAttribute( 'data-start_date', startDate );
-                        lineCanvas.setAttribute( 'data-end_date', endDate );
-                        singleMonth.insertAdjacentElement( 'beforeend', lineCanvas );
-                        createChart.functions.drawChart( lineCanvas, debtID, 'line', debtValuesJson = null, month );
 
                         let doughnutChart = document.createElement( 'canvas' );
                         doughnutChart.classList.add( 'total-logs-per-month', 'line-chart' );
@@ -218,6 +240,19 @@ let dcmShortcodes = {
 
 
                     } );
+
+
+                    allYearsData.forEach( ( year ) => {
+                        //console.log( year );
+                        let lineCanvas = document.createElement( 'canvas' );
+                        lineCanvas.classList.add( 'total-logs-per-month', 'line-chart' );
+                        lineCanvas.setAttribute( 'debt-id', debtID );
+                       // lineCanvas.setAttribute( 'data-start_date', startDate );
+                        //lineCanvas.setAttribute( 'data-end_date', endDate );
+                        document.querySelector( '.reports-graphics[data-id="'+ debtID + '"] .multi-graphics-wrapper' ).insertAdjacentElement( 'beforeend', lineCanvas );
+                        createChart.functions.drawLineChartPerYear( lineCanvas, year, {title: year.year} );
+                    } );
+
 
                 } );
 
@@ -281,6 +316,69 @@ let dcmShortcodes = {
                     );
 
                 }
+            }
+        },
+        generalFunctions : {
+            converMonthLogsToYearLogs : ( monthLogs ) => {
+                let yearsLogs = [];
+                monthLogs.forEach( ( month ) => {
+                    let startDate = month.start_date.split('-');
+                    startDate     = startDate[1] + '-' + startDate[0] + '-' + startDate[2];
+                    let monthlyPaymentsTotal = 0;
+                    month.debt_logs.forEach( ( log ) => {
+                        monthlyPaymentsTotal += parseFloat( log.paid );
+                    } );
+                    yearsLogs.push({
+                        paymentsTotal  : monthlyPaymentsTotal,
+                        month          : new Date( startDate ).getMonth()+1,
+                        year           : new Date( startDate ).getFullYear(),
+                        title          : month.title
+                    });
+                } );
+                return yearsLogs;
+            },
+            getYearLogs : ( year, yearsLogs ) => {
+                let yearArray = [];
+                let months = [
+                    [1, 'Jan'],
+                    [2, 'Feb'],
+                    [3, 'Mar'],
+                    [4, 'Apr'],
+                    [5, 'May'],
+                    [6, 'Jun'],
+                    [7, 'Jul'],
+                    [8, 'Aug'],
+                    [9, 'Sep'],
+                    [10, 'Oct'],
+                    [11, 'Nov'],
+                    [12, 'Dec'],
+                ];
+                months.forEach( (month) => {
+                    let monthIndex = month[0];
+                    let monthName  = month[1];
+
+                    // Get the payments of this months ( if it does not have any payments, it will be zero)
+                    let totalPayments = 0;
+                    let debtTitle = '';
+                    yearsLogs.forEach( ( monthYear ) => {
+                        if (
+                               monthYear.year === year
+                            && monthYear.month === monthIndex
+                        ) {
+                            totalPayments = monthYear.paymentsTotal;
+                            debtTitle     = monthYear.title;
+                        }
+                    });
+
+                    yearArray.push({
+                        'month'    : monthName,
+                        'index'    : monthIndex,
+                        'payments' : totalPayments,
+                        'title'    : debtTitle
+                    });
+                } );
+
+                return yearArray;
             }
         },
         init: () => {

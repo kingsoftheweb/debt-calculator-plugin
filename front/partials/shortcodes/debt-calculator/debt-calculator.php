@@ -1,5 +1,11 @@
 <?php
 if( is_user_logged_in() ) :
+
+if( isset( $_GET['user_id'] ) ) {
+	$author = $_GET['user_id'];
+} else {
+	$author = get_current_user_id();
+}
 ?>
 <div class="dcm-shortcode">
 	<h3>Debt Control</h3>
