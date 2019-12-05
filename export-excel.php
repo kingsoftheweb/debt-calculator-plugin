@@ -7,7 +7,7 @@ $type    = $_GET['type'];
 $user_id = $_GET['user_id'];
 if( 'all' === $type ) {
 
-	if( !$export->is_user_allowed( $user_id ) ) {
+	if( !$export->is_user_allowed_excel( $user_id ) ) {
 		echo 'You are not allowed to get results for the report';
 	} else {
 		$export->export_all_debts_to_excel( $user_id );

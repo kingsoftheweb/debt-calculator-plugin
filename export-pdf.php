@@ -144,11 +144,27 @@ if( 'all' === $type ) :
 		ul#all_debts_array {
 			display: flex;
 			flex-direction: column;
-			max-height: 400px;
+			max-height: 700px;
 			flex-wrap: wrap;
 			list-style: none;
 		}
-	</style>
+        ul#all_debts_array li {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            font-size: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        ul#all_debts_array li div.title {
+            width: 30%;
+        }
+        ul#all_debts_array li div.value {
+            width: 15%;
+        }
+        ul#all_debts_array li div.date {
+            width: 25%;
+        }
+    </style>
 	<div class="wrapper" id = "page1">
 
 		<div class="header">
@@ -213,31 +229,30 @@ if( 'all' === $type ) :
 		</div>
 
 		<div class="tables">
-			<h3>Payments in last Two Weeks</h3>
-			<table class="results-table" id = "all_debts_array">
+			<h3>Payments in last One Month</h3>
+            <ul id = "all_debts_array">
+	            <?php
+	            $all_debts_logs = json_decode( json_encode( $all_debts_logs ), true );
+	            foreach ( $all_debts_logs as $key => $log ) {
+	               // if( 15>$key )continue;
+		            $dateLastTwoWeeks = strtotime('-4 weeks');
 
-				<?php
-				$all_debts_logs = json_decode( json_encode( $all_debts_logs ), true );
-				foreach ( $all_debts_logs as $log ) {
-					$dateLastTwoWeeks = strtotime('-2 weeks');
+		            if( strtotime( $log['time'] ) >= $dateLastTwoWeeks ) {
+			            ?>
 
-					if( strtotime( $log['time'] ) >= $dateLastTwoWeeks ) {
-						?>
+                        <li>
+                            <div class="title"><?php echo $log['title'];?></div>
+                            <div class="value"><?php echo $log['paid'];?></div>
+<!--                            <div class="value">--><?php //echo $log['remaining'];?><!--</div>-->
+<!--                            <div class="value">--><?php //echo $log['yearly_interest'];?><!--</div>-->
+                            <div class="date"><?php echo $log['time'];?></div>
+                        </li>
 
-						<tr>
-							<td><?php echo $log['title'];?></td>
-							<td><?php echo $log['paid'];?></td>
-							<td><?php echo $log['remaining'];?></td>
-							<td><?php echo $log['yearly_interest'];?></td>
-							<td><?php echo $log['time'];?></td>
-						</tr>
-
-
-						<?php
-					}
-				}
-				?>
-			</table>
+			            <?php
+		            }
+	            }
+	            ?>
+            </ul>
 		</div>
 
 
@@ -298,11 +313,11 @@ if( 'all' === $type ) :
 				 pdf.addImage( canvasesArray[i], 'JPEG', 0, 0, width, height );
 			 }
 			 console.log(pdfCanvases);*/
-            //pdf.save('debts_payments_reports.pdf');
+            pdf.save('debts_payments_reports.pdf');
 
 
             console.log(pdfCanvases);
-        }, 1000 );
+        }, 2000 );
         document.addEventListener( 'lastWrapper', function () {
             console.log('last wrapper');
             let pdfCanvases = document.querySelectorAll( 'canvas.pdf-canvas' );

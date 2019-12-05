@@ -99,6 +99,11 @@ class DCP_Export_Data extends DCP_Init {
 	}
 
 
+	public function is_user_allowed_excel () {
+
+		if( current_user_can( 'administrator' ) ) return true;
+		else return false;
+	}
 	public function is_user_allowed ( $debts_author_id ) {
 
 		if( $debts_author_id === get_current_user_id() || current_user_can( 'administrator' ) ) return true;
