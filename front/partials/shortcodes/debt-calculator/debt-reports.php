@@ -78,11 +78,11 @@
 <!--		                                </div>-->
 
                                         <div class="multi-graphics-wrapper">
-                                            <input type = "hidden"
-                                                   class = "order_logs_per_month"
-                                                   data-id = "<?php echo $debt_id; ?>"
-                                                   value = '<?php echo json_encode( $functions->order_logs_per_month( $debt_id ) ); ?>' />
-                                        </div>
+			                                <input type = "hidden"
+			                                       class = "order_logs_per_month"
+			                                       data-id = "<?php echo $debt_id; ?>"
+			                                       value = '<?php echo json_encode( $functions->order_logs_per_month( $debt_id ) ); ?>' />
+		                                </div>
 
 	                                </div>
 

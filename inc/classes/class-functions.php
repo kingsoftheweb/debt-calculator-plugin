@@ -152,11 +152,118 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 		}
 
 		/**
+		 *  get_total_payments_per_month
+		 *  Returns the total payments per month.
+		 *
+		 *
+		 * @param $author_id
+		 *
+		 * @return array
+		 * @throws Exception
+		 */
+		public function get_total_payments_per_month ( $author_id ) {
+			$first_debt = get_posts(
+				array(
+					'post_type'   => 'kotw_debt',
+					'post_status' => 'publish',
+					'numberposts' => 1,
+					'orderby'     => 'date',
+					'order'       => 'asc',
+					'author'      => $author_id,
+				)
+			);
+			$last_debt = get_posts(
+				array(
+					'post_type'   => 'kotw_debt',
+					'post_status' => 'publish',
+					'numberposts' => 1,
+					'orderby'     => 'date',
+					'order'       => 'desc',
+					'author'      => $author_id,
+				)
+			);
+			$first_date = $first_debt ? get_the_date( 'Y-m-d', $first_debt[0] ) : 0;
+			$last_date  = $last_debt ? get_the_date( 'Y-m-d', $last_debt[0] ) : 0;
+
+
+			$start    = new DateTime( $first_date );
+			$interval = new DateInterval('P1M');
+			$end      = new DateTime( $last_date );
+			$period   = new DatePeriod( $start, $interval, $end );
+
+			$months = [];
+			foreach ( $period as $dt ) {
+				$first_day = '01-' . $dt->format( 'm-Y' );
+				$last_day  = date( "t-m-Y", strtotime( $dt->format('d-m-Y') ) );
+
+				$months[] = array(
+					'title'     => $dt->format( 'M-Y' ),
+ 					'month'     => $dt->format( 'm' ),
+					'year'      => $dt->format( 'Y' ),
+					'first_day' => $first_day,
+					'last_day'  => $last_day
+				);
+			}
+
+			$debts_per_months_array = [];
+			foreach ( $months as $month ) {
+				$all_debts_per_month = get_posts(
+					array(
+						'post_type'   => 'kotw_debt',
+						'post_status' => 'publish',
+						'numberposts' => -1,
+						'orderby'     => 'date',
+						'order'       => 'asc',
+						'author' => $author_id,
+						'date_query'  => array(
+							'after'      => $month['first_day'],
+							'before'     => $month['last_day'],
+							'inclusive'  => true
+						)
+					)
+				);
+				$debts = [];
+				$total_paid         = 0;
+				$number_of_payments = 0;
+				$total_remaining    = 0;
+				foreach ( $all_debts_per_month as $single_debt ) {
+
+					if( $this->is_still_debt_at_date( $single_debt->ID, $month['last_day'] ) ) {
+
+						$debts_values_per_month = $this->get_total_debt_values_at_date( $single_debt->ID, $month['last_day'], $month['first_day'] );
+						$total_paid         += (float) $debts_values_per_month['total_paid'];
+						$number_of_payments += (int) $debts_values_per_month['number_of_payments'];
+						$total_remaining    += (float) $debts_values_per_month['remaining'];
+
+						$debts[] = array(
+							'title'        => $single_debt->post_title,
+							'is_stil_debt' => $this->is_still_debt_at_date( $single_debt->ID, $month['last_day'] ) ? 'yes' : 'no',
+							'debt_values'  => $debts_values_per_month,
+						);
+					}
+				}
+
+				$debts_per_months_array[] = array(
+					'title'           => $month['title'],
+					'month'           => $month['month'],
+					'year'            => $month['year'],
+					'start_date'      => $month['first_day'],
+					'end_date'        => $month['last_day'],
+					'total_paid'      => $total_paid,
+					'remaining'       => $total_remaining,
+					'number_payments' => $number_of_payments,
+					'debts'           => $debts
+				);
+			}
+
+			return $debts_per_months_array;
+		}
+
+		/**
 		 *  get_total_payments_per_year
 		 *  Returns the total payments per year.
 		 *
-		 * @param $debt_id
-		 * @param $date
+		 * @param $author_id
 		 *
 		 * @return array
 		 */

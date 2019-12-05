@@ -7,7 +7,7 @@ let dcmShortcodes = {
             resultsTabs       : document.querySelectorAll( 'td.arm-form-table-content.tab-has-result .title' ),
             totalDebtInfo     : document.querySelector( '.total-debts-chart__main' ),
             allDebtsInfo      : document.querySelector( '.total-debts-chart__main.all_debts' ),
-            allDebtsInfoPerMonth      : document.querySelector( '.total-debts-chart__main.all_debts.per_month' ),
+            monthlyPayments   : document.querySelector( '.total-debts-chart__main.all_debts.per_month input' ),
             yearlyPaymentsDiv : document.querySelector( '.yearly-payments-chart__main' ),
             monthlyLogs       : document.querySelectorAll( '.multi-graphics-wrapper input.order_logs_per_month' ),
             addNewButton      : document.querySelector( '.dcm-shortcode input.submit.add-new-debt' ),
@@ -20,7 +20,8 @@ let dcmShortcodes = {
             // On load.
             window.onload = () => {
                 plugin.functions.parseUrl();
-                plugin.functions.reportsCharts();
+                plugin.functions.reportsCharts.singleDebt();
+                plugin.functions.reportsCharts.totalDebts();
             };
 
             // Single Tabs on Click.
@@ -124,144 +125,6 @@ let dcmShortcodes = {
                 }
 
             },
-            // Updating the Chart per each report for each debt.
-            reportsCharts : () => {
-                // Line Charts per each single debt.
-                document.querySelectorAll( 'canvas.debts-reports.line-chart' ).forEach( ( canvas ) => {
-                    //createChart.functions.drawChart( canvas, canvas.getAttribute( 'data-id' ), 'line' );
-                } );
-
-                // Line Charts for yearly payments.
-                let yearlyPaymentValues = JSON.parse( dcmShortcodes.debtCalculator.elements.yearlyPaymentsDiv.querySelector( 'input[name=yearly_payments_values]' ).value );
-                let yearlyPaymentsArray = [];
-                yearlyPaymentValues.forEach( ( year ) => {
-                    let totalPaidPerYear = 0;
-                    year.debts.forEach( (debt) => {
-                        totalPaidPerYear += parseFloat( debt.debt_values.total_paid );
-                    } );
-                    yearlyPaymentsArray.push( {
-                        year : year.year,
-                        total_paid : totalPaidPerYear
-                    } );
-                } );
-                let yearlyPaymentCanvas = dcmShortcodes.debtCalculator.elements.yearlyPaymentsDiv.querySelector( 'canvas.yearly-payments-canvas' );
-                let yearlyPaymentLabels = {
-                    title: 'Yearly Payments'
-                };
-                createChart.functions.drawLineCombined( yearlyPaymentCanvas, yearlyPaymentsArray, yearlyPaymentLabels );
-
-
-                // Doughnut Charts for total debts values.
-                let totalDebtsValues = dcmShortcodes.debtCalculator.elements.totalDebtInfo.querySelector( 'input[name="total_debts_info"]' ).value;
-                let totalDebtCanvas  = dcmShortcodes.debtCalculator.elements.totalDebtInfo.querySelector( 'canvas.total-debts-canvas' );
-                createChart.functions.drawChart( totalDebtCanvas, totalDebtCanvas.getAttribute( 'data-id' ), 'doughnut', totalDebtsValues );
-
-                let allDebtsInfoValues  = dcmShortcodes.debtCalculator.elements.allDebtsInfo.querySelector( 'input[name="total_debts_info"]' ).value;
-                let allDebtsInfoLabels  = dcmShortcodes.debtCalculator.elements.allDebtsInfo.querySelector( 'input[name="total_debts_info_labels"]' ).value;
-                let allDebtsInfoCanvas  = dcmShortcodes.debtCalculator.elements.allDebtsInfo.querySelector( 'canvas.total-debts-canvas' );
-                createChart.functions.drawDoughnutCombined( allDebtsInfoCanvas,  JSON.parse( allDebtsInfoValues ), JSON.parse( allDebtsInfoLabels ) );
-
-
-
-                // Doughnut and Line Charts for monthly logs per each debt
-                dcmShortcodes.debtCalculator.elements.monthlyLogs.forEach( ( totalLogsInput ) => {
-                    let totalLogsOrderedByMonth = JSON.parse( totalLogsInput.value );
-                    console.log(totalLogsOrderedByMonth  );
-                    let totalLogsOrderedByYear   = dcmShortcodes.debtCalculator.generalFunctions.converMonthLogsToYearLogs( totalLogsOrderedByMonth );
-
-                    // Get first and last year
-                    let firstYear = totalLogsOrderedByYear[0].year;
-                    let lastYear  = totalLogsOrderedByYear[totalLogsOrderedByYear.length-1].year;
-
-                    //console.log(firstYear, lastYear);
-                    let allYearsData = [];
-                    for( let i = firstYear; i <= lastYear; i++ ) {
-                        // Get year logs of that year.
-                        let logsPerYear = dcmShortcodes.debtCalculator.generalFunctions.getYearLogs( i, totalLogsOrderedByYear );
-                        allYearsData.push( {
-                            year: i,
-                            data: logsPerYear
-                        } );
-                    }
-                    console.log( allYearsData );
-
-                    let debtID = totalLogsInput.getAttribute( 'data-id' );
-
-                    totalLogsOrderedByMonth.forEach( ( month, index ) => {
-                        let startDate =  month.start_date;
-                        let endDate   =  month.end_date;
-
-                        let beforeArrow = index === 0 ? '' : '<i class="fa fa-arrow-left arrow-direction"></i>';
-                        let nextArrow   = index === totalLogsOrderedByMonth.length-1 ? '' : '<i class="fa fa-arrow-right arrow-direction"></i>';
-                        let showClass   = index === totalLogsOrderedByMonth.length-1 ? 'show' : 'hide';
-
-
-                        let singleMonth = document.createElement( 'div' );
-                        singleMonth.classList.add( 'single-month-chart', showClass );
-                        singleMonth.setAttribute( 'data-index', index );
-                        singleMonth.insertAdjacentHTML( 'afterbegin',
-                            '<div class="monthly-header" data-index = "' + index + '">' +
-                                    '<span class="arrow" data-direction ="back" data-index = "' + index + '">' + beforeArrow +  '</span>'+
-                                    '<span class="start-date">' + startDate +  '</span>'+
-                                    '<span class="middle-icon">-</span>'+
-                                    '<span class="end-date">' + endDate + '</span>'+
-                                    '<span class="arrow" data-direction ="forward" data-index = "' + index + '">' + nextArrow +  '</span>'+
-                                  '</div>' );
-                        totalLogsInput.insertAdjacentElement( 'afterend', singleMonth );
-
-                        // On Each Arrow Click
-                        singleMonth.querySelectorAll( '.monthly-header .arrow i' ).forEach( ( arrow ) => {
-                            arrow.addEventListener( 'click', () => {
-                                console.log( arrow );
-                                let currentIndex = arrow.parentElement.getAttribute( 'data-index' );
-                                let nextIndex    = 0;
-                                switch( arrow.parentElement.getAttribute( 'data-direction' ) ) {
-                                    case 'forward' : nextIndex = parseInt( currentIndex ) + 1;
-                                        break;
-                                    case 'back' : nextIndex = parseInt( currentIndex ) - 1;
-                                        break;
-                                }
-                              //  console.log( currentIndex, nextIndex );
-                                document.querySelectorAll( '.single-month-chart' ).forEach( ( div ) => {
-                                    div.classList.remove( 'show' );
-                                } );
-                                document.querySelector( '.single-month-chart[data-index="' + nextIndex + '"]' ).classList.add('show');
-                            } );
-
-                        } );
-
-                        let doughnutChart = document.createElement( 'canvas' );
-                        doughnutChart.classList.add( 'total-logs-per-month', 'line-chart' );
-                        doughnutChart.setAttribute( 'debt-id', debtID );
-                        doughnutChart.setAttribute( 'data-start_date', startDate );
-                        doughnutChart.setAttribute( 'data-end_date', endDate );
-                        singleMonth.insertAdjacentElement( 'beforeend', doughnutChart );
-                        createChart.functions.drawChart( doughnutChart, debtID, 'doughnut', debtValuesJson = null, month );
-
-
-                    } );
-
-
-                    allYearsData.forEach( ( year ) => {
-                        //console.log( year );
-                        let lineCanvas = document.createElement( 'canvas' );
-                        lineCanvas.classList.add( 'total-logs-per-month', 'line-chart' );
-                        lineCanvas.setAttribute( 'debt-id', debtID );
-                       // lineCanvas.setAttribute( 'data-start_date', startDate );
-                        //lineCanvas.setAttribute( 'data-end_date', endDate );
-                        document.querySelector( '.reports-graphics[data-id="'+ debtID + '"] .multi-graphics-wrapper' ).insertAdjacentElement( 'beforeend', lineCanvas );
-                        createChart.functions.drawLineChartPerYear( lineCanvas, year, {title: year.year} );
-                    } );
-
-
-                } );
-
-                // Doughnut Charts per each single debt.
-                document.querySelectorAll( 'canvas.debts-reports.doughnut-chart' ).forEach( ( canvas ) => {
-                    createChart.functions.drawChart( canvas, canvas.getAttribute( 'data-id' ), 'doughnut' );
-                } );
-
-            },
             addNewDebt : ( submitButton ) => {
                 let authorID             = submitButton.parentElement.parentElement.parentElement.querySelector( 'input[name="author_id"]' ).value;
                 let debtNameInput        = submitButton.parentElement.parentElement.parentElement.querySelector( 'input[name="debt_name"]' );
@@ -316,7 +179,227 @@ let dcmShortcodes = {
                     );
 
                 }
-            }
+            },
+            reportsCharts : {
+                totalDebts : () => {
+                    // Pie Chart for monthly payments.
+                    let monthlyPayments = JSON.parse( dcmShortcodes.debtCalculator.elements.monthlyPayments.value );
+                    if( monthlyPayments.length >0 ) {
+                        monthlyPayments.forEach( ( month, index ) => {
+                            console.log( month );
+                            let startDate =  month.start_date;
+                            let endDate   =  month.end_date;
+
+                            let beforeArrow = index === 0 ? '' : '<i class="fa fa-arrow-left arrow-direction"></i>';
+                            let nextArrow   = index === monthlyPayments.length-1 ? '' : '<i class="fa fa-arrow-right arrow-direction"></i>';
+                            let showClass   = index === monthlyPayments.length-1 ? 'show' : 'hide';
+
+
+                            let singleMonth = document.createElement( 'div' );
+                            singleMonth.classList.add( 'single-month-chart', showClass );
+                            singleMonth.setAttribute( 'data-index', index );
+                            singleMonth.insertAdjacentHTML( 'afterbegin',
+                                '<div class="monthly-header" data-index = "' + index + '">' +
+                                '<span class="arrow" data-direction ="back" data-index = "' + index + '">' + beforeArrow +  '</span>'+
+                                '<span class="start-date">' + startDate +  '</span>'+
+                                '<span class="middle-icon">-</span>'+
+                                '<span class="end-date">' + endDate + '</span>'+
+                                '<span class="arrow" data-direction ="forward" data-index = "' + index + '">' + nextArrow +  '</span>'+
+                                '</div>' );
+
+                            dcmShortcodes.debtCalculator.elements.monthlyPayments.insertAdjacentElement( 'afterend', singleMonth );
+
+                            // On Each Arrow Click
+                            singleMonth.querySelectorAll( '.monthly-header .arrow i' ).forEach( ( arrow ) => {
+                                arrow.addEventListener( 'click', () => {
+                                    console.log( arrow );
+                                    let currentIndex = arrow.parentElement.getAttribute( 'data-index' );
+                                    let nextIndex    = 0;
+                                    switch( arrow.parentElement.getAttribute( 'data-direction' ) ) {
+                                        case 'forward' : nextIndex = parseInt( currentIndex ) + 1;
+                                            break;
+                                        case 'back' : nextIndex = parseInt( currentIndex ) - 1;
+                                            break;
+                                    }
+                                    //  console.log( currentIndex, nextIndex );
+                                    document.querySelectorAll( '.single-month-chart' ).forEach( ( div ) => {
+                                        div.classList.remove( 'show' );
+                                    } );
+                                    document.querySelector( '.single-month-chart[data-index="' + nextIndex + '"]' ).classList.add('show');
+                                } );
+
+                            } );
+
+                            let doughnutChart = document.createElement( 'canvas' );
+                            doughnutChart.classList.add( 'total-logs-per-month', 'line-chart' );
+                            doughnutChart.setAttribute( 'debt-id', 0 );
+                            doughnutChart.setAttribute( 'data-start_date', startDate );
+                            doughnutChart.setAttribute( 'data-end_date', endDate );
+                            singleMonth.insertAdjacentElement( 'beforeend', doughnutChart );
+                            //console.log( doughnutChart );
+                            createChart.functions.drawChart( doughnutChart, 0, 'doughnut', debtValuesJson = null, month );
+
+
+                            // Add Table per each debt
+                            let table = '<table class = "all-payments-per-month"><tbody>';
+                            month.debts.forEach( ( debt ) => {
+                                let progress = parseFloat( debt.debt_values.total_paid ) / ( parseFloat( debt.debt_values.total_paid ) + parseFloat( debt.debt_values.remaining ) )
+                                progress = Math.round( progress * 100 );
+                                table += '<tr>' +
+                                        '<td>'+ debt.title +'</td>'+
+                                        '<td>'+ debt.debt_values.total_paid +'</td>'+
+                                        '<td>%'+ progress +'</td>'+
+                                    '</tr>';
+                            } );
+
+                            table += '</tbody></table>';
+                            singleMonth.insertAdjacentHTML( 'beforeend', table );
+
+                        } );
+                    }
+
+
+                    // Line Chart for yearly payments.
+                    let yearlyPaymentValues = JSON.parse( dcmShortcodes.debtCalculator.elements.yearlyPaymentsDiv.querySelector( 'input[name=yearly_payments_values]' ).value );
+                    let yearlyPaymentsArray = [];
+                    yearlyPaymentValues.forEach( ( year ) => {
+                        let totalPaidPerYear = 0;
+                        year.debts.forEach( (debt) => {
+                            totalPaidPerYear += parseFloat( debt.debt_values.total_paid );
+                        } );
+                        yearlyPaymentsArray.push( {
+                            year : year.year,
+                            total_paid : totalPaidPerYear
+                        } );
+                    } );
+                    //console.log( yearlyPaymentsArray, yearlyPaymentValues );
+
+                    let yearlyPaymentCanvas = dcmShortcodes.debtCalculator.elements.yearlyPaymentsDiv.querySelector( 'canvas.yearly-payments-canvas' );
+                    let yearlyPaymentLabels = {
+                        title: 'Yearly Payments'
+                    };
+                    createChart.functions.drawLineCombined( yearlyPaymentCanvas, yearlyPaymentsArray, yearlyPaymentLabels );
+
+
+                    // Doughnut Charts for total debts values.
+                    let totalDebtsValues = dcmShortcodes.debtCalculator.elements.totalDebtInfo.querySelector( 'input[name="total_debts_info"]' ).value;
+                    let totalDebtCanvas  = dcmShortcodes.debtCalculator.elements.totalDebtInfo.querySelector( 'canvas.total-debts-canvas' );
+                    createChart.functions.drawChart( totalDebtCanvas, totalDebtCanvas.getAttribute( 'data-id' ), 'doughnut', totalDebtsValues );
+
+                    let allDebtsInfoValues  = dcmShortcodes.debtCalculator.elements.allDebtsInfo.querySelector( 'input[name="total_debts_info"]' ).value;
+                    let allDebtsInfoLabels  = dcmShortcodes.debtCalculator.elements.allDebtsInfo.querySelector( 'input[name="total_debts_info_labels"]' ).value;
+                    let allDebtsInfoCanvas  = dcmShortcodes.debtCalculator.elements.allDebtsInfo.querySelector( 'canvas.total-debts-canvas' );
+                    createChart.functions.drawDoughnutCombined( allDebtsInfoCanvas,  JSON.parse( allDebtsInfoValues ), JSON.parse( allDebtsInfoLabels ) );
+
+
+                },
+                singleDebt : () => {
+                    // Doughnut Charts per each single debt ( Total Single Debt Info).
+                    document.querySelectorAll( 'canvas.debts-reports.doughnut-chart' ).forEach( ( canvas ) => {
+                        createChart.functions.drawChart( canvas, canvas.getAttribute( 'data-id' ), 'doughnut' );
+                    } );
+
+
+                    // Doughnut and Line Charts for monthly logs per each debt
+                    dcmShortcodes.debtCalculator.elements.monthlyLogs.forEach( ( totalLogsInput ) => {
+                        let totalLogsOrderedByMonth = JSON.parse( totalLogsInput.value );
+                        //console.log(totalLogsOrderedByMonth  );
+                        let totalLogsOrderedByYear   = dcmShortcodes.debtCalculator.generalFunctions.converMonthLogsToYearLogs( totalLogsOrderedByMonth );
+
+                        // Get first and last year
+                        let firstYear = 0,
+                            lastYear  = 0;
+                        if( totalLogsOrderedByYear.length > 0 ) {
+                            firstYear = totalLogsOrderedByYear[0].year;
+                            lastYear  = totalLogsOrderedByYear[totalLogsOrderedByYear.length-1].year;
+                        }
+
+                        //console.log(firstYear, lastYear);
+                        let allYearsData = [];
+                        for( let i = firstYear; i <= lastYear; i++ ) {
+                            // Get year logs of that year.
+                            let logsPerYear = dcmShortcodes.debtCalculator.generalFunctions.getYearLogs( i, totalLogsOrderedByYear );
+                            allYearsData.push( {
+                                year: i,
+                                data: logsPerYear
+                            } );
+                        }
+                        //console.log( allYearsData );
+
+                        let debtID = totalLogsInput.getAttribute( 'data-id' );
+
+                        totalLogsOrderedByMonth.forEach( ( month, index ) => {
+                            //console.log( month );
+                            let startDate =  month.start_date;
+                            let endDate   =  month.end_date;
+
+                            let beforeArrow = index === 0 ? '' : '<i class="fa fa-arrow-left arrow-direction"></i>';
+                            let nextArrow   = index === totalLogsOrderedByMonth.length-1 ? '' : '<i class="fa fa-arrow-right arrow-direction"></i>';
+                            let showClass   = index === totalLogsOrderedByMonth.length-1 ? 'show' : 'hide';
+
+
+                            let singleMonth = document.createElement( 'div' );
+                            singleMonth.classList.add( 'single-month-chart', showClass );
+                            singleMonth.setAttribute( 'data-index', index );
+                            singleMonth.insertAdjacentHTML( 'afterbegin',
+                                '<div class="monthly-header" data-index = "' + index + '">' +
+                                '<span class="arrow" data-direction ="back" data-index = "' + index + '">' + beforeArrow +  '</span>'+
+                                '<span class="start-date">' + startDate +  '</span>'+
+                                '<span class="middle-icon">-</span>'+
+                                '<span class="end-date">' + endDate + '</span>'+
+                                '<span class="arrow" data-direction ="forward" data-index = "' + index + '">' + nextArrow +  '</span>'+
+                                '</div>' );
+                            totalLogsInput.insertAdjacentElement( 'afterend', singleMonth );
+
+                            // On Each Arrow Click
+                            singleMonth.querySelectorAll( '.monthly-header .arrow i' ).forEach( ( arrow ) => {
+                                arrow.addEventListener( 'click', () => {
+                                    console.log( arrow );
+                                    let currentIndex = arrow.parentElement.getAttribute( 'data-index' );
+                                    let nextIndex    = 0;
+                                    switch( arrow.parentElement.getAttribute( 'data-direction' ) ) {
+                                        case 'forward' : nextIndex = parseInt( currentIndex ) + 1;
+                                            break;
+                                        case 'back' : nextIndex = parseInt( currentIndex ) - 1;
+                                            break;
+                                    }
+                                    //  console.log( currentIndex, nextIndex );
+                                    document.querySelectorAll( '.single-month-chart' ).forEach( ( div ) => {
+                                        div.classList.remove( 'show' );
+                                    } );
+                                    document.querySelector( '.single-month-chart[data-index="' + nextIndex + '"]' ).classList.add('show');
+                                } );
+
+                            } );
+
+                            let doughnutChart = document.createElement( 'canvas' );
+                            doughnutChart.classList.add( 'total-logs-per-month', 'line-chart' );
+                            doughnutChart.setAttribute( 'debt-id', debtID );
+                            doughnutChart.setAttribute( 'data-start_date', startDate );
+                            doughnutChart.setAttribute( 'data-end_date', endDate );
+                            singleMonth.insertAdjacentElement( 'beforeend', doughnutChart );
+                            createChart.functions.drawChart( doughnutChart, debtID, 'doughnut', debtValuesJson = null, month );
+
+
+                        } );
+
+
+                        allYearsData.forEach( ( year ) => {
+                            //console.log( year );
+                            let lineCanvas = document.createElement( 'canvas' );
+                            lineCanvas.classList.add( 'total-logs-per-month', 'line-chart' );
+                            lineCanvas.setAttribute( 'debt-id', debtID );
+                            // lineCanvas.setAttribute( 'data-start_date', startDate );
+                            //lineCanvas.setAttribute( 'data-end_date', endDate );
+                            document.querySelector( '.reports-graphics[data-id="'+ debtID + '"] .multi-graphics-wrapper' ).insertAdjacentElement( 'beforeend', lineCanvas );
+                            createChart.functions.drawLineChartPerYear( lineCanvas, year, {title: year.year} );
+                        } );
+
+
+                    } );
+
+                }
+            },
         },
         generalFunctions : {
             converMonthLogsToYearLogs : ( monthLogs ) => {
@@ -360,15 +443,22 @@ let dcmShortcodes = {
                     // Get the payments of this months ( if it does not have any payments, it will be zero)
                     let totalPayments = 0;
                     let debtTitle = '';
-                    yearsLogs.forEach( ( monthYear ) => {
-                        if (
-                               monthYear.year === year
-                            && monthYear.month === monthIndex
-                        ) {
-                            totalPayments = monthYear.paymentsTotal;
-                            debtTitle     = monthYear.title;
-                        }
-                    });
+
+                    // Check if there are any year logs imported.
+                    if( yearsLogs.length > 0 ) {
+                        yearsLogs.forEach( ( monthYear ) => {
+                            if (
+                                monthYear.year === year
+                                && monthYear.month === monthIndex
+                            ) {
+                                totalPayments = monthYear.paymentsTotal;
+                                debtTitle     = monthYear.title;
+                            }
+                        });
+
+                    } else {
+                        console.log( 'there are no years logs' );
+                    }
 
                     yearArray.push({
                         'month'    : monthName,
@@ -391,85 +481,3 @@ let dcmShortcodes = {
 window.addEventListener('DOMContentLoaded', (event) => {
     dcmShortcodes.debtCalculator.init();
 });
-
-/*
-var rangeSlider = function(){
-    var slider = jQuery('.row'),
-        range = jQuery('.value_range'),
-        value = jQuery('.field-text');
-
-    slider.each(function(){
-
-        value.each(function(){
-            var value = jQuery(this).prev().attr('value');
-            jQuery(this).html(value);
-        });
-
-        range.on('input', function(){
-            jQuery(this).next(value).html(this.value);
-        });
-    });
-};
-rangeSlider();
-
-jQuery('#submit').click(function(){
-    var h = jQuery('#height').val() / 100;
-    var w = jQuery('#weight').val();
-    var bmi = h * h ;
-    bmi = w/bmi;
-    bmi = (bmi).toFixed(1);
-    jQuery('#bmiValue').html(bmi + " ");
-    if (bmi < 18.5) {
-        //Underweight
-        jQuery('.result-text').css('background','-webkit-linear-gradient(left top, #27939D, #07658F)');
-        jQuery('.result-text').css('background','-o-linear-gradient(bottom right, #27939D, #07658F)');
-        jQuery('.result-text').css('background','-moz-linear-gradient(bottom right, #27939D, #07658F)');
-        jQuery('.result-text').css('background','linear-gradient(to bottom right, #27939D, #07658F)');
-        jQuery('#bmid').html("Underweight");
-    } else if ((18.5 <= bmi) && (bmi <= 24.9)) {
-        //Normal weight
-        jQuery('.result-text').css('background','-webkit-linear-gradient(left top, #4FD24D, #4CA456)');
-        jQuery('.result-text').css('background','-o-linear-gradient(bottom right, #4FD24D, #4CA456)');
-        jQuery('.result-text').css('background','-moz-linear-gradient(bottom right, #4FD24D, #4CA456)');
-        jQuery('.result-text').css('background','linear-gradient(to bottom right, #4FD24D, #4CA456)');
-        jQuery('#bmid').html("Normal");
-    } else if ((25 <= bmi) && (bmi <= 29.9)) {
-        //Overweight
-        jQuery('.result-text').css('background','-webkit-linear-gradient(left top, #EF7532, #DC3A26)');
-        jQuery('.result-text').css('background','-o-linear-gradient(bottom right, #EF7532, #DC3A26)');
-        jQuery('.result-text').css('background','-moz-linear-gradient(bottom right, #EF7532, #DC3A26)');
-        jQuery('.result-text').css('background','linear-gradient(to bottom right, #EF7532, #DC3A26)');
-        jQuery('#bmid').html("Overweight");
-    } else {
-        //Obese
-        jQuery('.result-text').css('background','-webkit-linear-gradient(left top, #F73946, #FF3875)');
-        jQuery('.result-text').css('background','-o-linear-gradient(bottom right, #F73946, #FF3875)');
-        jQuery('.result-text').css('background','-moz-linear-gradient(bottom right, #F73946, #FF3875)');
-        jQuery('.result-text').css('background','linear-gradient(to bottom right, #F73946, #FF3875)');
-        jQuery('#bmid').html("Obese");
-    }
-    console.log(bmi);
-});
-
-jQuery('input[type="range"]').change(function () {
-    var val = (jQuery(this).val() - jQuery(this).attr('min')) / (jQuery(this).attr('max') - jQuery(this).attr('min'));
-
-    jQuery(this).css('background-image',
-        '-webkit-gradient(linear, left top, right top, '
-        + 'color-stop(' + val + ', #F73946), '
-        + 'color-stop(' + val + ', #27283A)'
-        + ')'
-    );
-});
-
-jQuery('.value_range').each(function (){
-    var val = (jQuery(this).val() - jQuery(this).attr('min')) / (jQuery(this).attr('max') - jQuery(this).attr('min'));
-
-    jQuery(this).css('background-image',
-        '-webkit-gradient(linear, left top, right top, '
-        + 'color-stop(' + val + ', #F73946), '
-        + 'color-stop(' + val + ', #27283A)'
-        + ')'
-    );
-})*/
-;

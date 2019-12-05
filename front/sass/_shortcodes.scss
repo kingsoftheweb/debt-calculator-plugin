@@ -286,6 +286,66 @@
 			transition: all $fast_time_duration;
 		}
 	}
+	
+	
+	
+	.single-month-chart {
+		@include align-center;
+		display: none;
+		flex-direction: column;
+		padding: 10px 0 30px 0;
+		margin-bottom: 10px;
+		@include block_background;
+		
+		.monthly-header {
+			@include align-center;
+			width: 70%;
+			flex-direction: row;
+			background: $primary_color;
+			color: $secondary_color;
+			border-radius: 20px;
+			padding: 5px;
+			margin: 10px auto;
+			
+			span {
+				display: flex;
+				justify-content: center;
+				i {
+					@include align-center;
+					margin: 0 10px;
+					&.arrow-direction {
+						font-size: 20px;
+					}
+				}
+				&.arrow {
+					width: 20px;
+					margin: 0 10px;
+				}
+				&.start-date {
+					flex:2;
+				}
+				&.middle-icon {
+					flex:1;
+				}
+				&.end-date {
+					flex:2;
+				}
+			}
+		}
+		canvas {
+			width: 95% !important;
+			height: auto !important;
+		}
+		
+		&.show {
+			display: flex;
+		}
+	}
+	
+	.all-payments-per-month {
+		width: 100%;
+		margin-left: 20px;
+	}
 }
 
 

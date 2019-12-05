@@ -132,25 +132,10 @@ $total_debt_info = array(
 
 <div class="total-debts-chart__main all_debts per_month">
 	<?php
-
-	$get_debts = get_posts(
-		array(
-			'post_type'   => 'kotw_debt',
-			'post_status' => 'publish',
-			'author'      => $author
-		)
-	);
-	$debts_array  = [];
-	$labels_array = [];
-	foreach ( $get_debts as $debt ) {
-		if( isset($debt) ) {
-			$debt_id = $debt->ID;
-			$debts_array[]  = get_post_meta( $debt_id, $this->prefix . '_remaining_debt', true );
-			$labels_array[] = get_the_title( $debt_id );
-		}
-	}
+	/*echo '<pre>';
+	print_r( $payments_per_months );
+	echo '</pre>';*/
 	?>
-    <input type = "hidden" name = "total_debts_info" value = '<?php echo json_encode( $debts_array ); ?>'/>
-    <input type = "hidden" name = "total_debts_info_labels" value = '<?php echo json_encode( $labels_array ); ?>'/>
+    <input type = "hidden" name = "total_debts_info_ordered_by_month" value = '<?php echo json_encode( $payments_per_months ); ?>'/>
     <canvas class="total-debts-canvas doughnut-chart"></canvas>
 </div>

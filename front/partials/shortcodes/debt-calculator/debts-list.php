@@ -1,3 +1,12 @@
+<?php
+$functions = new DCP_Functions();
+$payments_per_years = $functions->get_total_payments_per_year( $author );
+$payments_per_years = array_reverse( $payments_per_years ); // Re-arrange years array to be DESC.
+
+$payments_per_months = $functions->get_total_payments_per_month( $author );
+//$payments_per_months = array_reverse( $payments_per_months );
+
+?>
 <div class="arm_account_detail_tab arm_account_detail_tab_content arm_account_content_active"
      data-tab="debts-list">
 	<div class="arm_account_detail_tab_heading">Debts List</div>
@@ -51,9 +60,7 @@
 
 			<h4>Yearly Payments</h4>
 			<?php
-			$functions = new DCP_Functions();
-			$payments_per_years = $functions->get_total_payments_per_year( $author );
-			$payments_per_years = array_reverse( $payments_per_years ); // Re-arrange years array to be DESC.
+
 			?>
 
 			<div class="yearly-payments-chart__main">
