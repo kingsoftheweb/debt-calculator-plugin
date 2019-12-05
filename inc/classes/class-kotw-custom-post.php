@@ -130,6 +130,6 @@ $debts = new KOTW_Custom_Post(
 	'Debt',
 	'Debts',
 	array( 'tag' ),
-	array( 'title', 'editor' ),
+	array( 'title', 'editor', 'author' ),
 	false
 );

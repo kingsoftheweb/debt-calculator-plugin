@@ -1,13 +1,13 @@
 <?php
 
-$user_id = get_current_user_id();
+$user_id = $author;
 
 $debts = get_posts(
 	array(
 		'post_type'   => 'kotw_debt',
 		'post_status' => 'publish',
 		'numberposts' => -1,
-		'author' => get_current_user_id()
+		'author'      => $author
 	)
 );
 $total_debt_remaining = 0;
@@ -20,9 +20,17 @@ foreach ($debts as $debt) {
 	}
 
 }
+if( 0 == ( (float) $total_debt_paid + (float) $total_debt_remaining ) ) {
+	$paid_progress = 0;
+} else {
+	$paid_progress   = 100 * (float)$total_debt_paid / ( (float) $total_debt_paid + (float) $total_debt_remaining );
+}
 
-$paid_progress      = 100 * (float)$total_debt_paid / ( (float) $total_debt_paid + (float) $total_debt_remaining );
-$remaining_progress = 100 * (float)$total_debt_remaining / ( (float) $total_debt_paid + (float) $total_debt_remaining );
+if( 0 == ( (float) $total_debt_paid + (float) $total_debt_remaining ) ) {
+	$remaining_progress = 0;
+} else {
+	$remaining_progress = 100 * (float)$total_debt_remaining / ( (float) $total_debt_paid + (float) $total_debt_remaining );
+}
 $total_debt_info = array(
         'title'      => 'Total Debts',
         'remaining'  => $total_debt_remaining,
@@ -77,7 +85,7 @@ $total_debt_info = array(
 	            'post_type'   => 'kotw_debt',
 	            'post_status' => 'publish',
 	            'numberposts' => -1,
-	            'author' => get_current_user_id()
+	            'author'      => $author
             )
     );
     $debts_array  = [];

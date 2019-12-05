@@ -181,8 +181,8 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 					'author' => $author_id,
 				)
 			);
-			$first_year = get_the_date( 'Y', $first_debt[0] );
-			$last_year  = get_the_date( 'Y', $last_debt[0] );
+			$first_year = $first_debt ? get_the_date( 'Y', $first_debt[0] ) : 0;
+			$last_year  = $last_debt ? get_the_date( 'Y', $last_debt[0] ) : 0;
 			$years = [];
 			$i = $first_year;
 			for( $i; $i<=$last_year; $i++ ) {
