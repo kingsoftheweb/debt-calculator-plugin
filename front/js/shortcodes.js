@@ -7,6 +7,7 @@ let dcmShortcodes = {
             resultsTabs       : document.querySelectorAll( 'td.arm-form-table-content.tab-has-result .title' ),
             totalDebtInfo     : document.querySelector( '.total-debts-chart__main' ),
             allDebtsInfo      : document.querySelector( '.total-debts-chart__main.all_debts' ),
+            allDebtsInfoPerMonth      : document.querySelector( '.total-debts-chart__main.all_debts.per_month' ),
             yearlyPaymentsDiv : document.querySelector( '.yearly-payments-chart__main' ),
             monthlyLogs       : document.querySelectorAll( '.multi-graphics-wrapper input.order_logs_per_month' ),
             addNewButton      : document.querySelector( '.dcm-shortcode input.submit.add-new-debt' ),
