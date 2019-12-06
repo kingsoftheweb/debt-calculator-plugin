@@ -65,16 +65,29 @@ if( 'all' === $type ) :
 			display: flex;
 			padding: 1rem;
 			justify-content: center;
-			flex-direction: row;
+			flex-direction: column;
+            width: 100%;
 		}
 		.wrapper .header .logo {
-			width: 33%;
+            width: 100%;
+            justify-content: center;
+            display: flex;
 		}
 		.wrapper .header .info {
-			width: 66%;
+			width: 100%;
 			display: flex;
 			align-items: center;
+            flex-direction: column;
 		}
+        .wrapper .header .info h1 {
+            font-size: 66px;
+        }
+        .wrapper .header .info h3 {
+            font-size: 40px;
+        }
+        .wrapper .header .info h4 {
+            font-size: 25px;
+        }
 		.wrapper .header .info table {
 			width: 100%;
 			text-align: left;
@@ -84,7 +97,7 @@ if( 'all' === $type ) :
 		}
 
 		.wrapper .header img {
-			max-height: 200px;
+			max-height: 500px;
 			width: auto;
 		}
 		.wrapper .charts {
@@ -103,17 +116,24 @@ if( 'all' === $type ) :
 
 		.wrapper .charts .row .canvas-3 {
 			display: flex;
-			width: 40%;
 			justify-content: center;
+            margin-bottom: 20px;
 		}
+        .wrapper .row.canvas-3 {
+            flex-direction: column;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
 		.wrapper .charts table#all_debts_array {
-			width: 55%;
-			margin-left: 5%;
+			width: 100%;
+			margin-top: 5%;
 		}
 
 		.wrapper .charts table#all_debts_array tr, .wrapper .charts table#all_debts_array th, .wrapper .charts table#all_debts_array td {
 			text-align: left;
 		}
+
 
 		.wrapper .charts .row .canvas-3 img {
 			//max-width: 50%;
@@ -165,27 +185,22 @@ if( 'all' === $type ) :
             width: 25%;
         }
     </style>
-	<div class="wrapper" id = "page1">
+    <div class="wrapper" id = "page1">
 
-		<div class="header">
-			<div class="logo">
-				<img src="<?php echo 'admin/assets/jay-folds-logo.png'; ?>" />
-			</div>
-			<div class="info">
-				<table>
-					<tr>
-						<th>User:</th>
-						<td><?php echo $user_display_name . '(' . $username . ')'; ?></td>
-					</tr>
-					<tr>
-						<th>Report Date:</th>
-						<td><?php echo date('d-m-Y'); ?></td>
-					</tr>
+        <div class="header">
+            <div class="logo">
+                <img src="<?php echo 'admin/assets/jay-folds-logo.png'; ?>" />
+            </div>
+            <div class="info">
+                <h1>Payments/Debts Report</h1>
+                <h3><?php echo $user_display_name . '(' . $username . ')'; ?></h3>
+                <h4><?php echo date('d-m-Y'); ?></h4>
+            </div>
 
-				</table>
-			</div>
+        </div>
+    </div>
+	<div class="wrapper" id = "page2">
 
-		</div>
 		<div class="charts">
 			<div class="row">
 				<div class = "canvas-wrapper canvas-1">
@@ -197,7 +212,7 @@ if( 'all' === $type ) :
 				</div>
 
 			</div>
-			<div class="row">
+			<div class="row canvas-3">
 				<div class = "canvas-wrapper canvas-3">
 					<img src = "<?php echo $data3;?>" />
 				</div>
@@ -258,18 +273,7 @@ if( 'all' === $type ) :
 
 	</div>
 
-<!--	<div class="wrapper" id = "page-2">
-		<div class="tables">
-			<?php
-/*
-			$data = $export->export_all_debts_to_pdf( $user_id );
-			echo '<pre>';
-			//print_r($data);
-			echo '</pre>';
 
-			*/?>
-		</div>
-	</div>-->
 
 
 
@@ -280,7 +284,41 @@ if( 'all' === $type ) :
         // Generate the PDF
         document.addEventListener( 'DOMContentLoaded', function() {
             let bodyHeight = document.body.offsetHeight;
-            let wrappers = document.querySelectorAll( '.wrapper' );
+            bodyHeight = bodyHeight/2;
+
+
+            let pdf = new jsPDF('p','pt','a4');
+            let width = pdf.internal.pageSize.getWidth();
+            let height = pdf.internal.pageSize.getHeight();
+
+
+console.log( bodyHeight, width, height );
+            // Page 1 wrapper
+            html2canvas( document.getElementById('page1'), {
+                height: bodyHeight,
+                scale: 1
+            } ).then( canvas => {
+                document.body.appendChild( canvas );
+                canvas.classList.add( 'pdf-canvas' );
+                pdf.addImage( canvas.toDataURL(), 'JPEG', 0, 0, width, height );
+                pdf.addPage();
+
+                html2canvas( document.getElementById('page2'), {
+                    height: bodyHeight,
+                    scale: 1
+                } ).then( canvas => {
+                    document.body.appendChild( canvas );
+                    canvas.classList.add( 'pdf-canvas' );
+                    pdf.addImage( canvas.toDataURL(), 'JPEG', 0, 0, width, height );
+
+                    pdf.save('debts_payments_reports.pdf');
+                });
+
+            });
+
+
+
+            /*let wrappers = document.querySelectorAll( '.wrapper' );
             wrappers.forEach( (wrapper, index) => {
                 console.log(wrapper);
                 let id = wrapper.getAttribute( 'id' );
@@ -295,9 +333,10 @@ if( 'all' === $type ) :
                         document.dispatchEvent(new CustomEvent ( 'lastWrapper' ) );
                     }
                 });
-            } );
+            } );*/
 
         }, false);
+/*
 
         setTimeout( () => {
             let pdfCanvases = document.querySelectorAll( 'canvas.pdf-canvas' );
@@ -308,11 +347,11 @@ if( 'all' === $type ) :
 
             pdf.addImage( pdfCanvases[0].toDataURL(), 'JPEG', 0, 0, width, height );
 
-            /* for( let i=1; i<canvasesArray.length-1; i++ ) {
+            /!* for( let i=1; i<canvasesArray.length-1; i++ ) {
 				 pdf.addPage();
 				 pdf.addImage( canvasesArray[i], 'JPEG', 0, 0, width, height );
 			 }
-			 console.log(pdfCanvases);*/
+			 console.log(pdfCanvases);*!/
             pdf.save('debts_payments_reports.pdf');
 
 
@@ -330,7 +369,7 @@ if( 'all' === $type ) :
             pdfCanvases.forEach( (canvas) => {
                 canvasesArray.push( canvas.toDataURL() );
             } );
-            /*
+            /!*
 			 pdf.addImage( canvasesArray[0], 'JPEG', 0, 0, width, height );
 
 			 for( let i=1; i<canvasesArray.length-1; i++ ) {
@@ -338,8 +377,9 @@ if( 'all' === $type ) :
 				 pdf.addImage( canvasesArray[i], 'JPEG', 0, 0, width, height );
 			 }
 			 console.log(pdfCanvases);
-			 pdf.save('myPage.pdf');*/
+			 pdf.save('myPage.pdf');*!/
         } );
+*/
 
 
 

@@ -94,6 +94,8 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 		 * @return array
 		 */
 		public function get_total_debt_values_at_date ( $debt_id, $date, $start_date = null ) {
+			$date       = date('Y-m-d', strtotime( $date ) );
+			$start_date = date('Y-m-d', strtotime( $start_date ) );
 			global $wpdb;
 			$table_name = $wpdb->prefix . $this->prefix . '_debt_logs';
 			if( null !== $start_date ) {
@@ -182,6 +184,7 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 					'author'      => $author_id,
 				)
 			);
+			if( count($first_debt ) < 1 || count ( $last_debt ) < 1 ) return [];
 			$first_date = $first_debt ? get_the_date( 'Y-m-d', $first_debt[0] ) : 0;
 			$last_date  = $last_debt ? get_the_date( 'Y-m-d', $last_debt[0] ) : 0;
 
@@ -192,17 +195,34 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 			$period   = new DatePeriod( $start, $interval, $end );
 
 			$months = [];
-			foreach ( $period as $dt ) {
-				$first_day = '01-' . $dt->format( 'm-Y' );
-				$last_day  = date( "t-m-Y", strtotime( $dt->format('d-m-Y') ) );
+			// Only one debt is added.
+			if( $end == $start ) {
+				$first_day = '01-' . $start->format( 'm-Y' );
+				$last_day  = date( "t-m-Y", strtotime( $start->format('d-m-Y') ) );
 
 				$months[] = array(
-					'title'     => $dt->format( 'M-Y' ),
- 					'month'     => $dt->format( 'm' ),
-					'year'      => $dt->format( 'Y' ),
+					'title'     => $start->format( 'M-Y' ),
+					'month'     => $start->format( 'm' ),
+					'year'      => $start->format( 'Y' ),
 					'first_day' => $first_day,
 					'last_day'  => $last_day
 				);
+
+			} else {
+			    // More than one debt are added.
+				foreach ( $period as $dt ) {
+					$first_day = '01-' . $dt->format( 'm-Y' );
+					$last_day  = date( "t-m-Y", strtotime( $dt->format('d-m-Y') ) );
+
+					$months[] = array(
+						'title'     => $dt->format( 'M-Y' ),
+						'month'     => $dt->format( 'm' ),
+						'year'      => $dt->format( 'Y' ),
+						'first_day' => $first_day,
+						'last_day'  => $last_day
+					);
+				}
+
 			}
 
 			$debts_per_months_array = [];
@@ -214,7 +234,7 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 						'numberposts' => -1,
 						'orderby'     => 'date',
 						'order'       => 'asc',
-						'author' => $author_id,
+						'author'      => $author_id,
 						'date_query'  => array(
 							'after'      => $month['first_day'],
 							'before'     => $month['last_day'],
@@ -228,7 +248,7 @@ if ( ! class_exists( 'DCP_Functions' ) ):
 				$total_remaining    = 0;
 				foreach ( $all_debts_per_month as $single_debt ) {
 
-					if( $this->is_still_debt_at_date( $single_debt->ID, $month['last_day'] ) ) {
+					if( $this->is_still_debt_at_date( $single_debt->ID, $month['last_day'] ) || 1==1 ) {
 
 						$debts_values_per_month = $this->get_total_debt_values_at_date( $single_debt->ID, $month['last_day'], $month['first_day'] );
 						$total_paid         += (float) $debts_values_per_month['total_paid'];
