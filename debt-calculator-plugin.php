@@ -7,6 +7,7 @@ Version: 1.0
 Author: Kings Of The Web
 Author URI: https://kingsoftheweb.ca
 License: GPL2
+textdomain: dfcKings
 */
 
 if ( ! defined( 'ABSPATH' ) ) {

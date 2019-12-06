@@ -13,7 +13,7 @@ if( isset( $_GET['user_id'] ) ) {
             <div class="single-grid-tab" data-id = "debts-list">
                 <div class="icon"><i class="fa fa-th-list"></i></div>
                 <div class="title">
-                    <h3>Debts List</h3>
+                    <h3>Debts Reports</h3>
                 </div>
             </div>
             <div class="single-grid-tab" data-id = "add-new-debt">
@@ -31,7 +31,7 @@ if( isset( $_GET['user_id'] ) ) {
             <div class="single-grid-tab" data-id = "debts-reports">
                 <div class="icon"><i class="fa fa-file"></i></div>
                 <div class="title">
-                    <h3>Debts Reports</h3>
+                    <h3>Debts</h3>
                 </div>
             </div>
         </div>

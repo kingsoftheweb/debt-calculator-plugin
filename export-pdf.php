@@ -20,7 +20,7 @@ if( 'all' === $type ) :
 		<!DOCTYPE html>
 		<html lang="en-US">
 	<head>
-		<title>Debt Export</title>
+		<title>Financial Report</title>
 		<meta charset="utf-8">
 		<!--	<meta name="viewport" content="width=device-width, initial-scale=1">-->
 		<link href="export.css?nocache=<?php echo time();?>" rel="stylesheet"/>
@@ -66,28 +66,28 @@ if( 'all' === $type ) :
 			padding: 1rem;
 			justify-content: center;
 			flex-direction: column;
-            width: 100%;
+			width: 100%;
 		}
 		.wrapper .header .logo {
-            width: 100%;
-            justify-content: center;
-            display: flex;
+			width: 100%;
+			justify-content: center;
+			display: flex;
 		}
 		.wrapper .header .info {
 			width: 100%;
 			display: flex;
 			align-items: center;
-            flex-direction: column;
+			flex-direction: column;
 		}
-        .wrapper .header .info h1 {
-            font-size: 66px;
-        }
-        .wrapper .header .info h3 {
-            font-size: 40px;
-        }
-        .wrapper .header .info h4 {
-            font-size: 25px;
-        }
+		.wrapper .header .info h1 {
+			font-size: 66px;
+		}
+		.wrapper .header .info h3 {
+			font-size: 40px;
+		}
+		.wrapper .header .info h4 {
+			font-size: 25px;
+		}
 		.wrapper .header .info table {
 			width: 100%;
 			text-align: left;
@@ -108,23 +108,24 @@ if( 'all' === $type ) :
 			display: flex;
 			flex-direction: row;
 			justify-content: center;
-			margin-bottom: 40px;
+			margin-bottom: 20px;
 		}
 		.wrapper .charts .row img {
 			max-width: 100%;
+			max-height: 500px;
 		}
 
 		.wrapper .charts .row .canvas-3 {
 			display: flex;
 			justify-content: center;
-            margin-bottom: 20px;
+			margin-bottom: 20px;
 		}
-        .wrapper .row.canvas-3 {
-            flex-direction: column;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
+		.wrapper .row.canvas-3 {
+			flex-direction: column;
+			width: 100%;
+			display: flex;
+			justify-content: center;
+		}
 		.wrapper .charts table#all_debts_array {
 			width: 100%;
 			margin-top: 5%;
@@ -136,7 +137,7 @@ if( 'all' === $type ) :
 
 
 		.wrapper .charts .row .canvas-3 img {
-			//max-width: 50%;
+		//max-width: 50%;
 		}
 
 		canvas.pdf-canvas {
@@ -168,23 +169,23 @@ if( 'all' === $type ) :
 			flex-wrap: wrap;
 			list-style: none;
 		}
-        ul#all_debts_array li {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            font-size: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        ul#all_debts_array li div.title {
-            width: 30%;
-        }
-        ul#all_debts_array li div.value {
-            width: 15%;
-        }
-        ul#all_debts_array li div.date {
-            width: 25%;
-        }
-    </style>
+		ul#all_debts_array li {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			font-size: 15px;
+			border-bottom: 1px solid #eee;
+		}
+		ul#all_debts_array li div.title {
+			width: 30%;
+		}
+		ul#all_debts_array li div.value {
+			width: 15%;
+		}
+		ul#all_debts_array li div.date {
+			width: 25%;
+		}
+	</style>
     <div class="wrapper" id = "page1">
 
         <div class="header">
@@ -192,8 +193,8 @@ if( 'all' === $type ) :
                 <img src="<?php echo 'admin/assets/jay-folds-logo.png'; ?>" />
             </div>
             <div class="info">
-                <h1>Payments/Debts Report</h1>
-                <h3><?php echo $user_display_name . '(' . $username . ')'; ?></h3>
+                <h1>Financial Report</h1>
+                <h3><?php echo $user_display_name; ?></h3>
                 <h4><?php echo date('d-m-Y'); ?></h4>
             </div>
 
@@ -206,7 +207,8 @@ if( 'all' === $type ) :
 				<div class = "canvas-wrapper canvas-1">
 					<img src = "<?php echo $data1;?>" />
 				</div>
-
+			</div>
+			<div class="row">
 				<div class = "canvas-wrapper canvas-2">
 					<img src = "<?php echo $data2;?>" />
 				</div>

@@ -478,6 +478,9 @@ let dcmShortcodes = {
 
 };
 
-window.addEventListener('DOMContentLoaded', (event) => {
-    dcmShortcodes.debtCalculator.init();
+window.addEventListener('DOMContentLoaded', ( event ) => {
+    // Check if shortcode exists.
+    if ( document.querySelectorAll( '.dcm-shortcode' ).length > 0 ) {
+        dcmShortcodes.debtCalculator.init();
+    }
 });

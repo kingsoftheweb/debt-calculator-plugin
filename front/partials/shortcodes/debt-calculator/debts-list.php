@@ -9,7 +9,7 @@ $payments_per_months = $functions->get_total_payments_per_month( $author );
 ?>
 <div class="arm_account_detail_tab arm_account_detail_tab_content arm_account_content_active"
      data-tab="debts-list">
-	<div class="arm_account_detail_tab_heading">Debts List</div>
+	<div class="arm_account_detail_tab_heading">Debts Reports</div>
     <div class="total-debts-chart">
 		<?php include_once $this->plugin_path . '/front/partials/shortcodes/debt-calculator/reports-charts/total-debts-chart.php'; ?>
     </div>
