@@ -245,9 +245,10 @@ let dcmShortcodes = {
                             month.debts.forEach( ( debt ) => {
                                 let progress = parseFloat( debt.debt_values.total_paid ) / ( parseFloat( debt.debt_values.total_paid ) + parseFloat( debt.debt_values.remaining ) )
                                 progress = Math.round( progress * 100 );
+                                progress = progress? progress:0;
                                 table += '<tr>' +
                                         '<td>'+ debt.title +'</td>'+
-                                        '<td>'+ debt.debt_values.total_paid +'</td>'+
+                                        '<td>$'+ debt.debt_values.total_paid +'</td>'+
                                         '<td>%'+ progress +'</td>'+
                                     '</tr>';
                             } );

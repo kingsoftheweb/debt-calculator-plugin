@@ -246,7 +246,7 @@ if( 'all' === $type ) :
 		</div>
 
 		<div class="tables">
-			<h3>Payments in last One Month</h3>
+			<h3>Monthly Payments</h3>
             <ul id = "all_debts_array">
 	            <?php
 	            $all_debts_logs = json_decode( json_encode( $all_debts_logs ), true );
