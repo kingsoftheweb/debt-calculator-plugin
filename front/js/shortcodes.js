@@ -249,7 +249,7 @@ let dcmShortcodes = {
                                 table += '<tr>' +
                                         '<td>'+ debt.title +'</td>'+
                                         '<td>$'+ debt.debt_values.total_paid +'</td>'+
-                                        '<td>%'+ progress +'</td>'+
+                                        '<td>'+ progress +'%</td>'+
                                     '</tr>';
                             } );
 

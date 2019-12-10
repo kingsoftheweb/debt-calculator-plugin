@@ -36,10 +36,12 @@ let createChart = {
                     data =  {
                         labels: labels,
                             datasets: [{
-                            label: debtValues.title,
-                            backgroundColor: 'rgb(255,255,255)',
-                            borderColor: createChart.variables.primaryColor,
-                            data: values
+
+                                label: debtValues.title,
+                                backgroundColor: 'rgb(255,255,255)',
+                                fontSize: 19,
+                                borderColor: createChart.variables.primaryColor,
+                                data: values
                         }]
                     };
                     options = {
@@ -62,6 +64,7 @@ let createChart = {
                                 createChart.variables.primaryColor,
                                 createChart.variables.secondaryColor
                             ],
+                            fontSize: 19,
                             borderColor: [
                                 'rgb(255,255,255)'
                             ],
@@ -107,6 +110,7 @@ let createChart = {
                 datasets: [{
                     label: chartLabels.title,
                     backgroundColor: 'rgb(255,255,255)',
+                    fontSize: 19,
                     borderColor: createChart.variables.primaryColor,
                     data: values
                 }]
@@ -146,6 +150,7 @@ let createChart = {
                 datasets: [{
                     label: '',
                     backgroundColor: colors,
+                    fontSize: 19,
                     borderColor: [
                         'rgb(255,255,255)'
                     ],
@@ -187,6 +192,7 @@ let createChart = {
                 labels: labels,
                 datasets: [{
                     label: chartLabels.title + ' Payments',
+                    fontSize: 19,
                     backgroundColor: 'rgb(255,255,255)',
                     borderColor: createChart.variables.primaryColor,
                     data: values
