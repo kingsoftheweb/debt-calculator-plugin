@@ -10,7 +10,7 @@ $user_data = get_userdata( $user_id );
 $user_display_name = $user_data->display_name;
 $username          = $user_data->user_login;
 
-
+$copyright = 'This is copyright text. All rights reserved.';
 if( 'all' === $type ) :
 
 	if ( ! $export->is_user_allowed( $user_id ) ) :
@@ -56,6 +56,7 @@ if( 'all' === $type ) :
 			height: 1697px !important;
 			width: 1200px !important;
 			max-width: 100%;
+			position: relative;
 			display: flex;
 			padding: 1rem;
 			flex-direction: column;
@@ -185,6 +186,14 @@ if( 'all' === $type ) :
 		ul#all_debts_array li div.date {
 			width: 25%;
 		}
+
+
+		.wrapper .footer {
+			position: absolute;
+			bottom: 80px;
+			text-align: center;
+			width: 100%;
+		}
 	</style>
     <div class="wrapper" id = "page1">
 
@@ -199,6 +208,9 @@ if( 'all' === $type ) :
             </div>
 
         </div>
+	    <div class="footer">
+		    <p><?php echo $copyright;?></p>
+	    </div>
     </div>
 	<div class="wrapper" id = "page2">
 
@@ -218,61 +230,70 @@ if( 'all' === $type ) :
 				<div class = "canvas-wrapper canvas-3">
 					<img src = "<?php echo $data3;?>" />
 				</div>
-				<table class="results-table" id = "all_debts_array">
-					<tr>
-						<th>Debt</th>
-						<th>Paid</th>
-						<th>Remaining</th>
-						<th>Interest</th>
-<!--						<th>Payment Date</th>-->
-					</tr>
-					<?php
-					foreach ( $all_debts_array as $debt ) {
-						?>
-						<tr>
-							<td><?php echo $debt['Debt'];?></td>
-							<td><?php echo $debt['Paid'];?></td>
-							<td><?php echo $debt['Remaining'];?></td>
-							<td><?php echo $debt['Interest'];?></td>
-<!--							<td>--><?php //echo $debt['Payment Date'];?><!--</td>-->
-						</tr>
 
-						<?php
-					}
-					?>
-				</table>
 			</div>
 
 		</div>
 
-		<div class="tables">
-			<h3>Monthly Payments</h3>
-            <ul id = "all_debts_array">
-	            <?php
-	            $all_debts_logs = json_decode( json_encode( $all_debts_logs ), true );
-	            foreach ( $all_debts_logs as $key => $log ) {
-	               // if( 15>$key )continue;
-		            $dateLastTwoWeeks = strtotime('-4 weeks');
-
-		            if( strtotime( $log['time'] ) >= $dateLastTwoWeeks ) {
-			            ?>
-
-                        <li>
-                            <div class="title"><?php echo $log['title'];?></div>
-                            <div class="value"><?php echo $log['paid'];?></div>
-<!--                            <div class="value">--><?php //echo $log['remaining'];?><!--</div>-->
-<!--                            <div class="value">--><?php //echo $log['yearly_interest'];?><!--</div>-->
-                            <div class="date"><?php echo $log['time'];?></div>
-                        </li>
-
-			            <?php
-		            }
-	            }
-	            ?>
-            </ul>
+		<div class="footer">
+			<p><?php echo $copyright;?></p>
 		</div>
 
+	</div>
 
+	<div class="wrapper" id = "page3">
+		<table class="results-table" id = "all_debts_array">
+			<tr>
+				<th>Debt</th>
+				<th>Paid</th>
+				<th>Remaining</th>
+				<th>Interest</th>
+				<!--						<th>Payment Date</th>-->
+			</tr>
+			<?php
+			foreach ( $all_debts_array as $debt ) {
+				?>
+				<tr>
+					<td><?php echo $debt['Debt'];?></td>
+					<td><?php echo $debt['Paid'];?></td>
+					<td><?php echo $debt['Remaining'];?></td>
+					<td><?php echo $debt['Interest'];?></td>
+					<!--							<td>--><?php //echo $debt['Payment Date'];?><!--</td>-->
+				</tr>
+
+				<?php
+			}
+			?>
+		</table>
+		<div class="tables">
+			<h3>Monthly Payments</h3>
+			<ul id = "all_debts_array">
+				<?php
+				$all_debts_logs = json_decode( json_encode( $all_debts_logs ), true );
+				foreach ( $all_debts_logs as $key => $log ) {
+					// if( 15>$key )continue;
+					$dateLastTwoWeeks = strtotime('-4 weeks');
+
+					if( strtotime( $log['time'] ) >= $dateLastTwoWeeks ) {
+						?>
+
+						<li>
+							<div class="title"><?php echo $log['title'];?></div>
+							<div class="value"><?php echo $log['paid'];?></div>
+							<!--                            <div class="value">--><?php //echo $log['remaining'];?><!--</div>-->
+							<!--                            <div class="value">--><?php //echo $log['yearly_interest'];?><!--</div>-->
+							<div class="date"><?php echo $log['time'];?></div>
+						</li>
+
+						<?php
+					}
+				}
+				?>
+			</ul>
+		</div>
+		<div class="footer">
+			<p><?php echo $copyright;?></p>
+		</div>
 	</div>
 
 
@@ -280,110 +301,54 @@ if( 'all' === $type ) :
 
 
 	<script>
-
-
-
         // Generate the PDF
         document.addEventListener( 'DOMContentLoaded', function() {
             let bodyHeight = document.body.offsetHeight;
-            bodyHeight = bodyHeight/2;
+            bodyHeight = 1697;
+
+            setTimeout( function() {
+                let pdf = new jsPDF('p','pt','a4');
+                let width = pdf.internal.pageSize.getWidth();
+                let height = pdf.internal.pageSize.getHeight();
 
 
-            let pdf = new jsPDF('p','pt','a4');
-            let width = pdf.internal.pageSize.getWidth();
-            let height = pdf.internal.pageSize.getHeight();
-
-
-console.log( bodyHeight, width, height );
-            // Page 1 wrapper
-            html2canvas( document.getElementById('page1'), {
-                height: bodyHeight,
-                scale: 1
-            } ).then( canvas => {
-                document.body.appendChild( canvas );
-                canvas.classList.add( 'pdf-canvas' );
-                pdf.addImage( canvas.toDataURL(), 'JPEG', 0, 0, width, height );
-                pdf.addPage();
-
-                html2canvas( document.getElementById('page2'), {
+                console.log( bodyHeight, width, height );
+                // Page 1 wrapper
+                html2canvas( document.getElementById('page1'), {
                     height: bodyHeight,
                     scale: 1
                 } ).then( canvas => {
                     document.body.appendChild( canvas );
                     canvas.classList.add( 'pdf-canvas' );
                     pdf.addImage( canvas.toDataURL(), 'JPEG', 0, 0, width, height );
+                    pdf.addPage();
 
-                    pdf.save('debts_payments_reports.pdf');
+                    html2canvas( document.getElementById('page2'), {
+                        height: bodyHeight,
+                        scale: 1
+                    } ).then( canvas => {
+                        document.body.appendChild( canvas );
+                        canvas.classList.add( 'pdf-canvas' );
+                        pdf.addImage( canvas.toDataURL(), 'JPEG', 0, 0, width, height );
+                        pdf.addPage();
+
+                        html2canvas( document.getElementById('page3'), {
+                            height: bodyHeight,
+                            scale: 1
+                        } ).then( canvas => {
+                            document.body.appendChild( canvas );
+                            canvas.classList.add( 'pdf-canvas' );
+                            pdf.addImage( canvas.toDataURL(), 'JPEG', 0, 0, width, height );
+
+                            pdf.save('debts_payments_reports.pdf');
+                        });
+
+                    });
+
                 });
-
-            });
-
-
-
-            /*let wrappers = document.querySelectorAll( '.wrapper' );
-            wrappers.forEach( (wrapper, index) => {
-                console.log(wrapper);
-                let id = wrapper.getAttribute( 'id' );
-                let div        = document.getElementById( id );
-                html2canvas( div, {
-                    height: bodyHeight,
-                    scale: 1
-                } ).then( canvas => {
-                    document.body.appendChild( canvas );
-                    canvas.classList.add( 'pdf-canvas' );
-                    if( index === wrappers.length-1 ) {
-                        document.dispatchEvent(new CustomEvent ( 'lastWrapper' ) );
-                    }
-                });
-            } );*/
+            }, 2000 );
 
         }, false);
-/*
-
-        setTimeout( () => {
-            let pdfCanvases = document.querySelectorAll( 'canvas.pdf-canvas' );
-
-            let pdf = new jsPDF('p','pt','a4');
-            let width = pdf.internal.pageSize.getWidth();
-            let height = pdf.internal.pageSize.getHeight();
-
-            pdf.addImage( pdfCanvases[0].toDataURL(), 'JPEG', 0, 0, width, height );
-
-            /!* for( let i=1; i<canvasesArray.length-1; i++ ) {
-				 pdf.addPage();
-				 pdf.addImage( canvasesArray[i], 'JPEG', 0, 0, width, height );
-			 }
-			 console.log(pdfCanvases);*!/
-            pdf.save('debts_payments_reports.pdf');
-
-
-            console.log(pdfCanvases);
-        }, 2000 );
-        document.addEventListener( 'lastWrapper', function () {
-            console.log('last wrapper');
-            let pdfCanvases = document.querySelectorAll( 'canvas.pdf-canvas' );
-
-            let pdf = new jsPDF('p','pt','a4');
-            let width = pdf.internal.pageSize.getWidth();
-            let height = pdf.internal.pageSize.getHeight();
-
-            let canvasesArray = [];
-            pdfCanvases.forEach( (canvas) => {
-                canvasesArray.push( canvas.toDataURL() );
-            } );
-            /!*
-			 pdf.addImage( canvasesArray[0], 'JPEG', 0, 0, width, height );
-
-			 for( let i=1; i<canvasesArray.length-1; i++ ) {
-				 pdf.addPage();
-				 pdf.addImage( canvasesArray[i], 'JPEG', 0, 0, width, height );
-			 }
-			 console.log(pdfCanvases);
-			 pdf.save('myPage.pdf');*!/
-        } );
-*/
-
-
 
 	</script>
 	</body>
