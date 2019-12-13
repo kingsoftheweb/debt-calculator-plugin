@@ -1,7 +1,12 @@
+Chart.defaults.global.defaultFontSize = 18;
+
+console.log( Chart );
+
 let createChart = {
     variables : {
         primaryColor    : 'rgb(0,46,91)',
-        secondaryColor  : 'rgb(253,228,40)'
+        secondaryColor  : 'rgb(253,228,40)',
+        fontSize        : 16
     },
     functions : {
         drawChart : ( canvas, debtID, type, debtValuesJson = null, debtLogValuesArray = null, labels = null) => {
@@ -35,11 +40,10 @@ let createChart = {
                     } );
                     data =  {
                         labels: labels,
-                            datasets: [{
-
+                        datasets: [{
                                 label: debtValues.title,
                                 backgroundColor: 'rgb(255,255,255)',
-                                fontSize: 19,
+                                fontSize: createChart.variables.fontSize,
                                 borderColor: createChart.variables.primaryColor,
                                 data: values
                         }]
@@ -64,7 +68,7 @@ let createChart = {
                                 createChart.variables.primaryColor,
                                 createChart.variables.secondaryColor
                             ],
-                            fontSize: 19,
+                            fontSize: createChart.variables.fontSize,
                             borderColor: [
                                 'rgb(255,255,255)'
                             ],

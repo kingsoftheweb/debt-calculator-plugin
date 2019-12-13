@@ -7,7 +7,7 @@ $type    = $_GET['type'];
 $user_id = $_GET['user_id'];
 
 $user_data = get_userdata( $user_id );
-$user_display_name = $user_data->display_name;
+$user_display_name = $user_data->first_name . $user_data->last_name;
 $username          = $user_data->user_login;
 
 $copyright = 'This is copyright text. All rights reserved.';

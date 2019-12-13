@@ -41,15 +41,14 @@ if ( ! class_exists( 'DCP_Enqueue_Scripts' ) ):
 
 			// Public Libraries
 			wp_enqueue_script( $this->prefix . '-chartJS', 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js', [], time(), true );
-			wp_enqueue_script( $this->prefix . '-jsPDF', 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js', [], time(), true );
+			//wp_enqueue_script( $this->prefix . '-jsPDF', 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js', [], time(), true );
 
 			// Plugin Scripts
 			wp_enqueue_script( $this->prefix . '-createChart', $this->plugin_url . '/front/js/createChart.min.js', [], time(), true );
 			wp_enqueue_script( $this->prefix . '-exportTable', $this->plugin_url . '/front/js/exportTable.min.js', [], time(), true );
-			wp_enqueue_script( $this->prefix . '-front', $this->plugin_url . '/front/js/front.min.js', [], time(), true );
+			//wp_enqueue_script( $this->prefix . '-front', $this->plugin_url . '/front/js/front.min.js', [], time(), true );
 			wp_enqueue_script( $this->prefix . '-shortcodes', $this->plugin_url . '/front/js/shortcodes.min.js', array(
 				'jquery',
-				'jquery-ui-slider'
 			), time(), true );
 			wp_localize_script( $this->prefix . '-shortcodes', 'dcp_object',
 				array(
