@@ -2,17 +2,18 @@ let dcmShortcodes = {
 
     debtCalculator: {
         elements: {
-            singleTabs        : document.querySelectorAll('.single-grid-tab'),
-            contentTabs       : document.querySelectorAll( '.arm_account_detail_tab.arm_account_detail_tab_content' ),
-            resultsTabs       : document.querySelectorAll( 'td.arm-form-table-content.tab-has-result .title' ),
-            totalDebtInfo     : document.querySelector( '.total-debts-chart__main' ),
-            allDebtsInfo      : document.querySelector( '.total-debts-chart__main.all_debts' ),
-            monthlyPayments   : document.querySelector( '.total-debts-chart__main.all_debts.per_month input' ),
-            yearlyPaymentsDiv : document.querySelector( '.yearly-payments-chart__main' ),
-            monthlyLogs       : document.querySelectorAll( '.multi-graphics-wrapper input.order_logs_per_month' ),
-            addNewButton      : document.querySelector( '.dcm-shortcode input.submit.add-new-debt' ),
-            updateButtons     : document.querySelectorAll( '.dcm-shortcode input.submit.update-debt' ),
-            exportPDF         : document.querySelector( '.export-current-debt a.export-pdf' ),
+            singleTabs         : document.querySelectorAll('.single-grid-tab'),
+            contentTabs        : document.querySelectorAll( '.arm_account_detail_tab.arm_account_detail_tab_content' ),
+            resultsTabs        : document.querySelectorAll( 'td.arm-form-table-content.tab-has-result .title' ),
+            totalDebtInfo      : document.querySelector( '.total-debts-chart__main' ),
+            allDebtsInfo       : document.querySelector( '.total-debts-chart__main.all_debts' ),
+            monthlyPayments    : document.querySelector( '.total-debts-chart__main.all_debts.per_month input' ),
+            monthlyPaymentsDiv : document.querySelector( '.total-logs-per-month' ),
+            yearlyPaymentsDiv  : document.querySelector( '.yearly-payments-chart__main' ),
+            monthlyLogs        : document.querySelectorAll( '.multi-graphics-wrapper input.order_logs_per_month' ),
+            addNewButton       : document.querySelector( '.dcm-shortcode input.submit.add-new-debt' ),
+            updateButtons      : document.querySelectorAll( '.dcm-shortcode input.submit.update-debt' ),
+            exportPDF          : document.querySelector( '.export-current-debt a.export-pdf' ),
         },
         events: () => {
             let plugin = dcmShortcodes.debtCalculator;
@@ -66,13 +67,12 @@ let dcmShortcodes = {
                 let url     = plugin.elements.exportPDF.getAttribute( 'data-href' );
                 let userID  = plugin.elements.exportPDF.getAttribute( 'data-userID' );
                 let meta    = plugin.elements.exportPDF.getAttribute( 'data-meta' );
-                //let html = document.querySelector( '.reports-graphics[data-id="' + btn.getAttribute( 'data-id' ) + '"]' ).innerHTML;
-                let form    = plugin.elements.exportPDF.parentElement.querySelector( 'form' );
                 let canvas1 = dcmShortcodes.debtCalculator.elements.totalDebtInfo.querySelector( 'canvas' );
                 let canvas2 = dcmShortcodes.debtCalculator.elements.allDebtsInfo.querySelector( 'canvas' );
                 let canvas3 = dcmShortcodes.debtCalculator.elements.yearlyPaymentsDiv.querySelector( 'canvas' );
+                let canvas4 = document.querySelector( '.single-month-chart.show canvas' ); // Get the current shown month
 
-                dcpExportHTML.functions.pdfExport( form, canvas1, canvas2, canvas3, userID, url, meta );
+                dcpExportHTML.functions.pdfExport( canvas1, canvas2, canvas3, canvas4, userID, url, meta );
             } );
 
         },

@@ -63,6 +63,7 @@ class DCP_Ajax extends DCP_Init{
 		update_user_meta( $_POST['user_id'], $this->prefix . '_canvas_data_1', $_POST['data1'] );
 		update_user_meta( $_POST['user_id'], $this->prefix . '_canvas_data_2', $_POST['data2'] );
 		update_user_meta( $_POST['user_id'], $this->prefix . '_canvas_data_3', $_POST['data3'] );
+		update_user_meta( $_POST['user_id'], $this->prefix . '_canvas_data_4', $_POST['data4'] );
 
 		wp_die();
 	}
