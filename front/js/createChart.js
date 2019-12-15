@@ -1,5 +1,5 @@
 Chart.defaults.global.defaultFontSize = 18;
-
+Chart.defaults.global.defaultColor = 'rgba(0, 0, 0, 1)';
 console.log( Chart );
 
 let createChart = {
@@ -120,10 +120,31 @@ let createChart = {
                 }]
             };
             let options = {
+                legend: {
+                    labels: {
+                        fontColor: 'black'
+                    }
+                },
                 scales: {
+
                     yAxes: [{
+                        scaleLabel : {
+                            display: true,
+                            labelString: 'Payments($)',
+                            fontColor: 'black'
+                        },
                         ticks: {
-                            beginAtZero: true
+                            fontColor: 'black',
+                            beginAtZero: true,
+                            callback: function(value, index, values) {
+                                return '$' + value*1000;
+                            }
+                        }
+                    }],
+                    xAxes: [{
+
+                        ticks: {
+                            fontColor: 'black',
                         }
                     }]
                 }
@@ -198,15 +219,37 @@ let createChart = {
                     label: chartLabels.title + ' Payments',
                     fontSize: 19,
                     backgroundColor: 'rgb(255,255,255)',
+                    fillColor: 'rgb(0,0,0,)',
                     borderColor: createChart.variables.primaryColor,
                     data: values
                 }]
             };
             let options = {
+                legend: {
+                    labels: {
+                        fontColor: 'black'
+                    }
+                },
                 scales: {
+
                     yAxes: [{
+                        scaleLabel : {
+                            display: true,
+                            labelString: 'Payments($)',
+                            fontColor: 'black'
+                        },
                         ticks: {
-                            beginAtZero: true
+                            fontColor: 'black',
+                            beginAtZero: true,
+                            callback: function(value, index, values) {
+                                return '$' + value*1000;
+                            }
+                        }
+                    }],
+                    xAxes: [{
+
+                        ticks: {
+                            fontColor: 'black',
                         }
                     }]
                 }

@@ -264,6 +264,18 @@
 
 
 	// General Elements
+	a {
+		color: #0073aa;
+		&:hover {
+			color: #0073aa;
+		}
+		&:visited {
+			color: #0073aa;
+		}
+	}
+	td {
+		color: #000000;
+	}
 	.row {
 		&.export {
 			display: flex;
